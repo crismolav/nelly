@@ -10,7 +10,7 @@ from spacy import displacy
 from pdb import set_trace
 from order import Order
 
-def determine_semantic_frame_from_tree_root(parsed_tree):
+def determine_semantic_frame_from_parsed_tree(parsed_tree):
     tree_root = get_parse_tree_root(parsed_tree)
     print("tree_root_str: %s" % tree_root)
     if tree_root in ['sandwich', 'have', 'like', 'want','give', 'need']:
@@ -24,7 +24,7 @@ def get_parse_tree_root(parsed_tree):
             return token.lemma_
 
 def modify_order(order, parsed_tree):
-    semantic_frame = determine_semantic_frame_from_tree_root(parsed_tree)
+    semantic_frame = determine_semantic_frame_from_parsed_tree(parsed_tree)
     print("semantic_frame: %s" % semantic_frame)
     if semantic_frame == 'request':
         modify_order_with_request(order=order, parsed_tree=parsed_tree)
@@ -65,7 +65,7 @@ if __name__=="__main__":
     doc = nlp("Can I have a sandwich with tofu and tomatoes")
 
     modify_order(order=new_order, parsed_tree=doc)
-
+    set_trace()
     for token in doc:
         print(token.text, token.lemma_, token.pos_, token.tag_, token.dep_,
               token.shape_, token.is_alpha, token.is_stop)
