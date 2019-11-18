@@ -7,7 +7,8 @@ import os
 import sys
 import pyttsx3
 
-en_voice_id = "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0"
+
+#en_voice_id = "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0"
 
 nlp = spacy.load("en_core_web_sm")
 # Record Audio
@@ -35,7 +36,7 @@ except sr.RequestError as e:
 
 
 engine = pyttsx3.init()
-engine.setProperty('voice', en_voice_id)
+#engine.setProperty('voice', en_voice_id)
 
 # Set properties _before_ you add things to say
 engine.setProperty('rate', 100)    # Speed percent (can go over 100)
