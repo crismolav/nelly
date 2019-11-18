@@ -32,7 +32,8 @@ class Order:
     def available_sauces(self):
         return ['barbecue', 'ketchup', 'mustard', 'nelly_sauce']
 
-def determine_semantic_frame_from_tree_root(parse_tree_root):
+def determine_semantic_frame_from_tree_root(parse_tree):
+    parse_tree_root = get_parse_tree_root(parse_tree)
     if parse_tree_root in ['sandwich', 'have', 'like', 'want','give', 'need']:
         return 'request'
     else:
@@ -40,7 +41,6 @@ def determine_semantic_frame_from_tree_root(parse_tree_root):
 
 def get_parse_tree_root(parse_tree):
     for token in parse_tree:
-        # pass
         if token.dep_ == 'ROOT':
             return token.lemma_
 
@@ -59,14 +59,13 @@ if __name__=="__main__":
     new_order.add_bread_type("regular")
     new_order.add_vegetable("tomato")
     new_order.add_vegetable("lettuce")
-    
+
     nlp = spacy.load("en_core_web_sm")
     doc = nlp("Can I have a sandwich with tofu and tomato")
     doc = nlp("I would like a sandwich")
     doc = nlp("is this gluten free?")
     # doc = nlp("A sandwich with bacon and lettuce")
-    tree_root_str = get_parse_tree_root(parse_tree=doc)
-    semantic_frame = determine_semantic_frame_from_tree_root(parse_tree_root=tree_root_str)
+    semantic_frame = determine_semantic_frame_from_tree_root(parse_tree=doc)
 
     print("tree_root_str: %s"%tree_root_str)
     print("semantic_frame: %s"%semantic_frame)
