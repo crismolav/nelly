@@ -1,0 +1,14 @@
+https://github.com/google/sling/blob/master/doc/guide/frames.md
+
+https://towardsdatascience.com/custom-named-entity-recognition-using-spacy-7140ebbb3718 (Custom Named Entity Recognition Using spaCy)
+
+https://www.dataquest.io/blog/tutorial-text-classification-in-python-using-spacy/   Tutorial: Text Classification in Python Using spaCy
+
+https://github.com/lpmayos/nli/blob/master/virtual_bea.py
+
+https://web.stanford.edu/~jurafsky/slp3/   Speech and Language Processing (3rd ed. draft)
+
+https://docs.snips.ai/articles/platform/dialog/frame-based-dm    Frame-based Dialogue Management
+
+
+
