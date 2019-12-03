@@ -13,7 +13,7 @@ def determine_semantic_frame_from_parsed_tree(parsed_tree):
     root_tuple = get_parse_tree_root_tuple(parsed_tree)
     if triggers_greeting(root_tuple=root_tuple):
         return "greeting"
-    elif triggers_inform(root_tuple=root_tuple, parsed_tree=parsed_tree):
+    elif triggers_a_request_for_information(root_tuple=root_tuple, parsed_tree=parsed_tree):
         return "Information"
     elif triggers_request_special_need(root_tuple=root_tuple, parsed_tree=parsed_tree):
         return 'request_special_need'
@@ -22,7 +22,7 @@ def determine_semantic_frame_from_parsed_tree(parsed_tree):
     else:
         return False
 
-def triggers_inform(root_tuple, parsed_tree):
+def triggers_a_request_for_information(root_tuple, parsed_tree):
     root_lemma, root_text = root_tuple
     if root_lemma in ["do", "tell", "know", "contain"]:
         return True
