@@ -67,6 +67,6 @@ class FoodRestriction:
     def __init__(self):
         self.food_restrictions_list = None
     def add_food_restriction(self, food_restriction):
-
+        pass
     def recognized_food_restrictions(self):
         return ['vegan', 'celiac', 'lactose_intolerant', 'peanut']

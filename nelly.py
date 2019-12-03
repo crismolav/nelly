@@ -25,7 +25,17 @@ def determine_semantic_frame_from_parsed_tree(parsed_tree):
         return False
 
 def positive_case_for_special_need_verb_be(parsed_tree):
-    return True
+    positive_list = ['vegan', 'vegetarian', 'celiac', 'lactose']
+    root_non_lemma = ''
+    for token in parsed_tree:
+        if token.dep_ == 'ROOT':
+            root_non_lemma = token.text
+
+    for token in parsed_tree:
+        parent = token.head
+        if str(parent) == root_non_lemma and token.text in positive_list:
+            return True
+    return False
 
 def positive_case_for_special_need_verb_with_negation(parsed_tree):
     return True
@@ -77,7 +87,7 @@ if __name__=="__main__":
     # doc = nlp("is this gluten free?")
     # doc = nlp("A sandwich with bacon and lettuce")
     doc = nlp("The immigration people questioned her about her occupation")
-    doc = nlp("I do not eat dairy")
+    doc = nlp("I am vegan")
     modify_order(order=new_order, parsed_tree=doc)
     print("*****")
     print("New order vegetables: %s"%new_order.vegetable_list)
