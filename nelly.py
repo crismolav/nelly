@@ -10,48 +10,77 @@ from pdb import set_trace
 from order import Order
 
 def determine_semantic_frame_from_parsed_tree(parsed_tree):
-    tree_root = get_parse_tree_root(parsed_tree)
-    print("tree_root_str: %s" % tree_root)
-    if triggers_request_order_updated(tree_root, parsed_tree):
-        return 'request_order_updated'
-    elif triggers_request_special_need(tree_root, parsed_tree):
+    root_tuple = get_parse_tree_root_tuple(parsed_tree)
+    if triggers_request_special_need(root_tuple=root_tuple, parsed_tree=parsed_tree):
         return 'request_special_need'
+    elif triggers_request_order_update(root_tuple=root_tuple, parsed_tree=parsed_tree):
+        return 'request_order_update'
     else:
         return False
 
-def triggers_request_order_updated(tree_root, parsed_tree):
-    if tree_root in ['sandwich', 'have', 'like', 'want', 'give', 'need']:
+def triggers_request_order_update(root_tuple, parsed_tree):
+    root_lemma, root_text = root_tuple
+    if root_lemma in ['sandwich', 'have', 'like', 'want', 'give', 'need']:
         return True
     return False
 
-def triggers_request_special_need(tree_root, parsed_tree):
-    if tree_root == 'be':
-        if positive_case_for_special_need_verb_be(parsed_tree):
-            return True
-    else:
-        if positive_case_for_special_need_verb_with_negation(parsed_tree):
-            return True
+def triggers_request_special_need(root_tuple, parsed_tree):
+    root_lemma, root_text = root_tuple
+    if root_lemma in ['eat', 'drink', 'ingest', 'consume', 'tolerate', 'have', 'be']:
+        if root_verb_is_negated(root_tuple, parsed_tree):
+            if triggers_request_special_need_verb_with_negation(
+                root_tuple=root_tuple, parsed_tree=parsed_tree):
+                return True
+        else:
+            if triggers_request_special_need_verb_positive(
+                root_tuple=root_tuple, parsed_tree=parsed_tree):
+                return True
 
-def positive_case_for_special_need_verb_be(parsed_tree):
-    positive_list = ['vegan', 'vegetarian', 'celiac', 'lactose']
-    root_non_lemma = ''
-    for token in parsed_tree:
-        if token.dep_ == 'ROOT':
-            root_non_lemma = token.text
+    return False
+
+def triggers_request_special_need_verb_positive(root_tuple, parsed_tree):
+    trigger_list = ['intolerance', 'allergy', 'disease']
+    positive_list = ['vegan', 'vegetarian', 'celiac', 'lactose', 'gluten']
+    root_lemma, root_text = root_tuple
+    if root_lemma not in ['be', 'have']:
+        return False
 
     for token in parsed_tree:
-        parent = token.head
-        if str(parent) == root_non_lemma and token.text in positive_list:
+        if token_triggers_special_need_verb_positive(
+                token=token, root_text=root_text, positive_list=positive_list,
+                trigger_list=trigger_list):
             return True
     return False
 
-def positive_case_for_special_need_verb_with_negation(parsed_tree):
+def token_triggers_special_need_verb_positive(token, root_text, positive_list, trigger_list):
+    parent = token.head
+    if ((str(parent) == root_text and token.text in positive_list)
+            or (str(parent) in trigger_list and str(parent.head) == root_text
+                and token.text in positive_list)):
+        return True
+    else:
+        return False
+
+def root_verb_is_negated(root_tuple, parsed_tree):
+    root_lemma, root_text = root_tuple
+    for token in parsed_tree:
+        if str(token.dep_) == 'neg' and str(token.head) == root_text:
+            return True
+    return False
+
+def triggers_request_special_need_verb_with_negation(root_tuple, parsed_tree):
+    root_lemma, root_text = root_tuple
+    positive_list = ['celiac', 'lactose', 'noon']
+    for token in parsed_tree:
+        parent = token.head
+        if str(parent) == root_text and token.text in positive_list:
+            return True
     return True
 
-def get_parse_tree_root(parsed_tree):
+def get_parse_tree_root_tuple(parsed_tree):
     for token in parsed_tree:
         if token.dep_ == 'ROOT':
-            return token.lemma_
+            return token.lemma_, token.text
 
 def modify_order(order, parsed_tree):
     semantic_frame = determine_semantic_frame_from_parsed_tree(parsed_tree)
@@ -94,7 +123,7 @@ if __name__=="__main__":
     # doc = nlp("I would like a sandwich")
     # doc = nlp("is this gluten free?")
     # doc = nlp("A sandwich with bacon and lettuce")
-    doc = nlp("I am vegan can i have a sandwich with tomato")
+    doc = nlp("I have gluten allergy")
 
     modify_order(order=new_order, parsed_tree=doc)
     print("*****")

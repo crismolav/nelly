@@ -7,7 +7,7 @@ class Request:
 class request_special_need(Request):
     pass
 
-class request_order_updated(Request):
+class request_order_update(Request):
     pass
 
 class Ask:
