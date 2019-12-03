@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # Requires PyAudio and PySpeech.
-
 import speech_recognition as sr
 import spacy
 import os
@@ -14,9 +13,22 @@ def determine_semantic_frame_from_parsed_tree(parsed_tree):
     tree_root = get_parse_tree_root(parsed_tree)
     print("tree_root_str: %s" % tree_root)
     if tree_root in ['sandwich', 'have', 'like', 'want','give', 'need']:
-        return 'request'
+        return 'request_order_updated'
+    elif tree_root in ['eat', 'drink', 'ingest', 'consume', 'tolerate', 'have', 'be']:
+        if tree_root == 'be':
+            if positive_case_for_special_need_verb_be(parsed_tree):
+                return 'request_special_need'
+        else:
+            if positive_case_for_special_need_verb_with_negation(parsed_tree):
+                return 'request_special_need'
     else:
         return False
+
+def positive_case_for_special_need_verb_be(parsed_tree):
+    return True
+
+def positive_case_for_special_need_verb_with_negation(parsed_tree):
+    return True
 
 def get_parse_tree_root(parsed_tree):
     for token in parsed_tree:
@@ -26,21 +38,23 @@ def get_parse_tree_root(parsed_tree):
 def modify_order(order, parsed_tree):
     semantic_frame = determine_semantic_frame_from_parsed_tree(parsed_tree)
     print("semantic_frame: %s" % semantic_frame)
-    if semantic_frame == 'request':
-        modify_order_with_request(order=order, parsed_tree=parsed_tree)
+    if semantic_frame == 'request_order_updated':
+        update_order_with_request(order=order, parsed_tree=parsed_tree)
     else:
         pass
 
-def modify_order_with_request(order, parsed_tree):
+def update_order_with_request(order, parsed_tree):
+    #TODO: use spacey labels ("PRODUCT")
     for token in parsed_tree:
-        all_ingredients = order.get_all_avaible_ingredient()
+        all_ingredients = order.get_all_avaible_ingredients()
         if token.lemma_ in order.available_protein_types():
             order.add_protein_type(protein_type=token.lemma_)
         elif token.lemma_ in order.available_vegetables():
             order.add_vegetable(vegetable=token.lemma_)
         elif token.lemma_ in order.available_sauces():
             order.add_sauce(sauce=token.lemma_)
-
+#obligatory slots and optional slots.
+#root?
 if __name__=="__main__":
     # engine = pyttsx3.init()
     #     # #engine.setProperty('voice', en_voice_id)
@@ -62,14 +76,17 @@ if __name__=="__main__":
     # doc = nlp("I would like a sandwich")
     # doc = nlp("is this gluten free?")
     # doc = nlp("A sandwich with bacon and lettuce")
-    doc = nlp("Can I have a sandwich with tofu and tomatoes")
-
+    doc = nlp("The immigration people questioned her about her occupation")
+    doc = nlp("I do not eat dairy")
     modify_order(order=new_order, parsed_tree=doc)
-    set_trace()
-    for token in doc:
-        print(token.text, token.lemma_, token.pos_, token.tag_, token.dep_,
-              token.shape_, token.is_alpha, token.is_stop)
-    # displacy.serve(doc, style="dep")
+    print("*****")
+    print("New order vegetables: %s"%new_order.vegetable_list)
+    print("New order protein: %s" % new_order.protein)
+    print("*****")
+    # for token in doc:
+    #     print(token.text, token.lemma_, token.pos_, token.tag_, token.dep_,
+    #           token.shape_, token.is_alpha, token.is_stop)
+    displacy.serve(doc, style="dep")
     # Record Audio
     # r = sr.Recognizer()
     # with sr.Microphone() as source:

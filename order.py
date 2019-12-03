@@ -20,5 +20,5 @@ class Order:
         self.sauce_list.append(sauce)
     def available_sauces(self):
         return ['barbecue', 'ketchup', 'mustard', 'nelly_sauce']
-    def get_all_avaible_ingredient(self):
+    def get_all_avaible_ingredients(self):
         return self.available_protein_types()+self.available_vegetables()+self.available_sauces()
