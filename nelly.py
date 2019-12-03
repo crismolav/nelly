@@ -12,17 +12,25 @@ from order import Order
 def determine_semantic_frame_from_parsed_tree(parsed_tree):
     tree_root = get_parse_tree_root(parsed_tree)
     print("tree_root_str: %s" % tree_root)
-    if tree_root in ['sandwich', 'have', 'like', 'want','give', 'need']:
+    if triggers_request_order_updated(tree_root, parsed_tree):
         return 'request_order_updated'
-    elif tree_root in ['eat', 'drink', 'ingest', 'consume', 'tolerate', 'have', 'be']:
-        if tree_root == 'be':
-            if positive_case_for_special_need_verb_be(parsed_tree):
-                return 'request_special_need'
-        else:
-            if positive_case_for_special_need_verb_with_negation(parsed_tree):
-                return 'request_special_need'
+    elif triggers_request_special_need(tree_root, parsed_tree):
+        return 'request_special_need'
     else:
         return False
+
+def triggers_request_order_updated(tree_root, parsed_tree):
+    if tree_root in ['sandwich', 'have', 'like', 'want', 'give', 'need']:
+        return True
+    return False
+
+def triggers_request_special_need(tree_root, parsed_tree):
+    if tree_root == 'be':
+        if positive_case_for_special_need_verb_be(parsed_tree):
+            return True
+    else:
+        if positive_case_for_special_need_verb_with_negation(parsed_tree):
+            return True
 
 def positive_case_for_special_need_verb_be(parsed_tree):
     positive_list = ['vegan', 'vegetarian', 'celiac', 'lactose']
@@ -86,8 +94,8 @@ if __name__=="__main__":
     # doc = nlp("I would like a sandwich")
     # doc = nlp("is this gluten free?")
     # doc = nlp("A sandwich with bacon and lettuce")
-    doc = nlp("The immigration people questioned her about her occupation")
-    doc = nlp("I do not eat dairy")
+    doc = nlp("I am vegan can i have a sandwich with tomato")
+
     modify_order(order=new_order, parsed_tree=doc)
     print("*****")
     print("New order vegetables: %s"%new_order.vegetable_list)
