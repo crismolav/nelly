@@ -87,7 +87,7 @@ if __name__=="__main__":
     # doc = nlp("is this gluten free?")
     # doc = nlp("A sandwich with bacon and lettuce")
     doc = nlp("The immigration people questioned her about her occupation")
-    doc = nlp("I am vegan")
+    doc = nlp("I do not eat dairy")
     modify_order(order=new_order, parsed_tree=doc)
     print("*****")
     print("New order vegetables: %s"%new_order.vegetable_list)
