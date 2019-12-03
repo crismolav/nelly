@@ -23,13 +23,13 @@ class NellyTests(unittest.TestCase):
 
         self.assertEqual(expected, result)
 
-    def test_determine_semantic_frame_from_parsed_tree__request_special_need__be(self):
+    def test_determine_semantic_frame_from_parsed_tree__request_for_information(self):
         nlp = spacy.load("en_core_web_sm")
-        parsed_tree = nlp("I am celiac")
+        parsed_tree = nlp("Can you tell if it has lactose?")
 
         result = nelly.determine_semantic_frame_from_parsed_tree(
             parsed_tree=parsed_tree)
-        expected = 'request_special_need'
+        expected = "request_for_information"
 
         self.assertEqual(expected, result)
 
