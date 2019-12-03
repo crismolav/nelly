@@ -24,13 +24,14 @@ def determine_semantic_frame_from_parsed_tree(parsed_tree):
 
 def triggers_a_request_for_information(root_tuple, parsed_tree):
     root_lemma, root_text = root_tuple
-    if root_lemma in ["tell", "know", "contain", "have"]:
+    if root_lemma in ["tell", "know", "contain", "include", "have"]:
         if root_lemma == "have":
             for token in parsed_tree:
-                if str(token)== ["tell", "know", "contain"]:
+                if str(token.lemma_)== ["tomato", "onion", "lettuce", "bread"]:
                     return True
-                return False
-    return True
+                else: return False
+        else: return True
+
 
 def triggers_greeting(root_tuple):
     root_lemma, root_text = root_tuple
@@ -143,8 +144,8 @@ if __name__=="__main__":
     # doc = nlp("I would like a sandwich")
     # doc = nlp("is this gluten free?")
     # doc = nlp("A sandwich with bacon and lettuce")
-    doc = nlp("Does the cheese contain lactose?")
-    doc = nlp("Does my sandwich has lactose?")
+    #doc = nlp("Does the cheese contain lactose?")
+    doc = nlp("Does my sandwich has tomato?")
 
 
     modify_order(order=new_order, parsed_tree=doc)
