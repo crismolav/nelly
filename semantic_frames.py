@@ -1,3 +1,9 @@
+class Greetings:
+    def __init__(self):
+        self.speaker = None
+        self.addressee = None
+        self.message = None
+
 class Request:
     def __init__(self):
         self.speaker = None

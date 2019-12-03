@@ -12,12 +12,19 @@ from order import Order
 def determine_semantic_frame_from_parsed_tree(parsed_tree):
     tree_root = get_parse_tree_root(parsed_tree)
     print("tree_root_str: %s" % tree_root)
-    if triggers_request_order_updated(tree_root, parsed_tree):
+    if triggers_greeting(tree_root, parsed_tree):
+        return "greeting"
+    elif triggers_request_order_updated(tree_root, parsed_tree):
         return 'request_order_updated'
     elif triggers_request_special_need(tree_root, parsed_tree):
         return 'request_special_need'
     else:
         return False
+
+def triggers_greeting(tree_root, parsed_tree):
+    if tree_root in ["hi", "hey", "hello", "good morning"]:
+        return True
+    return False
 
 def triggers_request_order_updated(tree_root, parsed_tree):
     if tree_root in ['sandwich', 'have', 'like', 'want', 'give', 'need']:
@@ -94,7 +101,7 @@ if __name__=="__main__":
     # doc = nlp("I would like a sandwich")
     # doc = nlp("is this gluten free?")
     # doc = nlp("A sandwich with bacon and lettuce")
-    doc = nlp("I am vegan can i have a sandwich with tomato")
+    doc = nlp("Hello Nelly")
 
     modify_order(order=new_order, parsed_tree=doc)
     print("*****")
