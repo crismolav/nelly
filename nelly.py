@@ -14,6 +14,8 @@ def determine_semantic_frame_from_parsed_tree(parsed_tree):
     print("tree_root_str: %s" % tree_root)
     if triggers_greeting(tree_root, parsed_tree):
         return "greeting"
+    elif triggers_inform(tree_root, parsed_tree):
+        return "Information"
     elif triggers_request_order_updated(tree_root, parsed_tree):
         return 'request_order_updated'
     elif triggers_request_special_need(tree_root, parsed_tree):
@@ -22,12 +24,17 @@ def determine_semantic_frame_from_parsed_tree(parsed_tree):
         return False
 
 def triggers_greeting(tree_root, parsed_tree):
-    if tree_root in ["hi", "hey", "hello", "good morning"]:
+    if tree_root in ["hi", "hey", "hello", "morning", "afternoon", "evening", "night"]:
+        return True
+    return False
+
+def triggers_inform(tree_root, parsed_tree):
+    if tree_root in ["do", "tell", "know", "contain"]:
         return True
     return False
 
 def triggers_request_order_updated(tree_root, parsed_tree):
-    if tree_root in ['sandwich', 'have', 'like', 'want', 'give', 'need']:
+    if tree_root in ['sandwich', 'have', 'like', 'want', 'give', 'need', "add", "take"]:
         return True
     return False
 
@@ -101,7 +108,7 @@ if __name__=="__main__":
     # doc = nlp("I would like a sandwich")
     # doc = nlp("is this gluten free?")
     # doc = nlp("A sandwich with bacon and lettuce")
-    doc = nlp("Hello Nelly")
+    doc = nlp("Does the cheese contain lactose?")
 
     modify_order(order=new_order, parsed_tree=doc)
     print("*****")
