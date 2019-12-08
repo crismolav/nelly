@@ -26,11 +26,18 @@ def triggers_a_request_for_information(root_tuple, parsed_tree):
     root_lemma, root_text = root_tuple
     if root_lemma in ["tell", "know", "contain", "include"]:
         return True
-    elif root_lemma in ["have", "want", "need", "would", "like"]:
+    elif root_lemma in ["have", "want", "need", "would", "like", "be"]:
         for token in parsed_tree:
-            if str(token.lemma_) in ["do", "tell", "know", "contain", "include"]:
+            if str(token.head.lemma_) == 'be':
+                # E.g. "I am vegan"
+                if str(token.dep_) == 'nsubj':
+                    return False
+                # E.g. "Is this bread vegan"
+                else:
+                    return True
+            if str(token.lemma_) in ["do", "tell", "know", "contain", "include", "find", "inquire"]:
                 return True
-    else: return False
+    return False
 
 def triggers_greeting(root_tuple):
     root_lemma, root_text = root_tuple
