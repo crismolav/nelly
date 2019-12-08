@@ -7,7 +7,7 @@ import sys
 import pyttsx3
 from spacy import displacy
 from pdb import set_trace
-from order import Order
+from semantic_frames import Order, Customer
 
 def update_state(order, parsed_tree):
     semantic_frame = determine_semantic_frame_from_parsed_tree(parsed_tree)
