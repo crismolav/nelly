@@ -56,7 +56,7 @@ class NellyTests(unittest.TestCase):
 
     def test_determine_semantic_frame_from_parsed_tree__request_for_information(self):
         nlp = spacy.load("en_core_web_sm")
-        parsed_tree = nlp("does my sandwich include lactose")
+        parsed_tree = nlp("does my sandwich has lactose")
 
         result = nelly.determine_semantic_frame_from_parsed_tree(
             parsed_tree=parsed_tree)
