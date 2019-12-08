@@ -165,6 +165,7 @@ if __name__=="__main__":
     #     # engine.runAndWait()
 
     # en_voice_id = "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0"
+    new_customer =  Customer()
     new_order = Order()
     # new_order.add_bread_type("regular")
     # new_order.add_vegetable("tomato")
