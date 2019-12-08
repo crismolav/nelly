@@ -6,23 +6,23 @@ ingredients = {
 
     'cheese' : {
         "type" : "dairy",
-        "restrictions" : lactose
+        "restrictions" : "lactose"
     },
 
 
     'beef'  : {
         "type" : "meat",
-        "restrictions" : vegans
+        "restrictions" : "vegan"
     },
 
     'bread'  : {
         "type": "bread",
-        "restrictions": gluten
+        "restrictions": "gluten"
     },
 
     'bread_ng' : {
-        "type": bread,
-        "restrictions": none
+        "type": "bread",
+        "restrictions": None
 
     }
     # 'customer' : {
