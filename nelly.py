@@ -32,7 +32,6 @@ def triggers_a_request_for_information(root_tuple, parsed_tree):
                 else: return False
         else: return True
 
-
 def triggers_greeting(root_tuple):
     root_lemma, root_text = root_tuple
     if root_lemma in ["hi", "hey", "hello", "morning", "afternoon", "evening", "night"]:
@@ -41,8 +40,27 @@ def triggers_greeting(root_tuple):
 
 def triggers_request_order_update(root_tuple, parsed_tree):
     root_lemma, root_text = root_tuple
-    if root_lemma in ['sandwich', 'have', 'like', 'want', 'give', 'need', "add"]:
-        return True
+    modal_verbs = ['would', 'like']
+    there_is_a_verb = is_there_a_verb(parsed_tree)
+
+    if there_is_a_verb and root_lemma not in ['sandwich', 'have', 'like', 'want',
+                                              'give', 'need', "add", "order"]:
+        return False
+    for token in parsed_tree:
+        if there_is_a_verb:
+            if root_lemma in modal_verbs:
+                if str(token.head) == root_text and str(token.lemma_) in ['know', 'inquire', 'find']:
+                    return False
+        else:
+            if str(token.lemma_) in get_all_available_ingredients():
+                return True
+
+    return True
+
+def is_there_a_verb(parsed_tree):
+    for token in parsed_tree:
+        if token.pos_ == 'VERB':
+            return True
     return False
 
 def triggers_request_special_need(root_tuple, parsed_tree):
@@ -56,7 +74,6 @@ def triggers_request_special_need(root_tuple, parsed_tree):
             if triggers_request_special_need_verb_positive(
                 root_tuple=root_tuple, parsed_tree=parsed_tree):
                 return True
-
     return False
 
 def triggers_request_special_need_verb_positive(root_tuple, parsed_tree):
@@ -91,12 +108,14 @@ def root_verb_is_negated(root_tuple, parsed_tree):
 
 def triggers_request_special_need_verb_with_negation(root_tuple, parsed_tree):
     root_lemma, root_text = root_tuple
-    positive_list = ['celiac', 'lactose', 'noon']
+    positive_list = ['celiac', 'lactose', 'dairy', 'wheat', 'peanuts', 'nuts', 'meat', 'animal']
     for token in parsed_tree:
         parent = token.head
-        if str(parent) == root_text and token.text in positive_list:
+        granparent = parent.head
+        if (str(parent) == root_text or str(granparent) == root_text) \
+                and token.text in positive_list:
             return True
-    return True
+    return False
 
 def get_parse_tree_root_tuple(parsed_tree):
     for token in parsed_tree:
@@ -121,6 +140,10 @@ def update_order_with_request(order, parsed_tree):
             order.add_vegetable(vegetable=token.lemma_)
         elif token.lemma_ in order.available_sauces():
             order.add_sauce(sauce=token.lemma_)
+
+def get_all_available_ingredients():
+    fake_order = Order()
+    return fake_order.get_all_avaible_ingredients() + ['sandwich']
 #obligatory slots and optional slots.
 #root?
 if __name__=="__main__":
@@ -145,17 +168,17 @@ if __name__=="__main__":
     # doc = nlp("is this gluten free?")
     # doc = nlp("A sandwich with bacon and lettuce")
     #doc = nlp("Does the cheese contain lactose?")
-    doc = nlp("Does my sandwich has tomato?")
-
+    doc = nlp("A sandwich please")
+    for token in doc:
+        print(token.text, token.head,  token.lemma_, token.pos_, token.tag_, token.dep_,
+              token.shape_, token.is_alpha, token.is_stop)
 
     modify_order(order=new_order, parsed_tree=doc)
     print("*****")
     print("New order vegetables: %s"%new_order.vegetable_list)
     print("New order protein: %s" % new_order.protein)
     print("*****")
-    # for token in doc:
-    #     print(token.text, token.lemma_, token.pos_, token.tag_, token.dep_,
-    #           token.shape_, token.is_alpha, token.is_stop)
+
     displacy.serve(doc, style="dep")
     # Record Audio
     # r = sr.Recognizer()
