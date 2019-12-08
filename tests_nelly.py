@@ -129,5 +129,26 @@ class NellyTests(unittest.TestCase):
 
         self.assertTrue(result)
 
+    def test_triggers_a_request_for_information__verb_to_be__True(self):
+        nlp = spacy.load("en_core_web_sm")
+        parsed_tree = nlp("Is the bread gluten free")
+        root_tuple = nelly.get_parse_tree_root_tuple(parsed_tree)
+
+        result = nelly.triggers_a_request_for_information(
+            root_tuple=root_tuple, parsed_tree=parsed_tree)
+
+        self.assertTrue(result)
+
+    def test_triggers_a_request_for_information__verb_to_be__False(self):
+        nlp = spacy.load("en_core_web_sm")
+        parsed_tree = nlp("We are vegan")
+        root_tuple = nelly.get_parse_tree_root_tuple(parsed_tree)
+
+        result = nelly.triggers_a_request_for_information(
+            root_tuple=root_tuple, parsed_tree=parsed_tree)
+
+        self.assertFalse(result)
+
+
 if __name__ == '__main__':
     unittest.main()

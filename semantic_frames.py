@@ -10,20 +10,16 @@ class Request:
         self.addressee = None
         self.message = None
 
+class request_for_information(Request):
+    pass
+
 class request_special_need(Request):
     pass
+
 
 class request_order_update(Request):
     pass
 
-class Ask:
-    def __init__(self):
-        self.speaker = None
-        self.addressee = None
-        self.message = None
-
-class ask_information(Ask):
-    pass
 
 # class Inform:
 #     def __init__(self):
@@ -31,15 +27,8 @@ class ask_information(Ask):
 #         self.addressee = None
 #         self.message = None
 
-class ask_information(Ask):
-    pass
-
-
-class request_special_need(Request):
-    pass
-
-
-
+# class ask_information(Ask):
+#     pass
 
 
 class Order():
