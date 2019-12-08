@@ -30,6 +30,14 @@ class request_order_update(Request):
 # class ask_information(Ask):
 #     pass
 
+class Customer():
+    def __init__(self):
+        self.name = None
+        self.food_restrictions_list = []
+    def add_food_restriction(self, food_restriction):
+        pass
+    def recognized_food_restrictions(self):
+        return ['vegan', 'celiac', 'lactose_intolerant', 'peanut']
 
 class Order():
     def __init__(self):
@@ -57,11 +65,3 @@ class Order():
     def get_all_avaible_ingredients(self):
         return self.available_protein_types()+self.available_vegetables()+self.available_sauces()
     pass
-
-class FoodRestriction:
-    def __init__(self):
-        self.food_restrictions_list = None
-    def add_food_restriction(self, food_restriction):
-        pass
-    def recognized_food_restrictions(self):
-        return ['vegan', 'celiac', 'lactose_intolerant', 'peanut']
