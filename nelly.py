@@ -9,6 +9,25 @@ from spacy import displacy
 from pdb import set_trace
 from order import Order
 
+def update_state(order, parsed_tree):
+    semantic_frame = determine_semantic_frame_from_parsed_tree(parsed_tree)
+    print("semantic_frame: %s" % semantic_frame)
+    if semantic_frame == 'request_order_updated':
+        update_order_with_request(order=order, parsed_tree=parsed_tree)
+    else:
+        pass
+
+def update_order_with_request(order, parsed_tree):
+    #TODO: use spacey labels ("PRODUCT")
+    for token in parsed_tree:
+        all_ingredients = order.get_all_avaible_ingredients()
+        if token.lemma_ in order.available_protein_types():
+            order.add_protein_type(protein_type=token.lemma_)
+        elif token.lemma_ in order.available_vegetables():
+            order.add_vegetable(vegetable=token.lemma_)
+        elif token.lemma_ in order.available_sauces():
+            order.add_sauce(sauce=token.lemma_)
+
 def determine_semantic_frame_from_parsed_tree(parsed_tree):
     root_tuple = get_parse_tree_root_tuple(parsed_tree)
     if triggers_greeting(root_tuple=root_tuple):
@@ -129,24 +148,6 @@ def get_parse_tree_root_tuple(parsed_tree):
         if token.dep_ == 'ROOT':
             return token.lemma_, token.text
 
-def modify_order(order, parsed_tree):
-    semantic_frame = determine_semantic_frame_from_parsed_tree(parsed_tree)
-    print("semantic_frame: %s" % semantic_frame)
-    if semantic_frame == 'request_order_updated':
-        update_order_with_request(order=order, parsed_tree=parsed_tree)
-    else:
-        pass
-
-def update_order_with_request(order, parsed_tree):
-    #TODO: use spacey labels ("PRODUCT")
-    for token in parsed_tree:
-        all_ingredients = order.get_all_avaible_ingredients()
-        if token.lemma_ in order.available_protein_types():
-            order.add_protein_type(protein_type=token.lemma_)
-        elif token.lemma_ in order.available_vegetables():
-            order.add_vegetable(vegetable=token.lemma_)
-        elif token.lemma_ in order.available_sauces():
-            order.add_sauce(sauce=token.lemma_)
 
 def get_all_available_ingredients():
     fake_order = Order()
@@ -181,7 +182,7 @@ if __name__=="__main__":
               token.shape_, token.is_alpha, token.is_stop)
 
 
-    modify_order(order=new_order, parsed_tree=doc)
+    update_state(order=new_order, parsed_tree=doc)
     print("*****")
     print("New order vegetables: %s"%new_order.vegetable_list)
     print("New order protein: %s" % new_order.protein)
