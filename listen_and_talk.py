@@ -4,6 +4,7 @@ from playsound import playsound
 import speech_recognition as sr
 
 
+
 r = sr.Recognizer()   #Speech recognition
 with sr.Microphone() as source:
     print("Say something!")
