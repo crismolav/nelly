@@ -45,7 +45,7 @@ class Order():
         self.protein = None
         self.sauce_list = []
         self.vegetable_list = []
-        self.food_restriction = FoodRestriction()
+        #self.food_restriction = FoodRestriction()
     def add_bread_type(self, bread_type):
         self.bread_type = bread_type
     def available_bread_types(self):
@@ -64,4 +64,4 @@ class Order():
         return ['barbecue', 'ketchup', 'mustard', 'nelly_sauce']
     def get_all_avaible_ingredients(self):
         return self.available_protein_types()+self.available_vegetables()+self.available_sauces()
-    pass
+

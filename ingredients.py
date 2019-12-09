@@ -4,11 +4,15 @@ ingredients = {
         "restrictions" : None
     },
 
+    "lettuce" : {
+        "type" : "Vegetable",
+        "restrictions" : None
+    },
+
     'cheese' : {
         "type" : "dairy",
         "restrictions" : "lactose"
     },
-
 
     'beef'  : {
         "type" : "meat",

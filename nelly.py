@@ -178,9 +178,9 @@ if __name__=="__main__":
     # doc = nlp("A sandwich with bacon and lettuce")
     #doc = nlp("Does the cheese contain lactose?")
     doc = nlp("A sandwich please")
-    for token in doc:
-        print(token.text, token.head,  token.lemma_, token.pos_, token.tag_, token.dep_,
-              token.shape_, token.is_alpha, token.is_stop)
+    # for token in doc:
+    #     print(token.text, token.head,  token.lemma_, token.pos_, token.tag_, token.dep_,
+    #           token.shape_, token.is_alpha, token.is_stop)
 
 
     update_state(order=new_order, parsed_tree=doc)
