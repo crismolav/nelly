@@ -9,7 +9,7 @@ r = sr.Recognizer()   #Speech recognition
 with sr.Microphone() as source:
     print("Say something!")
     r.adjust_for_ambient_noise(source,duration=0.5)
-    audio = r.listen(source)
+    audio = r.record(source, duration=5)
     message = r.recognize_google(audio)
     print("Check: "+message)
 try:
