@@ -33,6 +33,7 @@ class request_order_update(Request):
 class Customer():
     def __init__(self):
         self.name = None
+        self.order = Order()
         self.food_restrictions_list = []
     def add_food_restriction(self, food_restriction):
         pass
