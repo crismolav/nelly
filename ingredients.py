@@ -1,32 +1,40 @@
 ingredients = {
     'tomato' : {
-        "type" : "Vegetable",
-        "restrictions" : None
+        "type" : "vegetable",
+        "restrictions" : []
     },
-
     "lettuce" : {
-        "type" : "Vegetable",
-        "restrictions" : None
+        "type" : "vegetable",
+        "restrictions" : []
     },
-
     'cheese' : {
         "type" : "dairy",
-        "restrictions" : "lactose"
+        "restrictions" : ["lactose"]
     },
-
     'beef'  : {
-        "type" : "meat",
-        "restrictions" : "vegan"
+        "type" : "protein",
+        "restrictions" : ["vegan"]
     },
-
-    'bread'  : {
+    'wheat_bread'  : {
         "type": "bread",
-        "restrictions": "gluten"
+        "restrictions": ["gluten", "vegan"]
+        "ingredients": ["wheat_flour", "yeast", "butter", "water", "salt", "sugar"]
     },
-
-    'bread_ng' : {
+    'whole_wheat_bread'  : {
         "type": "bread",
-        "restrictions": None
+        "restrictions": ["gluten", "vegan"]
+        "ingredients": ["whole_wheat_flour", "yeast", "sun_flower_oil", "water", "salt", "sugar"]
+    },
+    'rice_bread' : {
+        "type": "bread",
+        "restrictions": ["vegan"],
+        "ingredients": ["rice_flour", "yeast", "butter", "water", "salt", "sugar"]
+
+    }
+    'sourdough_bread' : {
+        "type": "bread",
+        "restrictions": [],
+        "ingredients": ["wheat_flour", "water", "salt", "olive_oil","sun_flower_seeds"]
 
     }
     # 'customer' : {
