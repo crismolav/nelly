@@ -23,18 +23,20 @@ def update_state(customer, parsed_tree):
 def update_order_with_request(customer, parsed_tree):
     #TODO: use spacey labels ("PRODUCT")
     for token in parsed_tree:
-        all_ingredients = customer.order.get_all_avaible_ingredients()
-        if token.lemma_ in customer.order.available_protein_types():
+        if token.lemma_ in ingredients_dict['protein'].keys():
             customer.order.add_protein_type(protein_type=token.lemma_)
-        elif token.lemma_ in customer.order.available_vegetables():
+        elif token.lemma_ in ingredients_dict['vegetable'].keys():
             customer.order.add_vegetable(vegetable=token.lemma_)
-        elif token.lemma_ in customer.order.available_sauces():
+        elif token.lemma_ in ingredients_dict['sauce'].keys():
             customer.order.add_sauce(sauce=token.lemma_)
+        elif token.lemma_ in ingredients_dict['bread'].keys():
+            customer.order.add_bread(bread=token.lemma_)
+        elif token.lemma_ in ingredients_dict['cheese'].keys():
+            customer.order.add_cheese(cheese=token.lemma_)
 
 def provide_information(customer, parsed_tree):
     root_lemma, root_text = get_parse_tree_root_tuple(parsed_tree)
     queried_list = determine_what_ingredient_is_being_queried(parsed_tree)
-    set_trace()
     if is_yes_or_no(root_lemma):
         pass
 
@@ -180,7 +182,7 @@ def get_all_available_ingredients():
 if __name__=="__main__":
     new_customer =  Customer()
     nlp = spacy.load("en_core_web_sm")
-    doc = nlp("Is the whole wheat bread gluten free")
+    doc = nlp("I want a sandwich with onions lettuce and bread")
     # doc = displacy.serve(doc, style="dep")
     # for token in doc:
     #     print(token.text, token.head,  token.lemma_, token.pos_, token.tag_, token.dep_,
@@ -190,6 +192,9 @@ if __name__=="__main__":
     print("*****")
     print("New order vegetables: %s"%new_customer.order.vegetable_list)
     print("New order protein: %s" % new_customer.order.protein)
+    print("New order cheese: %s" % new_customer.order.cheese)
+    print("New order bread: %s" % new_customer.order.bread_type)
+    print("New order sauce: %s" % new_customer.order.sauce_list)
     print("*****")
 
     displacy.serve(doc, style="dep")
