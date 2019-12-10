@@ -80,7 +80,6 @@ def triggers_request_order_update(root_tuple, parsed_tree):
         else:
             if str(token.lemma_) in get_all_available_ingredients():
                 return True
-
     return True
 
 def is_there_a_verb(parsed_tree):
@@ -177,7 +176,7 @@ if __name__=="__main__":
     # doc = nlp("is this gluten free?")
     # doc = nlp("A sandwich with bacon and lettuce")
     #doc = nlp("Does the cheese contain lactose?")
-    doc = nlp("i want cheese")
+    doc = nlp("i want lettuce")
     # for token in doc:
     #     print(token.text, token.head,  token.lemma_, token.pos_, token.tag_, token.dep_,
     #           token.shape_, token.is_alpha, token.is_stop)
