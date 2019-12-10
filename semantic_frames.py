@@ -20,7 +20,6 @@ class request_special_need(Request):
 class request_order_update(Request):
     pass
 
-
 # class Inform:
 #     def __init__(self):
 #         self.speaker = None
