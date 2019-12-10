@@ -171,19 +171,20 @@ def get_parse_tree_root_tuple(parsed_tree):
 
 
 def get_all_available_ingredients():
-    fake_order = Order()
-    return fake_order.get_all_avaible_ingredients() + ['sandwich']
-#obligatory slots and optional slots.
-#root?
+    all_available_ingredients = []
+    for food_type, food_type_dict in ingredients_dict.items():
+        all_available_ingredients +=ingredients_dict[food_type].keys()
+    return all_available_ingredients
+
+
 if __name__=="__main__":
     new_customer =  Customer()
     nlp = spacy.load("en_core_web_sm")
     doc = nlp("Is the whole wheat bread gluten free")
-    doc = displacy.serve(doc, style="dep")
+    # doc = displacy.serve(doc, style="dep")
     # for token in doc:
     #     print(token.text, token.head,  token.lemma_, token.pos_, token.tag_, token.dep_,
     #           token.shape_, token.is_alpha, token.is_stop)
-
 
     update_state(customer=new_customer, parsed_tree=doc)
     print("*****")
@@ -192,24 +193,3 @@ if __name__=="__main__":
     print("*****")
 
     displacy.serve(doc, style="dep")
-    # Record Audio
-    # r = sr.Recognizer()
-    # with sr.Microphone() as source:
-    #     print("Say something!")
-    #     audio = r.listen(source)
-    #
-    # # Speech recognition using Google Speech Recognition
-    # try:
-    #     # for testing purposes, we're just using the default API key
-    #     # to use another API key, use `r.recognize_google(audio, key="GOOGLE_SPEECH_RECOGNITION_API_KEY")`
-    #     # instead of `r.recognize_google(audio)`
-    #     print("You said: " + r.recognize_google(audio))
-    #     doc = nlp(r.recognize_google(audio))
-    #     for chunk in doc.noun_chunks:
-    #         print (chunk)
-    # except sr.UnknownValueError:
-    #     print("Google Speech Recognition could not understand audio")
-    # except sr.RequestError as e:
-    #     print("Coud not request results from Google Speech Recognition service; {0}".format(e))
-
-
