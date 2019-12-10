@@ -13,6 +13,26 @@ class NellyTests(unittest.TestCase):
 
         self.assertEqual(expected, result)
 
+    def test_determine_semantic_frame_from_parsed_tree__greeting_simple(self):
+        nlp = spacy.load("en_core_web_sm")
+        parsed_tree = nlp("Hello")
+
+        result = nelly.determine_semantic_frame_from_parsed_tree(
+            parsed_tree=parsed_tree)
+        expected = 'greeting'
+
+        self.assertEqual(expected, result)
+
+    def test_determine_semantic_frame_from_parsed_tree__greeting_extended(self):
+        nlp = spacy.load("en_core_web_sm")
+        parsed_tree = nlp("Hello Nelly, how are you?")
+
+        result = nelly.determine_semantic_frame_from_parsed_tree(
+            parsed_tree=parsed_tree)
+        expected = 'greeting'
+
+        self.assertEqual(expected, result)
+
     def test_determine_semantic_frame_from_parsed_tree__request_special_need__be_celiac(self):
         nlp = spacy.load("en_core_web_sm")
         parsed_tree = nlp("I am celiac")
