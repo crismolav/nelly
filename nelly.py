@@ -9,24 +9,24 @@ from spacy import displacy
 from pdb import set_trace
 from semantic_frames import Order, Customer
 
-def update_state(order, parsed_tree):
+def update_state(customer, parsed_tree):
     semantic_frame = determine_semantic_frame_from_parsed_tree(parsed_tree)
     print("semantic_frame: %s" % semantic_frame)
     if semantic_frame == 'request_order_updated':
-        update_order_with_request(order=order, parsed_tree=parsed_tree)
+        update_order_with_request(customer=customer, parsed_tree=parsed_tree)
     else:
         pass
 
-def update_order_with_request(order, parsed_tree):
+def update_order_with_request(customer, parsed_tree):
     #TODO: use spacey labels ("PRODUCT")
     for token in parsed_tree:
-        all_ingredients = order.get_all_avaible_ingredients()
-        if token.lemma_ in order.available_protein_types():
-            order.add_protein_type(protein_type=token.lemma_)
-        elif token.lemma_ in order.available_vegetables():
-            order.add_vegetable(vegetable=token.lemma_)
-        elif token.lemma_ in order.available_sauces():
-            order.add_sauce(sauce=token.lemma_)
+        all_ingredients = customer.order.get_all_avaible_ingredients()
+        if token.lemma_ in customer.order.available_protein_types():
+            customer.order.add_protein_type(protein_type=token.lemma_)
+        elif token.lemma_ in customer.order.available_vegetables():
+            customer.order.add_vegetable(vegetable=token.lemma_)
+        elif token.lemma_ in customer.order.available_sauces():
+            customer.order.add_sauce(sauce=token.lemma_)
 
 def determine_semantic_frame_from_parsed_tree(parsed_tree):
     root_tuple = get_parse_tree_root_tuple(parsed_tree)
@@ -165,7 +165,6 @@ if __name__=="__main__":
 
     # en_voice_id = "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0"
     new_customer =  Customer()
-    new_order = Order()
     # new_order.add_bread_type("regular")
     # new_order.add_vegetable("tomato")
     # new_order.add_vegetable("lettuce")
@@ -182,7 +181,7 @@ if __name__=="__main__":
     #           token.shape_, token.is_alpha, token.is_stop)
 
 
-    update_state(order=new_order, parsed_tree=doc)
+    update_state(customer=new_customer, parsed_tree=doc)
     print("*****")
     print("New order vegetables: %s"%new_order.vegetable_list)
     print("New order protein: %s" % new_order.protein)
