@@ -177,7 +177,7 @@ if __name__=="__main__":
     # doc = nlp("is this gluten free?")
     # doc = nlp("A sandwich with bacon and lettuce")
     #doc = nlp("Does the cheese contain lactose?")
-    doc = nlp("A sandwich please")
+    doc = nlp("i want cheese")
     # for token in doc:
     #     print(token.text, token.head,  token.lemma_, token.pos_, token.tag_, token.dep_,
     #           token.shape_, token.is_alpha, token.is_stop)
