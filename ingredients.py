@@ -67,4 +67,3 @@ ingredients_dict = {
     #     "nutritional restriction":,
     #     "price":,
     # }
-}
