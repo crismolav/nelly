@@ -13,7 +13,7 @@ from ingredients import ingredients_dict
 def update_state(customer, parsed_tree):
     semantic_frame = determine_semantic_frame_from_parsed_tree(parsed_tree)
     print("semantic_frame: %s" % semantic_frame)
-    if semantic_frame == 'request_order_updated':
+    if semantic_frame == 'request_order_update':
         update_order_with_request(customer=customer, parsed_tree=parsed_tree)
     elif semantic_frame == 'request_for_information':
         provide_information(customer, parsed_tree=parsed_tree)
