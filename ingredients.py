@@ -1,4 +1,4 @@
-ingredients = {
+ingredients_dict = {
     'tomato' : {
         "type" : "vegetable",
         "restrictions" : []
@@ -18,12 +18,12 @@ ingredients = {
     },
     'wheat_bread'  : {
         "type": "bread",
-        "restrictions": ["gluten", "vegan"]
+        "restrictions": ["gluten", "vegan"],
         "ingredients": ["wheat_flour", "yeast", "butter", "water", "salt", "sugar"]
     },
     'whole_wheat_bread'  : {
         "type": "bread",
-        "restrictions": ["gluten", "vegan"]
+        "restrictions": ["gluten", "vegan"],
         "ingredients": ["whole_wheat_flour", "yeast", "sun_flower_oil", "water", "salt", "sugar"]
     },
     'rice_bread' : {
@@ -31,7 +31,7 @@ ingredients = {
         "restrictions": ["vegan"],
         "ingredients": ["rice_flour", "yeast", "butter", "water", "salt", "sugar"]
 
-    }
+    },
     'sourdough_bread' : {
         "type": "bread",
         "restrictions": [],
