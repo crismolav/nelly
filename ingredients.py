@@ -9,7 +9,8 @@ ingredients = {
     },
     'cheese' : {
         "type" : "dairy",
-        "restrictions" : ["lactose"]
+        "restrictions" : ["lactose"],
+        "ingredients": ["milk", "coagulant"]
     },
     'beef'  : {
         "type" : "protein",
