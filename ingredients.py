@@ -31,10 +31,14 @@ ingredients_dict = {
             "ingredients": []
         }
     },
-    "dairy":{
-        "cheese":{
+    "cheese":{
+        "regular_cheese":{
             "restriction": ["lactose", "vegan"],
             "ingredients": ["milk", "coagulants"]
+        },
+        "vegan_cheese":{
+            "restriction": [],
+            "ingredients": ["soja","coconut oil"]
         }
     },
     "bread":{
