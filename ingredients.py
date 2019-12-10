@@ -1,43 +1,62 @@
 ingredients_dict = {
-    'tomato' : {
-        "type" : "vegetable",
-        "restrictions" : []
+    "vegetable":{
+        "tomato":{
+            "restriction": [],
+            "ingredients": []
+        },
+        "lettuce":{
+            "restriction": [],
+            "ingredients": []
+        },
+        "onion":{
+            "restriction": [],
+            "ingredients": []
+        },
+        "olives":{
+            "restriction": [],
+            "ingredients": []
+        },
     },
-    "lettuce" : {
-        "type" : "vegetable",
-        "restrictions" : []
+    "protein":{
+        "beef":{
+            "restriction": ["vegan", "vegetarian"],
+            "ingredients": []
+        },
+        "chicken":{
+            "restriction": ["vegan", "vegetarian"],
+            "ingredients": []
+        },
+        "tuna":{
+            "restriction": ["vegan", "vegetarian"],
+            "ingredients": []
+        }
     },
-    'cheese' : {
-        "type" : "dairy",
-        "restrictions" : ["lactose"],
-        "ingredients": ["milk", "coagulant"]
+    "dairy":{
+        "cheese":{
+            "restriction": ["lactose", "vegan"],
+            "ingredients": ["milk", "coagulants"]
+        }
     },
-    'beef'  : {
-        "type" : "protein",
-        "restrictions" : ["vegan"]
-    },
-    'wheat_bread'  : {
-        "type": "bread",
-        "restrictions": ["gluten", "vegan"],
-        "ingredients": ["wheat_flour", "yeast", "butter", "water", "salt", "sugar"]
-    },
-    'whole_wheat_bread'  : {
-        "type": "bread",
-        "restrictions": ["gluten", "vegan"],
-        "ingredients": ["whole_wheat_flour", "yeast", "sun_flower_oil", "water", "salt", "sugar"]
-    },
-    'rice_bread' : {
-        "type": "bread",
-        "restrictions": ["vegan"],
-        "ingredients": ["rice_flour", "yeast", "butter", "water", "salt", "sugar"]
-
-    },
-    'sourdough_bread' : {
-        "type": "bread",
-        "restrictions": [],
-        "ingredients": ["wheat_flour", "water", "salt", "olive_oil","sun_flower_seeds"]
-
+    "bread":{
+        "wheat_bread":{
+            "restriction": ["vegan", "gluten"],
+            "ingredients": ["wheat_flour", "yeast", "butter", "water", "salt", "sugar"]
+        },
+        "whole_wheat_bread":{
+            "restriction": ["vegan", "gluten"],
+            "ingredients": ["whole_wheat_flour", "yeast", "sun_flower_oil", "water", "salt", "sugar"]
+        },
+        "rice_bread":{
+            "restriction": ["vegan"],
+            "ingredients": ["rice_flour", "yeast", "butter", "water", "salt", "sugar"]
+        },
+        "sourdough_bread":{
+            "restriction": [],
+            "ingredients": ["wheat_flour", "water", "salt", "olive_oil","sun_flower_seeds"]
+        }
     }
+}
+
     # 'customer' : {
     #     "greeting": true / false,
     #     "name" :,
