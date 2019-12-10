@@ -8,12 +8,15 @@ import pyttsx3
 from spacy import displacy
 from pdb import set_trace
 from semantic_frames import Order, Customer
+from ingredients import ingredients_dict
 
 def update_state(customer, parsed_tree):
     semantic_frame = determine_semantic_frame_from_parsed_tree(parsed_tree)
     print("semantic_frame: %s" % semantic_frame)
     if semantic_frame == 'request_order_updated':
         update_order_with_request(customer=customer, parsed_tree=parsed_tree)
+    elif semantic_frame == 'request_for_information':
+        provide_information(customer, parsed_tree=parsed_tree)
     else:
         pass
 
@@ -27,6 +30,24 @@ def update_order_with_request(customer, parsed_tree):
             customer.order.add_vegetable(vegetable=token.lemma_)
         elif token.lemma_ in customer.order.available_sauces():
             customer.order.add_sauce(sauce=token.lemma_)
+
+def provide_information(customer, parsed_tree):
+    root_lemma, root_text = get_parse_tree_root_tuple(parsed_tree)
+    queried_list = determine_what_ingredient_is_being_queried(parsed_tree)
+    set_trace()
+    if is_yes_or_no(root_lemma):
+        pass
+
+def is_yes_or_no(root_lemma):
+    if root_lemma in ['be']:
+        return True
+
+def determine_what_ingredient_is_being_queried(parsed_tree):
+    queried_list = []
+    for token in parsed_tree:
+        if token.lemma_ in get_all_available_ingredients():
+            queried_list.append(token.lemma_)
+    return queried_list
 
 def determine_semantic_frame_from_parsed_tree(parsed_tree):
     root_tuple = get_parse_tree_root_tuple(parsed_tree)
@@ -155,28 +176,10 @@ def get_all_available_ingredients():
 #obligatory slots and optional slots.
 #root?
 if __name__=="__main__":
-    # engine = pyttsx3.init()
-    #     # #engine.setProperty('voice', en_voice_id)
-    #     #
-    #     # # Set properties _before_ you add things to say
-    #     # engine.setProperty('rate', 100)    # Speed percent (can go over 100)
-    #     # engine.setProperty('volume', 0.9)  # Volume 0-1
-    #     # engine.say("Thank you")
-    #     # engine.runAndWait()
-
-    # en_voice_id = "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0"
     new_customer =  Customer()
-    # new_order.add_bread_type("regular")
-    # new_order.add_vegetable("tomato")
-    # new_order.add_vegetable("lettuce")
-    # print(new_order.vegetable_list)
-
     nlp = spacy.load("en_core_web_sm")
-    # doc = nlp("I would like a sandwich")
-    # doc = nlp("is this gluten free?")
-    # doc = nlp("A sandwich with bacon and lettuce")
-    #doc = nlp("Does the cheese contain lactose?")
-    doc = nlp("i want cheese")
+    doc = nlp("Is the whole wheat bread gluten free")
+    doc = displacy.serve(doc, style="dep")
     # for token in doc:
     #     print(token.text, token.head,  token.lemma_, token.pos_, token.tag_, token.dep_,
     #           token.shape_, token.is_alpha, token.is_stop)
@@ -184,8 +187,8 @@ if __name__=="__main__":
 
     update_state(customer=new_customer, parsed_tree=doc)
     print("*****")
-    print("New order vegetables: %s"%new_order.vegetable_list)
-    print("New order protein: %s" % new_order.protein)
+    print("New order vegetables: %s"%new_customer.order.vegetable_list)
+    print("New order protein: %s" % new_customer.order.protein)
     print("*****")
 
     displacy.serve(doc, style="dep")
