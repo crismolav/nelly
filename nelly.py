@@ -55,7 +55,7 @@ def determine_what_ingredient_is_being_queried(parsed_tree):
 
 def determine_semantic_frame_from_parsed_tree(parsed_tree):
     root_tuple = get_parse_tree_root_tuple(parsed_tree)
-    if triggers_greeting(root_tuple=root_tuple):
+    if triggers_greeting(root_tuple=root_tuple, parsed_tree= parsed_tree):
         return "greeting"
     elif triggers_a_request_for_information(root_tuple=root_tuple, parsed_tree=parsed_tree):
         return "request_for_information"
@@ -83,10 +83,14 @@ def triggers_a_request_for_information(root_tuple, parsed_tree):
                 return True
     return False
 
-def triggers_greeting(root_tuple):
+def triggers_greeting(root_tuple, parsed_tree):
     root_lemma, root_text = root_tuple
     if root_lemma in ["hi", "hey", "hello", "morning", "afternoon", "evening", "night"]:
         return True
+    if root_lemma == "be":
+        for token in parsed_tree:
+            if str(token.lemma_) in ["how"]:
+                return True
     return False
 
 def triggers_request_order_update(root_tuple, parsed_tree):
