@@ -13,6 +13,7 @@ from spacy import displacy
 from pdb import set_trace
 from semantic_frames import Order, Customer
 from ingredients import ingredients_dict
+import nelly
 
 ################################################################################
 def answer(frame):
@@ -66,7 +67,8 @@ def text_to_speech(answer):
     playsound("good2.mp3")
     os.remove("good2.mp3")
     return 0
-################################################################################def update_state(customer, parsed_tree):
+################################################################################
+def update_state(customer, parsed_tree):
     semantic_frame = determine_semantic_frame_from_parsed_tree(parsed_tree)
     print("semantic_frame: %s" % semantic_frame)
     if semantic_frame == 'request_order_update':
