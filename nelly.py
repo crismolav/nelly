@@ -98,14 +98,20 @@ def triggers_a_request_for_information(root_tuple, parsed_tree):
     return False
 
 def triggers_greeting(root_tuple, parsed_tree):
-    root_lemma, root_text = root_tuple
-    if root_lemma in ["hi", "hey", "hello", "morning", "afternoon", "evening", "night"]:
-        return True
-    if root_lemma == "be":
-        for token in parsed_tree:
-            if str(token.lemma_) in ["how"]:
-                return True
+    trigger_words = ["hi", "hey", "hello", "morning", "afternoon", "evening", "night"]
+    for token in parsed_tree:
+        if str(token.lemma_) in trigger_words:
+            return True
+
     return False
+    # root_lemma, root_text = root_tuple
+    # if root_lemma in ["hi", "hey", "hello", "morning", "afternoon", "evening", "night"]:
+    #     return True
+    # if root_lemma == "be":
+    #     for token in parsed_tree:
+    #         if str(token.lemma_) in ["how"]:
+    #             return True
+    # return False
 
 def triggers_request_order_update(root_tuple, parsed_tree):
     root_lemma, root_text = root_tuple
