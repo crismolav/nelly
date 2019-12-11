@@ -74,6 +74,26 @@ def answer(frame):
         answer = ['Sure!, Now your order is: + spacystring()']
         answer = random.choice(answer)
 
+    elif frame == "answer_bread":
+        answer = ['Please tell me which kind of bread do you want for your sandwich', 'Which of the bread options you want my friend?']
+        answer = random.choice(answer)
+
+    elif frame == "answer_protein":
+        answer = ['Please tell me which protein do you want in your sandwich', 'Would you want any protein for your sandwich?']
+        answer = random.choice(answer)
+
+    elif frame == "answer_vegetable":
+        answer = ['Please tell me which vegetables do you want in your sandwich', 'You dont like vegetables?. Add some vegetables to your order, please!']
+        answer = random.choice(answer)
+
+    elif frame == "answer_sauce":
+        answer = ['Please tell me which sauces do you want in your sandwich', 'If you add sauce the sandwich taste better. Please tell me which sauce you want to add.']
+        answer = random.choice(answer)
+
+    elif frame == "answer_cheese":
+        answer = ['Please tell me which kind of cheese do you want in your sandwich','If you are not lactose intolerant, please tell me which cheese you want in the sandwich, my friend!']
+        answer = random.choice(answer)
+
     else:
         answer = ['I dont have an answer for that, sorry.', 'I can not help you with that, amigo. Sorry.']
         answer = random.choice(answer)
@@ -128,13 +148,43 @@ if __name__=="__main__":
             doc = nlp(message)
             nelly.update_state(customer=new_customer, parsed_tree=doc)
             frame = nelly.determine_semantic_frame_from_parsed_tree(doc)
-            answer1= answer(frame)
-            text_to_speech(answer1)
-            message = speech_to_text()
+            if frame == "request_order_update":
+                if not new_customer.order.vegetable_list:
+                    answer1= answer("answer_vegetable")
+                    text_to_speech(answer1)
+                    message = speech_to_text()
+
+                elif not new_customer.order.sauce_list:
+                    answer1= answer("answer_sauce")
+                    text_to_speech(answer1)
+                    message = speech_to_text()
+
+                elif new_customer.order.bread_type == None:
+                    answer1= answer("answer_bread")
+                    text_to_speech(answer1)
+                    message = speech_to_text()
+
+                elif new_customer.order.protein == None:
+                    answer1= answer("answer_protein")
+                    text_to_speech(answer1)
+                    message = speech_to_text()
+
+                elif new_customer.order.cheese == None:
+                    answer1= answer("answer_cheese")
+                    text_to_speech(answer1)
+                    message = speech_to_text()
+
+                else:
+                    answer1= answer("answer_price")
+                    text_to_speech(answer1)
+                    message = speech_to_text()
+
+            if frame != "request_order_update":
+                answer1= answer(frame)
+                text_to_speech(answer1)
+                message = speech_to_text()
+
+
+
     answer1= answer("answer_goodbye")
     text_to_speech(answer1)
-    print("New order vegetables: %s"%new_customer.order.vegetable_list)
-    print("New order protein: %s" % new_customer.order.protein)
-    print("New order cheese: %s" % new_customer.order.cheese)
-    print("New order bread: %s" % new_customer.order.bread_type)
-    print("New order sauce: %s" % new_customer.order.sauce_list)
