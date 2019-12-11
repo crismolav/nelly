@@ -60,11 +60,3 @@ ingredients_dict = {
         }
     }
 }
-
-    # 'customer' : {
-    #     "greeting": true / false,
-    #     "name" :,
-    #     "nutritional restriction":,
-    #     "price":,
-    # }
-}
