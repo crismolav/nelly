@@ -175,8 +175,8 @@ class NellyTests(unittest.TestCase):
     def test_update_customer_with_greeting__True(self):
         new_customer = sf.Customer()
         nelly.update_customer_with_greeting(customer=new_customer)
-
-        self.assertTrue(new_customer.greeted)
+        expected = 1
+        self.assertEqual(expected, new_customer.number_of_greetings)
 
     def test_triggers_a_request_order_update_all_ingredients(self):
         new_customer = sf.Customer()
@@ -228,6 +228,17 @@ class NellyTests(unittest.TestCase):
         expected_list = ["vegan", "celiac"]
 
         self.assertIsNot(expected_list, results_list)
+
+    # def test_update_customer_with_greeting__updated_info_is_correct(self):
+    #     new_customer = sf.Customer()
+    #     updated_info = {}
+    #
+    #     nelly.update_customer_with_greeting(customer=new_customer, updated_info=updated_info)
+    #
+    #     result = new_customer.food_restrictions_list
+    #     expected = {}
+    #
+    #     self.assertEqual(expected, result)
 
     # def test_triggers_a_request_for_information__verb_to_be__False(self):
     #
