@@ -16,7 +16,9 @@ from food_restrictions import food_restrictions_dict
 def update_state(customer, parsed_tree):
     semantic_frame = determine_semantic_frame_from_parsed_tree(parsed_tree)
     print("semantic_frame: %s" % semantic_frame)
-    if semantic_frame == 'request_order_update':
+    if semantic_frame == 'greeting':
+        update_customer_with_greeting(customer=customer)
+    elif semantic_frame == 'request_order_update':
         update_order_with_request(customer=customer, parsed_tree=parsed_tree)
     elif semantic_frame == 'request_for_information':
         provide_information(customer=customer, parsed_tree=parsed_tree)
@@ -24,6 +26,9 @@ def update_state(customer, parsed_tree):
         update_nutritional_restrictions(customer=customer, parsed_tree=parsed_tree)
     else:
         pass
+
+def update_customer_with_greeting(customer):
+    customer.update_greeted_status(status=True)
 
 def update_order_with_request(customer, parsed_tree):
     #TODO: use spacey labels ("PRODUCT")

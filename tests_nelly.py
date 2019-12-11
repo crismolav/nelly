@@ -170,6 +170,12 @@ class NellyTests(unittest.TestCase):
 
         self.assertFalse(result)
 
+    def test_update_customer_with_greeting__True(self):
+        new_customer = sf.Customer()
+        nelly.update_customer_with_greeting(customer=new_customer)
+
+        self.assertTrue(new_customer.greeted)
+
     def test_triggers_a_request_order_update_all_ingredients(self):
         new_customer = sf.Customer()
         nlp = spacy.load("en_core_web_sm")
