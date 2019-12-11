@@ -10,6 +10,7 @@ from spacy import displacy
 from pdb import set_trace
 from semantic_frames import Order, Customer
 from ingredients import ingredients_dict
+from food_restrictions import food_restrictions_dict
 
 
 def update_state(customer, parsed_tree):
@@ -18,7 +19,9 @@ def update_state(customer, parsed_tree):
     if semantic_frame == 'request_order_update':
         update_order_with_request(customer=customer, parsed_tree=parsed_tree)
     elif semantic_frame == 'request_for_information':
-        provide_information(customer, parsed_tree=parsed_tree)
+        provide_information(customer=customer, parsed_tree=parsed_tree)
+    elif semantic_frame == 'request_special_need':
+        update_nutritional_restrictions(customer=customer, parsed_tree=parsed_tree)
     else:
         pass
 
@@ -35,6 +38,12 @@ def update_order_with_request(customer, parsed_tree):
             customer.order.add_bread_type(bread_type=token.lemma_)
         elif token.lemma_ in ingredients_dict['cheese'].keys():
             customer.order.add_cheese(cheese=token.lemma_)
+
+def update_nutritional_restrictions(customer, parsed_tree):
+    for token in parsed_tree:
+        if token.lemma_ in food_restrictions_dict.keys():
+            customer.food_restrictions_list.add_food_restriction(food_restriction=token.lemma_)
+
 
 def provide_information(customer, parsed_tree):
     root_lemma, root_text = get_parse_tree_root_tuple(parsed_tree)
@@ -188,7 +197,7 @@ def get_all_available_ingredients():
 if __name__=="__main__":
     new_customer =  Customer()
     nlp = spacy.load("en_core_web_sm")
-    doc = nlp("I want a sandwich with onions beef ketchup regular_cheese and rice_bread")
+    doc = nlp("I would like a sandwich with onions and beef")
     # doc = displacy.serve(doc, style="dep")
     # for token in doc:
     #     print(token.text, token.head,  token.lemma_, token.pos_, token.tag_, token.dep_,

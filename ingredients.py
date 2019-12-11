@@ -29,6 +29,10 @@ ingredients_dict = {
         "tuna":{
             "restriction": ["vegan", "vegetarian"],
             "ingredients": []
+        },
+        "pork":{
+            "restriction": ["vegan", "vegetarian"],
+            "ingredients": []
         }
     },
     "cheese":{

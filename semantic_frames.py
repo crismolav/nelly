@@ -35,7 +35,7 @@ class Customer():
         self.order = Order()
         self.food_restrictions_list = []
     def add_food_restriction(self, food_restriction):
-        pass
+        self.food_restrictions_list.append(food_restriction)
     def recognized_food_restrictions(self):
         return ['vegan', 'celiac', 'lactose_intolerant', 'peanut']
 

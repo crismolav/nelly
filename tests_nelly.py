@@ -184,6 +184,18 @@ class NellyTests(unittest.TestCase):
 
         self.assertIsNot(expected_list, results_list)
 
+    def test_triggers_a_request_special_need(self):
+        new_customer = sf.Customer()
+        nlp = spacy.load("en_core_web_sm")
+        parsed_tree = nlp("vegan and celiac")
+
+        nelly.update_state(customer=new_customer, parsed_tree=parsed_tree)
+
+        results_list = [new_customer.food_restrictions_list]
+        expected_list = []
+
+        self.assertIsNot(expected_list, results_list)
+
     # def test_triggers_a_request_for_information__verb_to_be__False(self):
     #     nlp = spacy.load("en_core_web_sm")
     #     parsed_tree = nlp("Is the whole wheat bread vegan")
