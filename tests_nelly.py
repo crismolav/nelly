@@ -191,6 +191,36 @@ class NellyTests(unittest.TestCase):
 
         self.assertIsNot(expected_list, results_list)
 
+    def test_get_bread_type_strung__general_test(self):
+        nlp = spacy.load("en_core_web_sm")
+        parsed_tree = nlp("Is the whole wheat bread vegan")
+
+        result = nelly.get_bread_type_strung(parsed_tree)
+        expected = 'whole_wheat_bread'
+
+        self.assertEqual(expected, result)
+
+    def test_get_bread_type_strung__no_bread_mention(self):
+        nlp = spacy.load("en_core_web_sm")
+        parsed_tree = nlp("hello how are you")
+
+        result = nelly.get_bread_type_strung(parsed_tree)
+        expected = ''
+
+        self.assertEqual(expected, result)
+
+    def test_triggers_a_request_special_need(self):
+        new_customer = sf.Customer()
+        nlp = spacy.load("en_core_web_sm")
+        parsed_tree = nlp("vegan and celiac")
+
+        nelly.update_state(customer=new_customer, parsed_tree=parsed_tree)
+
+        results_list = [new_customer.food_restrictions_list]
+        expected_list = []
+
+        self.assertIsNot(expected_list, results_list)
+
     # def test_triggers_a_request_for_information__verb_to_be__False(self):
     #     nlp = spacy.load("en_core_web_sm")
     #     parsed_tree = nlp("Is the whole wheat bread vegan")
