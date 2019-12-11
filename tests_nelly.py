@@ -1,6 +1,7 @@
 import unittest
 import spacy
 import nelly
+import semantic_frames as sf
 
 class NellyTests(unittest.TestCase):
     def test_determine_semantic_frame_from_parsed_tree__request_special_need__have(self):
@@ -168,6 +169,12 @@ class NellyTests(unittest.TestCase):
             root_tuple=root_tuple, parsed_tree=parsed_tree)
 
         self.assertFalse(result)
+
+    def test_update_customer_with_greeting__True(self):
+        new_customer = sf.Customer()
+        nelly.update_customer_with_greeting(customer=new_customer)
+
+        self.assertTrue(new_customer.greeted)
 
     # def test_triggers_a_request_for_information__verb_to_be__False(self):
     #     nlp = spacy.load("en_core_web_sm")
