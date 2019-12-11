@@ -95,7 +95,7 @@ def answer(frame):
         answer = random.choice(answer)
 
     else:
-        answer = ['I dont have an answer for that, sorry.', 'I can not help you with that, amigo. Sorry.']
+        answer = ['HA HA HA HA!', 'I can not help you with that, amigo. Sorry.']
         answer = random.choice(answer)
     return answer
 ################################################################################
@@ -104,6 +104,16 @@ def answer_ingredient(ingredient_list):
     str1 = " "
     ingredient_list = str1.join(ingredient_list)
     answer = 'This food my friend, contains:' + ingredient_list
+    return answer
+
+################################################################################
+def answer_order(vegetable_list,sauce_list,bread,protein,cheese):
+    #FOR BETTER USER EXPERIENCE USE A LIST LIKE THIS ingredients= ['flour,', 'butter,', 'sugar,', 'salt,', 'yeast,']
+    str1 = " "
+    vegetable_list = ','.join(vegetable_list)
+    str2 = " "
+    sauce_list = ','.join(sauce_list)
+    answer = 'Dear friend, you have ordered a sandwich, with' + vegetable_list +','+ sauce_list +','+ bread +','+ protein +','+ cheese
     return answer
 ################################################################################
 def speech_to_text():
@@ -130,7 +140,6 @@ def text_to_speech(answer):
     os.remove("good2.mp3")
     return 0
 ################################################################################
-
 ################################################################################
 ################################################################################
 
@@ -148,7 +157,7 @@ if __name__=="__main__":
             doc = nlp(message)
             nelly.update_state(customer=new_customer, parsed_tree=doc)
             frame = nelly.determine_semantic_frame_from_parsed_tree(doc)
-            
+
             if frame == "request_order_update":
                 if not new_customer.order.vegetable_list:
                     answer1= answer("answer_vegetable")
@@ -176,9 +185,12 @@ if __name__=="__main__":
                     message = speech_to_text()
 
                 else:
+                    answer1= answer_order(new_customer.order.vegetable_list, new_customer.order.sauce_list, new_customer.order.bread_type, new_customer.order.protein, new_customer.order.cheese)
+                    text_to_speech(answer1)
                     answer1= answer("answer_price")
                     text_to_speech(answer1)
                     message = speech_to_text()
+
 
             else:
                 if new_customer.number_of_greetings > 1:
