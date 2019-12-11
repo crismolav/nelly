@@ -39,9 +39,11 @@ def update_order_with_request(customer, parsed_tree):
             customer.order.add_vegetable(vegetable=token.lemma_)
         elif token.lemma_ in ingredients_dict['sauce'].keys():
             customer.order.add_sauce(sauce=token.lemma_)
-        elif token.lemma_ in ingredients_dict['bread'].keys():
+        elif token.lemma_ == "bread":
+            token.lemma_ = get_food_type_strung(parsed_tree, "bread")
             customer.order.add_bread_type(bread_type=token.lemma_)
-        elif token.lemma_ in ingredients_dict['cheese'].keys():
+        elif token.lemma_ == "cheese":
+            token.lemma_ =get_food_type_strung(parsed_tree, "cheese")
             customer.order.add_cheese(cheese=token.lemma_)
 
 def update_nutritional_restrictions(customer, parsed_tree):
@@ -210,26 +212,38 @@ def get_all_available_ingredients():
     return all_available_ingredients + ['sandwich']
 
 def get_food_type_strung(parsed_tree, food_type):
-    bread_type_list = []
-    bread_children = []
+    food_type_list = []
+    food_children = []
     for token in parsed_tree:
         if token.lemma_ == food_type:
-            bread_children = token.children
+            food_children = token.children
             break
-    for bread_child in bread_children:
-        if bread_child.pos_ == 'DET':
+    filtered_food_children = filter_food_type_children(
+        children=food_children, food_type=food_type)
+    for food_child in filtered_food_children:
+        if food_child.pos_ == 'DET':
             continue
-        bread_type_list.append(bread_child.lemma_)
+        food_type_list.append(food_child.lemma_)
 
-    if bread_type_list != []:
-        bread_type_list.append(food_type)
+    if food_type_list != []:
+        food_type_list.append(food_type)
+    return '_'.join(food_type_list)
 
-    return '_'.join(bread_type_list)
+def filter_food_type_children(children, food_type):
+    bread_list = ["wheat", "whole", "rice", "sourdough"]
+    cheese_list = ["regular", "vegan"]
+    filter_in_list = bread_list if food_type == 'bread' else cheese_list
+    filtered_list = []
+    for child in children:
+        if str(child) in filter_in_list:
+            filtered_list.append(child)
+
+    return filtered_list
 
 if __name__=="__main__":
     new_customer =  Customer()
     nlp = spacy.load("en_core_web_sm")
-    doc = nlp("I want a sandwich with tomato, lettuce, onions and cheese please")
+    doc = nlp("I want a sandwich with tomato, lettuce, onions and cheese and rice bread please")
     # doc = displacy.serve(doc, style="dep")
     # for token in doc:
     #     print(token.text, token.head,  token.lemma_, token.pos_, token.tag_, token.dep_,
@@ -242,7 +256,7 @@ if __name__=="__main__":
     print("New order cheese: %s" % new_customer.order.cheese)
     print("New order bread: %s" % new_customer.order.bread_type)
     print("New order sauce: %s" % new_customer.order.sauce_list)
-    doc = nlp("i am vegan")
+    doc = nlp("i am vegan and vegetarian")
     update_state(customer=new_customer, parsed_tree=doc)
     print("Nutritional restriction: %s" %new_customer.food_restrictions_list)
     print("*****")
