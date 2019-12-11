@@ -41,6 +41,15 @@ class NellyTests(unittest.TestCase):
 
         self.assertEqual(expected, result)
 
+    def test_determine_semantic_frame_from_parsed_tree__greeting_with_order__request_order_update(self):
+        parsed_tree = nlp("Hello Nelly a sandwich with tomato")
+
+        result = nelly.determine_semantic_frame_from_parsed_tree(
+            parsed_tree=parsed_tree)
+        expected = 'request_order_update'
+
+        self.assertEqual(expected, result)
+
     def test_determine_semantic_frame_from_parsed_tree__request_special_need__be_celiac(self):
         parsed_tree = nlp("I am celiac")
 
