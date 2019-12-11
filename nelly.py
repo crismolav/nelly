@@ -189,6 +189,22 @@ def get_all_available_ingredients():
         all_available_ingredients +=ingredients_dict[food_type].keys()
     return all_available_ingredients
 
+def get_bread_type_strung(parsed_tree):
+    bread_type_list = []
+    bread_children = []
+    for token in parsed_tree:
+        if token.lemma_ == 'bread':
+            bread_children = token.children
+            break
+    for bread_child in bread_children:
+        if bread_child.pos_ == 'DET':
+            continue
+        bread_type_list.append(bread_child.lemma_)
+
+    if bread_type_list != []:
+        bread_type_list.append('bread')
+
+    return '_'.join(bread_type_list)
 
 if __name__=="__main__":
     new_customer =  Customer()
