@@ -58,5 +58,19 @@ ingredients_dict = {
             "restriction": [],
             "ingredients": ["wheat_flour", "water", "salt", "olive_oil","sun_flower_seeds"]
         }
+    },
+    "sauce":{
+        "ketchup":{
+            "restriction":[],
+            "ingredients":["tomato", "water", "sugar", "sodium"]
+        },
+        "mustard":{
+            "restriction":[],
+            "ingredients":["mustard", "water", "sugar", "sodium"]
+        },
+        "mayonnaise":{
+            "restriction":["vegan"],
+            "ingredients":["egg", "oil", "sodium"]
+        }
     }
 }
