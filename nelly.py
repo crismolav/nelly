@@ -69,14 +69,14 @@ def determine_what_ingredient_is_being_queried(parsed_tree):
 
 def determine_semantic_frame_from_parsed_tree(parsed_tree):
     root_tuple = get_parse_tree_root_tuple(parsed_tree)
-    if triggers_greeting(root_tuple=root_tuple, parsed_tree= parsed_tree):
-        return "greeting"
-    elif triggers_a_request_for_information(root_tuple=root_tuple, parsed_tree=parsed_tree):
+    if triggers_a_request_for_information(root_tuple=root_tuple, parsed_tree=parsed_tree):
         return "request_for_information"
     elif triggers_request_special_need(root_tuple=root_tuple, parsed_tree=parsed_tree):
         return 'request_special_need'
     elif triggers_request_order_update(root_tuple=root_tuple, parsed_tree=parsed_tree):
         return 'request_order_update'
+    elif triggers_greeting(root_tuple=root_tuple, parsed_tree= parsed_tree):
+        return "greeting"
     else:
         return False
 
@@ -85,7 +85,10 @@ def triggers_a_request_for_information(root_tuple, parsed_tree):
     if root_lemma in ["tell", "know", "contain", "include"]:
         return True
     elif root_lemma in ["have", "want", "need", "would", "like", "be"]:
+
         for token in parsed_tree:
+            if token.lemma_ in get_trigger_words_greeting():
+                return False
             if str(token.head.lemma_) == 'be':
                 # E.g. "I am vegan"
                 if str(token.dep_) == 'nsubj':
@@ -97,10 +100,13 @@ def triggers_a_request_for_information(root_tuple, parsed_tree):
                 return True
     return False
 
+
+def get_trigger_words_greeting():
+    return ["hi", "hey", "hello", "morning", "afternoon", "evening", "night"]
 def triggers_greeting(root_tuple, parsed_tree):
-    trigger_words = ["hi", "hey", "hello", "morning", "afternoon", "evening", "night"]
+    trigger_words_greeting = get_trigger_words_greeting()
     for token in parsed_tree:
-        if str(token.lemma_) in trigger_words:
+        if str(token.lemma_) in trigger_words_greeting:
             return True
 
     return False
@@ -121,16 +127,16 @@ def triggers_request_order_update(root_tuple, parsed_tree):
     if there_is_a_verb and root_lemma not in ['sandwich', 'have', 'like', 'want',
                                               'give', 'need', "add", "order"]:
         return False
+
     for token in parsed_tree:
         if there_is_a_verb:
             if root_lemma in modal_verbs:
                 if str(token.head) == root_text and str(token.lemma_) in ['know', 'inquire', 'find']:
                     return False
-        else:
-            if str(token.lemma_) in get_all_available_ingredients():
-                return True
+        if str(token.lemma_.lower()) in get_all_available_ingredients():
+            return True
 
-    return True
+    return False
 
 def is_there_a_verb(parsed_tree):
     for token in parsed_tree:
@@ -202,7 +208,7 @@ def get_all_available_ingredients():
     all_available_ingredients = []
     for food_type, food_type_dict in ingredients_dict.items():
         all_available_ingredients +=ingredients_dict[food_type].keys()
-    return all_available_ingredients
+    return all_available_ingredients + ['sandwich']
 
 def get_bread_type_strung(parsed_tree):
     bread_type_list = []
