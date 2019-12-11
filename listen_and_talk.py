@@ -148,8 +148,7 @@ if __name__=="__main__":
             doc = nlp(message)
             nelly.update_state(customer=new_customer, parsed_tree=doc)
             frame = nelly.determine_semantic_frame_from_parsed_tree(doc)
-            print("testing1")
-
+            
             if frame == "request_order_update":
                 if not new_customer.order.vegetable_list:
                     answer1= answer("answer_vegetable")
