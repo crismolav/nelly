@@ -133,3 +133,8 @@ if __name__=="__main__":
             message = speech_to_text()
     answer1= answer("answer_goodbye")
     text_to_speech(answer1)
+    print("New order vegetables: %s"%new_customer.order.vegetable_list)
+    print("New order protein: %s" % new_customer.order.protein)
+    print("New order cheese: %s" % new_customer.order.cheese)
+    print("New order bread: %s" % new_customer.order.bread_type)
+    print("New order sauce: %s" % new_customer.order.sauce_list)
