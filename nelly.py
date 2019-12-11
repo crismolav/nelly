@@ -37,7 +37,7 @@ def update_order_with_request(customer, parsed_tree):
         elif token.lemma_ in ingredients_dict['sauce'].keys():
             customer.order.add_sauce(sauce=token.lemma_)
         elif token.lemma_ in ingredients_dict['bread'].keys():
-            customer.order.add_bread(bread=token.lemma_)
+            customer.order.add_bread_type(bread_type=token.lemma_)
         elif token.lemma_ in ingredients_dict['cheese'].keys():
             customer.order.add_cheese(cheese=token.lemma_)
 
@@ -193,7 +193,7 @@ def get_all_available_ingredients():
 if __name__=="__main__":
     new_customer =  Customer()
     nlp = spacy.load("en_core_web_sm")
-    doc = nlp("I want a sandwich with onions lettuce and ketchup")
+    doc = nlp("I want a sandwich with onions beef ketchup regular_cheese and rice_bread")
     # doc = displacy.serve(doc, style="dep")
     # for token in doc:
     #     print(token.text, token.head,  token.lemma_, token.pos_, token.tag_, token.dep_,

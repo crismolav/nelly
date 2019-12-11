@@ -176,6 +176,21 @@ class NellyTests(unittest.TestCase):
 
         self.assertTrue(new_customer.greeted)
 
+    def test_triggers_a_request_order_update_all_ingredients(self):
+        new_customer = sf.Customer()
+        nlp = spacy.load("en_core_web_sm")
+        parsed_tree = nlp("I want a sandwich with onions beef ketchup rice_bread and cheese")
+        root_tuple = nelly.get_parse_tree_root_tuple(parsed_tree)
+
+        nelly.update_state(customer=new_customer, parsed_tree=parsed_tree)
+
+        results_list = [new_customer.order.vegetable_list, new_customer.order.protein,
+                        new_customer.order.cheese, new_customer.order.bread_type, new_customer.order.sauce_list]
+
+        expected_list =[[], None, None, None, []]
+
+        self.assertIsNot(expected_list, results_list)
+
     # def test_triggers_a_request_for_information__verb_to_be__False(self):
     #     nlp = spacy.load("en_core_web_sm")
     #     parsed_tree = nlp("Is the whole wheat bread vegan")
