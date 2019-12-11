@@ -148,14 +148,9 @@ if __name__=="__main__":
             doc = nlp(message)
             nelly.update_state(customer=new_customer, parsed_tree=doc)
             frame = nelly.determine_semantic_frame_from_parsed_tree(doc)
+            print("testing1")
 
-            if  frame == "greeting":
-                if new_customer.greeted > 1:
-                    answer1= answer("two_times_greeting")
-                    text_to_speech(answer1)
-                    message = speech_to_text()
-
-            elif frame == "request_order_update":
+            if frame == "request_order_update":
                 if not new_customer.order.vegetable_list:
                     answer1= answer("answer_vegetable")
                     text_to_speech(answer1)
@@ -187,9 +182,15 @@ if __name__=="__main__":
                     message = speech_to_text()
 
             else:
-                answer1= answer(frame)
-                text_to_speech(answer1)
-                message = speech_to_text()
+                if new_customer.number_of_greetings > 1:
+                    if  frame == "greeting":
+                        answer1= answer("two_times_greeting")
+                        text_to_speech(answer1)
+                        message = speech_to_text()
+                else:
+                        answer1= answer(frame)
+                        text_to_speech(answer1)
+                        message = speech_to_text()
 
 
 
