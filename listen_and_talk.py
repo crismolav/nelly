@@ -60,8 +60,8 @@ def answer(frame):
     elif frame == "answer_goodbye":
         answer = ['Thank you, for buying in Nellys, have a nice day!','Thank you, for your order.', 'Bon apetit. Goodbye!']
         answer = random.choice(answer)
-    elif frame == "silence_frame":
-        answer = ['Thank you, for buying in Nellys, have a nice day!','Thank you, for your order.', 'Bon apetit. Goodbye!']
+    elif frame == "silence":
+        answer = ['Please. Answer to me!', 'Are you muted? I can not hear you', 'Talk to me! Please my friend!', 'Listen my friend, you should answer my questions. If you want to eat today!']
         answer = random.choice(answer)
 
     else:
@@ -106,11 +106,15 @@ def text_to_speech(answer):
 if __name__=="__main__":
     new_customer =  Customer()
     nlp = spacy.load("en_core_web_sm")
-    message=speech_to_text()
-    doc = nlp(message)
+    message = speech_to_text()
+    if message != "silence":
+        doc = nlp(message)
 
-    nelly.update_state(customer=new_customer, parsed_tree=doc)
+        nelly.update_state(customer=new_customer, parsed_tree=doc)
 
-    frame = nelly.determine_semantic_frame_from_parsed_tree(doc)
-    answer1= answer(frame)
-    text_to_speech(answer1)
+        frame = nelly.determine_semantic_frame_from_parsed_tree(doc)
+        answer1= answer(frame)
+        text_to_speech(answer1)
+    else:
+        answer1= answer("silence")
+        text_to_speech(answer1)
