@@ -22,8 +22,8 @@ def answer(frame):
         answer = ['Hows your day going. What do you want to eat?', 'Hello my friend, what do you want to order?', 'Hello. My name is Nelly! What do you want to order?', 'Hi! Nice to meet you. Please proceed to order!']
         answer = random.choice(answer)
 
-    elif frame == "not_greeting":
-        answer = ['Well, as you did not answer, lets continue with your order, What do you want to eat?','Well friend, what you want to order today?','Answer bitch, why you so rude!, What you want to order?']
+    elif frame == "two_times_greeting":
+        answer = ['Hello, again, my friend!','It looks like, you enjoy greeting me!']
         answer = random.choice(answer)
 
     elif frame == "lactose_restriction": #(activated with cheese, milk, cream, etc)
@@ -67,7 +67,7 @@ def answer(frame):
         answer = random.choice(answer)
 
     elif frame == "silence":
-        answer = ['Please. Answer to me!', 'Are you muted? I can not hear you!', 'Talk to me! Please my friend!', 'Listen my friend, you should answer my questions. If you want to eat today!']
+        answer = ['Please. Answer to me!', 'Are you muted? I can not hear you!', 'Talk to me! Please my friend!', 'Listen my friend, you should answer my questions. If you want to eat today!', 'Well, as you did not answer, lets continue with your order, What do you want to eat?']
         answer = random.choice(answer)
 
     elif frame == "request_order_update":
@@ -148,7 +148,14 @@ if __name__=="__main__":
             doc = nlp(message)
             nelly.update_state(customer=new_customer, parsed_tree=doc)
             frame = nelly.determine_semantic_frame_from_parsed_tree(doc)
-            if frame == "request_order_update":
+
+            if  frame == "greeting":
+                if new_customer.greeted > 1:
+                    answer1= answer("two_times_greeting")
+                    text_to_speech(answer1)
+                    message = speech_to_text()
+
+            elif frame == "request_order_update":
                 if not new_customer.order.vegetable_list:
                     answer1= answer("answer_vegetable")
                     text_to_speech(answer1)
@@ -179,7 +186,7 @@ if __name__=="__main__":
                     text_to_speech(answer1)
                     message = speech_to_text()
 
-            if frame != "request_order_update":
+            else:
                 answer1= answer(frame)
                 text_to_speech(answer1)
                 message = speech_to_text()
