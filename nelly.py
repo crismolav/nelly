@@ -209,11 +209,11 @@ def get_all_available_ingredients():
         all_available_ingredients +=ingredients_dict[food_type].keys()
     return all_available_ingredients + ['sandwich']
 
-def get_bread_type_strung(parsed_tree):
+def get_food_type_strung(parsed_tree, food_type):
     bread_type_list = []
     bread_children = []
     for token in parsed_tree:
-        if token.lemma_ == 'bread':
+        if token.lemma_ == food_type:
             bread_children = token.children
             break
     for bread_child in bread_children:
@@ -222,7 +222,7 @@ def get_bread_type_strung(parsed_tree):
         bread_type_list.append(bread_child.lemma_)
 
     if bread_type_list != []:
-        bread_type_list.append('bread')
+        bread_type_list.append(food_type)
 
     return '_'.join(bread_type_list)
 

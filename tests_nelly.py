@@ -191,21 +191,21 @@ class NellyTests(unittest.TestCase):
 
         self.assertIsNot(expected_list, results_list)
 
-    def test_triggers_a_request_order_update_for_bread(self):
-        new_customer = sf.Customer()
-
-        parsed_tree = nlp("I want a sandwich with whole wheat bread")
-        nelly.update_state(customer=new_customer, parsed_tree=parsed_tree)
-
-        results = new_customer.order.bread_type
-        expected = "whole_wheat_bread"
-
-        self.assertEqual(expected, results)
+    # def test_triggers_a_request_order_update_for_bread(self):
+    #     new_customer = sf.Customer()
+    #
+    #     parsed_tree = nlp("I want a sandwich with whole wheat bread")
+    #     nelly.update_state(customer=new_customer, parsed_tree=parsed_tree)
+    #
+    #     results = new_customer.order.bread_type
+    #     expected = "whole_wheat_bread"
+    #
+    #     self.assertEqual(expected, results)
 
     def test_get_bread_type_strung__general_test(self):
         parsed_tree = nlp("Is the whole wheat bread vegan")
 
-        result = nelly.get_bread_type_strung(parsed_tree)
+        result = nelly.get_food_type_strung(parsed_tree, "bread")
         expected = 'whole_wheat_bread'
 
         self.assertEqual(expected, result)
@@ -213,7 +213,7 @@ class NellyTests(unittest.TestCase):
     def test_get_bread_type_strung__no_bread_mention(self):
         parsed_tree = nlp("hello how are you")
 
-        result = nelly.get_bread_type_strung(parsed_tree)
+        result = nelly.get_food_type_strung(parsed_tree, "bread")
         expected = ''
 
         self.assertEqual(expected, result)
