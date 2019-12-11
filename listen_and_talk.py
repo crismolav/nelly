@@ -61,7 +61,7 @@ def answer(frame):
         answer = ['Thank you, for buying in Nellys, have a nice day!','Thank you, for your order.', 'Bon apetit. Goodbye!']
         answer = random.choice(answer)
     elif frame == "silence":
-        answer = ['Please. Answer to me!', 'Are you muted? I can not hear you', 'Talk to me! Please my friend!', 'Listen my friend, you should answer my questions. If you want to eat today!']
+        answer = ['Please. Answer to me!', 'Are you muted? I can not hear you!', 'Talk to me! Please my friend!', 'Listen my friend, you should answer my questions. If you want to eat today!']
         answer = random.choice(answer)
 
     else:
