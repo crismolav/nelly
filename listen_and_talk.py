@@ -70,6 +70,10 @@ def answer(frame):
         answer = ['Please. Answer to me!', 'Are you muted? I can not hear you!', 'Talk to me! Please my friend!', 'Listen my friend, you should answer my questions. If you want to eat today!']
         answer = random.choice(answer)
 
+    elif frame == "request_order_update":
+        answer = ['Sure!, Now your order is: + spacystring()']
+        answer = random.choice(answer)
+
     else:
         answer = ['I dont have an answer for that, sorry.', 'I can not help you with that, amigo. Sorry.']
         answer = random.choice(answer)
@@ -85,8 +89,8 @@ def answer_ingredient(ingredient_list):
 def speech_to_text():
     r = sr.Recognizer()
     with sr.Microphone() as source:
+        r.adjust_for_ambient_noise(source,duration=0.4)
         print("Say something!")
-        r.adjust_for_ambient_noise(source,duration=0.5)
         audio = r.record(source, duration=5)
     try:
         message = r.recognize_google(audio)
@@ -109,20 +113,23 @@ def text_to_speech(answer):
 
 ################################################################################
 ################################################################################
+
+
 if __name__=="__main__":
     new_customer =  Customer()
     nlp = spacy.load("en_core_web_sm")
     message = speech_to_text()
     while message != "bye":
         while message == "silence":
-                answer1= answer("silence")
-                text_to_speech(answer1)
-                message = speech_to_text()
-        doc = nlp(message)
-        nelly.update_state(customer=new_customer, parsed_tree=doc)
-        frame = nelly.determine_semantic_frame_from_parsed_tree(doc)
-        answer1= answer(frame)
-        text_to_speech(answer1)
-        message = speech_to_text()
+            answer1= answer("silence")
+            text_to_speech(answer1)
+            message = speech_to_text()
+        if message != "bye":
+            doc = nlp(message)
+            nelly.update_state(customer=new_customer, parsed_tree=doc)
+            frame = nelly.determine_semantic_frame_from_parsed_tree(doc)
+            answer1= answer(frame)
+            text_to_speech(answer1)
+            message = speech_to_text()
     answer1= answer("answer_goodbye")
     text_to_speech(answer1)
