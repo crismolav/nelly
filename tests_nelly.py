@@ -175,8 +175,8 @@ class NellyTests(unittest.TestCase):
     def test_update_customer_with_greeting__True(self):
         new_customer = sf.Customer()
         nelly.update_customer_with_greeting(customer=new_customer)
-
-        self.assertTrue(new_customer.greeted)
+        expected = 1
+        self.assertEqual(expected, new_customer.number_of_greetings)
 
     def test_triggers_a_request_order_update_all_ingredients(self):
         new_customer = sf.Customer()
@@ -229,6 +229,7 @@ class NellyTests(unittest.TestCase):
 
         self.assertEqual(result_list, expected_list)
 
+
     def test_get_bread_type_strung__general_test(self):
         parsed_tree = nlp("Is the whole wheat bread vegan")
 
@@ -236,6 +237,7 @@ class NellyTests(unittest.TestCase):
         expected = 'whole_wheat_bread'
 
         self.assertEqual(expected, result)
+
     # def test_triggers_a_request_for_information__verb_to_be__False(self):
     #
     #     parsed_tree = nlp("Is the whole wheat bread vegan")

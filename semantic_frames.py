@@ -34,10 +34,10 @@ class Customer():
         self.name = None
         self.order = Order()
         self.food_restrictions_list = []
-        self.greeted = False
+        self.number_of_greetings = 0
 
-    def update_greeted_status(self, status):
-        self.greeted = status
+    def add_one_greeting(self):
+        self.number_of_greetings += 1
     def add_food_restriction(self, food_restriction):
         self.food_restrictions_list.append(food_restriction)
     # def recognized_food_restrictions(self):
