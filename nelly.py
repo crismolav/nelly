@@ -229,7 +229,7 @@ def get_bread_type_strung(parsed_tree):
 if __name__=="__main__":
     new_customer =  Customer()
     nlp = spacy.load("en_core_web_sm")
-    doc = nlp("I am vegan and vegetarian")
+    doc = nlp("I want a sandwich with tomato, lettuce, onions and cheese please")
     # doc = displacy.serve(doc, style="dep")
     # for token in doc:
     #     print(token.text, token.head,  token.lemma_, token.pos_, token.tag_, token.dep_,
@@ -242,6 +242,9 @@ if __name__=="__main__":
     print("New order cheese: %s" % new_customer.order.cheese)
     print("New order bread: %s" % new_customer.order.bread_type)
     print("New order sauce: %s" % new_customer.order.sauce_list)
+    doc = nlp("i am vegan")
+    update_state(customer=new_customer, parsed_tree=doc)
+    print("Nutritional restriction: %s" %new_customer.food_restrictions_list)
     print("*****")
 
     displacy.serve(doc, style="dep")

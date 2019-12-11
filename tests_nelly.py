@@ -181,17 +181,26 @@ class NellyTests(unittest.TestCase):
     def test_triggers_a_request_order_update_all_ingredients(self):
         new_customer = sf.Customer()
 
-        parsed_tree = nlp("I want a sandwich with onions beef ketchup rice_bread and cheese")
-        root_tuple = nelly.get_parse_tree_root_tuple(parsed_tree)
-
+        parsed_tree = nlp("I want a sandwich with onions beef ketchup rice_bread and regular_cheese")
         nelly.update_state(customer=new_customer, parsed_tree=parsed_tree)
 
         results_list = [new_customer.order.vegetable_list, new_customer.order.protein,
                         new_customer.order.cheese, new_customer.order.bread_type, new_customer.order.sauce_list]
 
-        expected_list =[[], None, None, None, []]
+        expected_list =[["onions"], "beef", "regular_cheese", "rice_bread", ["ketchup"]]
 
         self.assertIsNot(expected_list, results_list)
+
+    def test_triggers_a_request_order_update_for_bread(self):
+        new_customer = sf.Customer()
+
+        parsed_tree = nlp("I want a sandwich with whole wheat bread")
+        nelly.update_state(customer=new_customer, parsed_tree=parsed_tree)
+
+        results = new_customer.order.bread_type
+        expected = "whole_wheat_bread"
+
+        self.assertEqual(expected, results)
 
     def test_get_bread_type_strung__general_test(self):
         parsed_tree = nlp("Is the whole wheat bread vegan")
@@ -215,8 +224,8 @@ class NellyTests(unittest.TestCase):
 
         nelly.update_state(customer=new_customer, parsed_tree=parsed_tree)
 
-        results_list = [new_customer.food_restrictions_list]
-        expected_list = []
+        results_list = new_customer.food_restrictions_list
+        expected_list = ["vegan", "celiac"]
 
         self.assertIsNot(expected_list, results_list)
 
