@@ -40,8 +40,8 @@ class Customer():
         self.greeted = status
     def add_food_restriction(self, food_restriction):
         self.food_restrictions_list.append(food_restriction)
-    def recognized_food_restrictions(self):
-        return ['vegan', 'celiac', 'lactose_intolerant', 'peanut']
+    # def recognized_food_restrictions(self):
+    #     return ['vegan', 'celiac', 'lactose_intolerant', 'peanut']
 
 class Order():
     def __init__(self):

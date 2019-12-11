@@ -47,8 +47,7 @@ def update_order_with_request(customer, parsed_tree):
 def update_nutritional_restrictions(customer, parsed_tree):
     for token in parsed_tree:
         if token.lemma_ in food_restrictions_dict.keys():
-            customer.food_restrictions_list.add_food_restriction(food_restriction=token.lemma_)
-
+            customer.add_food_restriction(food_restriction=token.lemma_)
 
 def provide_information(customer, parsed_tree):
     root_lemma, root_text = get_parse_tree_root_tuple(parsed_tree)
@@ -218,7 +217,7 @@ def get_bread_type_strung(parsed_tree):
 if __name__=="__main__":
     new_customer =  Customer()
     nlp = spacy.load("en_core_web_sm")
-    doc = nlp("I would like a sandwich with onions and beef")
+    doc = nlp("I am vegan and vegetarian")
     # doc = displacy.serve(doc, style="dep")
     # for token in doc:
     #     print(token.text, token.head,  token.lemma_, token.pos_, token.tag_, token.dep_,

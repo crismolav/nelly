@@ -179,7 +179,7 @@ class NellyTests(unittest.TestCase):
     def test_triggers_a_request_order_update_all_ingredients(self):
         new_customer = sf.Customer()
         nlp = spacy.load("en_core_web_sm")
-        parsed_tree = nlp("I want a sandwich with onions beef ketchup rice_bread and cheese")
+        parsed_tree = nlp("I want a sandwich with onions beef ketchup rice_bread and regular_cheese")
         root_tuple = nelly.get_parse_tree_root_tuple(parsed_tree)
 
         nelly.update_state(customer=new_customer, parsed_tree=parsed_tree)
@@ -187,9 +187,9 @@ class NellyTests(unittest.TestCase):
         results_list = [new_customer.order.vegetable_list, new_customer.order.protein,
                         new_customer.order.cheese, new_customer.order.bread_type, new_customer.order.sauce_list]
 
-        expected_list =[[], None, None, None, []]
+        expected_list =[["onion"], "beef", "regular_cheese", "rice_bread", ["ketchup"]]
 
-        self.assertIsNot(expected_list, results_list)
+        self.assertEqual(expected_list, results_list)
 
     def test_get_bread_type_strung__general_test(self):
         nlp = spacy.load("en_core_web_sm")
@@ -212,14 +212,14 @@ class NellyTests(unittest.TestCase):
     def test_triggers_a_request_special_need(self):
         new_customer = sf.Customer()
         nlp = spacy.load("en_core_web_sm")
-        parsed_tree = nlp("vegan and celiac")
+        parsed_tree = nlp("i am vegan and celiac")
 
         nelly.update_state(customer=new_customer, parsed_tree=parsed_tree)
 
-        results_list = [new_customer.food_restrictions_list]
-        expected_list = []
+        results_list = new_customer.food_restrictions_list
+        expected_list = ["vegan", "celiac"]
 
-        self.assertIsNot(expected_list, results_list)
+        self.assertEqual(expected_list, results_list)
 
     # def test_triggers_a_request_for_information__verb_to_be__False(self):
     #     nlp = spacy.load("en_core_web_sm")
