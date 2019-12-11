@@ -2,39 +2,73 @@ ingredients_dict = {
     "vegetable":{
         "tomato":{
             "restriction": [],
-            "ingredients": []
+            "ingredients": ["tomato"]
         },
         "lettuce":{
             "restriction": [],
-            "ingredients": []
+            "ingredients": ["lettuce"]
         },
         "onion":{
             "restriction": [],
-            "ingredients": []
+            "ingredients": ["onion"]
         },
         "olives":{
             "restriction": [],
-            "ingredients": []
+            "ingredients": ["olives"]
         },
+        "pickles":{
+            "restriction": [],
+            "ingredients": ["pickles"]
+        },
+        "chile":{
+            "restriction": [],
+            "ingredients": ["chile"]
+        },
+        "mushrooms":{
+            "restriction": [],
+            "ingredients": ["mushrooms"]
+        }
     },
+
     "protein":{
         "beef":{
             "restriction": ["vegan", "vegetarian"],
-            "ingredients": []
+            "ingredients": ["beef"]
         },
         "chicken":{
             "restriction": ["vegan", "vegetarian"],
-            "ingredients": []
+            "ingredients": ["chicken"]
         },
         "tuna":{
             "restriction": ["vegan", "vegetarian"],
-            "ingredients": []
+            "ingredients": ["tuna fish"]
         },
         "pork":{
             "restriction": ["vegan", "vegetarian"],
-            "ingredients": []
+            "ingredients": ["pork"]
+        },
+        "tofu":{
+            "restriction": [],
+            "ingredients": ["tofu"]
+        },
+        "salami":{
+            "restriction": ["vegan", "vegetarian"],
+            "ingredients": ["salami","pork"]
+        },
+        "salmon":{
+            "restriction": ["vegan", "vegetarian"],
+            "ingredients": ["salmon fish"]
+        },
+        "turkey":{
+            "restriction": ["vegan", "vegetarian"],
+            "ingredients": ["turkey"]
+        },
+        "bacon":{
+            "restriction": ["vegan", "vegetarian"],
+            "ingredients": ["pork"]
         }
     },
+
     "cheese":{
         "regular_cheese":{
             "restriction": ["lactose", "vegan"],
@@ -43,8 +77,25 @@ ingredients_dict = {
         "vegan_cheese":{
             "restriction": [],
             "ingredients": ["soja","coconut oil"]
+        },
+        "cheddar_cheese":{
+            "restriction": ["lactose", "vegan"],
+            "ingredients": ["milk", "coagulants", "yellow colorant"]
+        },
+        "cheese":{
+            "restriction": ["lactose", "vegan"],
+            "ingredients": ["milk", "coagulants"]
+        },
+        "cottage_cheese":{
+            "restriction": ["lactose", "vegan"],
+            "ingredients": ["milk", "coagulants"]
+        },
+        "cream_cheese":{
+            "restriction": ["lactose", "vegan"],
+            "ingredients": ["milk", "coagulants"]
         }
     },
+
     "bread":{
         "wheat_bread":{
             "restriction": ["vegan", "gluten"],
@@ -61,10 +112,27 @@ ingredients_dict = {
         "sourdough_bread":{
             "restriction": [],
             "ingredients": ["wheat_flour", "water", "salt", "olive_oil","sun_flower_seeds"]
+        },
+        "oregano_bread":{
+            "restriction": ["vegan", "gluten"],
+            "ingredients": ["oregano","wheat_flour", "water", "salt", "olive_oil"]
+        },
+        "pita_bread":{
+            "restriction": [],
+            "ingredients": ["wheat_flour", "water", "salt"]
+        },
+        "white_bread":{
+            "restriction": ["vegan", "gluten"],
+            "ingredients": ["yeast","wheat_flour", "water", "salt"]
         }
     },
+
     "sauce":{
         "ketchup":{
+            "restriction":[],
+            "ingredients":["tomato", "water", "sugar", "sodium"]
+        },
+        "tomato_sauce":{
             "restriction":[],
             "ingredients":["tomato", "water", "sugar", "sodium"]
         },
@@ -75,6 +143,23 @@ ingredients_dict = {
         "mayonnaise":{
             "restriction":["vegan"],
             "ingredients":["egg", "oil", "sodium"]
+        },
+        "barbecue":{
+            "restriction":[""],
+            "ingredients":["species", "gum", "sodium", "sugar","mustard","water"]
+        },
+        "honey_mustard":{
+            "restriction":[""],
+            "ingredients":["honey","species", "gum", "sodium", "sugar","mustard","water"]
+        },
+        "spicy":{
+            "restriction":[""],
+            "ingredients":["chile","pepper","species", "gum", "sodium", "sugar","water"]
+        },
+        "ranch":{
+            "restriction":["vegan", "vegetarian"],
+            "ingredients":["milk","pepper","species", "gum", "sodium", "sugar","water"]
         }
     }
+
 }
