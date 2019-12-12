@@ -252,7 +252,6 @@ class NellyTests(unittest.TestCase):
 
         self.assertEqual(result_list, expected_list)
 
-
     def test_get_bread_type_strung__general_test(self):
         parsed_tree = nlp("Is the whole wheat bread vegan")
 

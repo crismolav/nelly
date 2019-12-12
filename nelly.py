@@ -1,11 +1,4 @@
-import speech_recognition as sr
-import os
 import spacy
-from spacy import displacy
-from pdb import set_trace
-from semantic_frames import Order, Customer
-from ingredients import ingredients_dict
-import sys
 from spacy import displacy
 from pdb import set_trace
 from semantic_frames import Order, Customer
@@ -15,10 +8,9 @@ from food_restrictions import food_restrictions_dict
 
 def update_state(customer, parsed_tree):
     semantic_frame = determine_semantic_frame_from_parsed_tree(parsed_tree)
-    updated_info = {}
     print("semantic_frame: %s" % semantic_frame)
     if semantic_frame == 'greeting':
-        update_customer_with_greeting(customer=customer, updated_info=updated_info)
+        update_customer_with_greeting(customer=customer)
     elif semantic_frame == 'request_order_update':
         update_order_with_request(customer=customer, parsed_tree=parsed_tree)
     elif semantic_frame == 'request_for_information':
@@ -28,26 +20,40 @@ def update_state(customer, parsed_tree):
     else:
         pass
 
-def update_customer_with_greeting(customer, updated_info={}):
+def update_customer_with_greeting(customer):
     customer.add_one_greeting()
-    updated_info.setdefault('semantic_frames', []).append('greeting')
-    updated_info['status_changed'] = {'customer':{'greeted'}}
+    last_state_change = {}
+    last_state_change.setdefault('semantic_frames', []).append('greeting')
+    last_state_change['state_changed'] = {'number_of_greetings': customer.number_of_greetings}
+    customer.last_state_change = last_state_change
+
 
 def update_order_with_request(customer, parsed_tree):
     #TODO: use spacey labels ("PRODUCT")
+    last_state_change = {}
+    last_state_change.setdefault('semantic_frames', []).append('request_order_update')
+    last_state_change['state_changed'] = {'order':{}}
+
     for token in parsed_tree:
         if token.lemma_ in ingredients_dict['protein'].keys():
             customer.order.add_protein_type(protein_type=token.lemma_)
+            last_state_change['state_changed']['order']['protein'] = token.lemma_
         elif token.lemma_ in ingredients_dict['vegetable'].keys():
             customer.order.add_vegetable(vegetable=token.lemma_)
+            last_state_change['state_changed']['order']['vegetable_list'] = token.lemma_
         elif token.lemma_ in ingredients_dict['sauce'].keys():
             customer.order.add_sauce(sauce=token.lemma_)
+            last_state_change['state_changed']['order']['sauce_list'] = token.lemma_
         elif token.lemma_ == "bread":
             token.lemma_ = get_food_type_strung(parsed_tree, "bread")
             customer.order.add_bread_type(bread_type=token.lemma_)
+            last_state_change['state_changed']['order']['bread_type'] = token.lemma_
         elif token.lemma_ == "cheese":
             token.lemma_ =get_food_type_strung(parsed_tree, "cheese")
             customer.order.add_cheese(cheese=token.lemma_)
+            last_state_change['state_changed']['order']['cheese'] = token.lemma_
+
+    customer.last_state_change = last_state_change
 
 def update_nutritional_restrictions(customer, parsed_tree):
     for token in parsed_tree:
@@ -81,6 +87,8 @@ def determine_semantic_frame_from_parsed_tree(parsed_tree):
         return 'request_order_update'
     elif triggers_greeting(root_tuple=root_tuple, parsed_tree= parsed_tree):
         return "greeting"
+    elif triggers_cancel(root_tuple=root_tuple, parsed_tree= parsed_tree):
+        return "request_cancel"
     else:
         return False
 #asdfadsfasdfsa
@@ -114,6 +122,21 @@ def triggers_greeting(root_tuple, parsed_tree):
             return True
 
     return False
+
+
+###############################################################################
+def get_trigger_words_cancel():
+    return ["cancel", "stop"]
+def triggers_cancel(root_tuple, parsed_tree):
+    trigger_words_cancel = get_trigger_words_cancel()
+    for token in parsed_tree:
+        if str(token.lemma_) in trigger_words_cancel:
+            return True
+
+    return False
+###############################################################################
+
+
     # root_lemma, root_text = root_tuple
     # if root_lemma in ["hi", "hey", "hello", "morning", "afternoon", "evening", "night"]:
     #     return True
@@ -246,7 +269,7 @@ def filter_food_type_children(children, food_type):
 if __name__=="__main__":
     new_customer =  Customer()
     nlp = spacy.load("en_core_web_sm")
-    doc = nlp("I want a sandwich with tomato, lettuce, onions and cheese and rice bread please")
+    doc = nlp("cancel")
     # doc = displacy.serve(doc, style="dep")
     # for token in doc:
     #     print(token.text, token.head,  token.lemma_, token.pos_, token.tag_, token.dep_,
