@@ -101,6 +101,10 @@ ingredients_dict = {
     },
 
     "bread":{
+        "bread": {
+            "restriction": ["vegan", "gluten"],
+            "ingredients": ["wheat_flour", "yeast", "butter", "water", "salt", "sugar"]
+        },
         "wheat_bread":{
             "restriction": ["vegan", "gluten"],
             "ingredients": ["wheat_flour", "yeast", "butter", "water", "salt", "sugar"]
