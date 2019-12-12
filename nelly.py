@@ -31,7 +31,7 @@ def update_state(customer, parsed_tree):
 def update_customer_with_greeting(customer, updated_info={}):
     customer.add_one_greeting()
     updated_info.setdefault('semantic_frames', []).append('greeting')
-    updated_info['status_changed'] = {'customer':{'greeted'}}
+    updated_info['status_changed'] = {'customer':{'number_of_greetings'}}
 
 def update_order_with_request(customer, parsed_tree):
     #TODO: use spacey labels ("PRODUCT")

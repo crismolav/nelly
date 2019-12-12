@@ -229,16 +229,14 @@ class NellyTests(unittest.TestCase):
 
         self.assertIsNot(expected_list, results_list)
 
-    # def test_update_customer_with_greeting__updated_info_is_correct(self):
-    #     new_customer = sf.Customer()
-    #     updated_info = {}
-    #
-    #     nelly.update_customer_with_greeting(customer=new_customer, updated_info=updated_info)
-    #
-    #     result = new_customer.food_restrictions_list
-    #     expected = {}
-    #
-    #     self.assertEqual(expected, result)
+    def test_update_customer_with_greeting__updated_info_is_correct(self):
+        new_customer = sf.Customer()
+        updated_info = {}
+
+        nelly.update_customer_with_greeting(customer=new_customer, updated_info=updated_info)
+        expected = {'semantic_frames': ['greeting'], 'status_changed': {'customer': {'number_of_greetings'}}}
+
+        self.assertEqual(expected, updated_info)
 
     # def test_triggers_a_request_for_information__verb_to_be__False(self):
     #
