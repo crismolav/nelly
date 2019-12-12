@@ -233,7 +233,7 @@ class NellyTests(unittest.TestCase):
     def test_filter_food_type_children__bread_filter(self):
         children = ["ketchup", "rice", "whole", "onions"]
         food_type = "bread"
-
+    
         result_list  = nelly.filter_food_type_children(children=children, food_type= food_type)
         expected_list= ["rice", "whole"]
 
@@ -247,6 +247,22 @@ class NellyTests(unittest.TestCase):
         expected = 'whole_wheat_bread'
 
         self.assertEqual(expected, result)
+
+    def test_determine_semantic_frame_from_parsed_tree__request_cancel_True(self):
+        parsed_tree = nlp("cancel the order")
+        root_tuple = nelly.get_parse_tree_root_tuple(parsed_tree)
+
+        result = nelly.triggers_cancel(root_tuple=root_tuple, parsed_tree= parsed_tree)
+
+        self.assertTrue(result)
+
+    def test_determine_semantic_frame_from_parsed_tree__request_cancel_False(self):
+        parsed_tree = nlp("Helly Nelly my old friendr")
+        root_tuple = nelly.get_parse_tree_root_tuple(parsed_tree)
+
+        result = nelly.triggers_cancel(root_tuple=root_tuple, parsed_tree= parsed_tree)
+
+        self.assertFalse(result)
 
     # def test_triggers_a_request_for_information__verb_to_be__False(self):
     #
