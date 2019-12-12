@@ -246,7 +246,7 @@ def filter_food_type_children(children, food_type):
 if __name__=="__main__":
     new_customer =  Customer()
     nlp = spacy.load("en_core_web_sm")
-    doc = nlp("I want a sandwich with tomato, lettuce, onions and cheese and rice bread please")
+    doc = nlp("I want a sandwich with tomato, lettuce, onions and vegan cheese and rice bread please")
     # doc = displacy.serve(doc, style="dep")
     # for token in doc:
     #     print(token.text, token.head,  token.lemma_, token.pos_, token.tag_, token.dep_,
