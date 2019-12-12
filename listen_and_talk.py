@@ -62,7 +62,7 @@ def answer(frame):
         answer = ['Its 5 euros in total! Thank you!','For you, I can leave it at 6 euros!', 'Its 10 euros. Have a nice day my friend.', 'Today, this sandwich is free for you!']
         answer = random.choice(answer)
 
-    elif frame == "answer_goodbye":
+    elif frame == "request_goodbye":
         answer = ['Thank you, for buying in Nellys, have a nice day!','Thank you, for your order.', 'Bon apetit. Goodbye!']
         answer = random.choice(answer)
 
@@ -156,12 +156,12 @@ if __name__=="__main__":
     doc = nlp(message)
     nelly.update_state(customer=new_customer, parsed_tree=doc)
     frame = nelly.determine_semantic_frame_from_parsed_tree(doc)
-    while message != "bye" and frame != 'request_cancel':
+    while frame != 'request_goodbye' and frame != 'request_cancel':
         while message == "silence":
             answer1= answer("silence")
             text_to_speech(answer1)
             message = speech_to_text()
-        if message != "bye":
+        if frame != "request_goodbye":
             if frame == "request_order_update":
                 if new_customer.order.bread_type == None:
                     answer1= answer("answer_bread")
@@ -216,5 +216,5 @@ if __name__=="__main__":
         frame = nelly.determine_semantic_frame_from_parsed_tree(doc)
 
 
-    answer1= answer("answer_goodbye")
+    answer1= answer(frame)
     text_to_speech(answer1)
