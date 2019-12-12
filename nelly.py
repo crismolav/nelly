@@ -89,6 +89,8 @@ def determine_semantic_frame_from_parsed_tree(parsed_tree):
         return 'request_order_update'
     elif triggers_greeting(root_tuple=root_tuple, parsed_tree= parsed_tree):
         return "greeting"
+    elif triggers_request_goodbye(root_tuple=root_tuple, parsed_tree=parsed_tree):
+        return "request_goodbye"
     elif triggers_request_cancel(root_tuple=root_tuple, parsed_tree= parsed_tree):
         return "request_cancel"
     else:
@@ -127,11 +129,11 @@ def triggers_greeting(root_tuple, parsed_tree):
 
 
 def get_trigger_words_goodbye():
-    return ["bye", "goodbye", "ciao"]
+    return ["bye", "goodbye", "ciao", "stop"]
 def triggers_request_goodbye(root_tuple, parsed_tree):
     trigger_words_goodbye= get_trigger_words_goodbye()
     for token in parsed_tree:
-        if str(token.lemma_) in trigger_words_goodbye():
+        if str(token.lemma_) in trigger_words_goodbye:
             return True
 
     return False
