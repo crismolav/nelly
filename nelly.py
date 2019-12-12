@@ -129,7 +129,7 @@ def triggers_greeting(root_tuple, parsed_tree):
 
 
 def get_trigger_words_goodbye():
-    return ["bye", "goodbye", "ciao", "stop"]
+    return ["bye", "goodbye", "ciao", "au-revoir", "soon"]
 def triggers_request_goodbye(root_tuple, parsed_tree):
     trigger_words_goodbye= get_trigger_words_goodbye()
     for token in parsed_tree:
