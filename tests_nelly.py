@@ -287,12 +287,12 @@ class NellyTests(unittest.TestCase):
         self.assertEqual(expected, result)
 
     #TODO:
-    # def test_triggers_request_order_update__special_case(self):
-    #     parsed_tree = nlp("i want to eat rice bread")
-    #     root_tuple = nelly.get_parse_tree_root_tuple(parsed_tree)
-    #     result = nelly.triggers_request_order_update(
-    #     root_tuple=root_tuple, parsed_tree=parsed_tree)
-    #     self.assertTrue(result)
+    def test_triggers_request_order_update__special_case(self):
+        parsed_tree = nlp("i want whole wheat bread")
+        root_tuple = nelly.get_parse_tree_root_tuple(parsed_tree)
+        result = nelly.triggers_request_order_update(
+        root_tuple=root_tuple, parsed_tree=parsed_tree)
+        self.assertTrue(result)
 
 
     # def test_triggers_a_request_for_information__verb_to_be__False(self):
