@@ -91,7 +91,7 @@ def determine_semantic_frame_from_parsed_tree(parsed_tree):
         return "request_cancel"
     else:
         return False
-
+#asdfadsfasdfsa
 def triggers_a_request_for_information(root_tuple, parsed_tree):
     root_lemma, root_text = root_tuple
     if root_lemma in ["tell", "know", "contain", "include"]:
