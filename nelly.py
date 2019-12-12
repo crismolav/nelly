@@ -125,6 +125,17 @@ def triggers_greeting(root_tuple, parsed_tree):
 
     return False
 
+
+def get_trigger_words_goodbye():
+    return ["bye", "goodbye", "ciao"]
+def triggers_request_goodbye(root_tuple, parsed_tree):
+    trigger_words_goodbye= get_trigger_words_goodbye()
+    for token in parsed_tree:
+        if str(token.lemma_) in trigger_words_goodbye():
+            return True
+
+    return False
+
 def get_trigger_words_cancel():
     return ["cancel", "stop"]
 def triggers_request_cancel(root_tuple, parsed_tree):
