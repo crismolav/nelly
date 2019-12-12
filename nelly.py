@@ -15,10 +15,9 @@ from food_restrictions import food_restrictions_dict
 
 def update_state(customer, parsed_tree):
     semantic_frame = determine_semantic_frame_from_parsed_tree(parsed_tree)
-    updated_info = {}
     print("semantic_frame: %s" % semantic_frame)
     if semantic_frame == 'greeting':
-        update_customer_with_greeting(customer=customer, updated_info=updated_info)
+        update_customer_with_greeting(customer=customer)
     elif semantic_frame == 'request_order_update':
         update_order_with_request(customer=customer, parsed_tree=parsed_tree)
     elif semantic_frame == 'request_for_information':
