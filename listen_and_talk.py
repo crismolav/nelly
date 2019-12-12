@@ -67,11 +67,15 @@ def answer(frame):
         answer = random.choice(answer)
 
     elif frame == "silence":
-        answer = ['Please. Answer to me!', 'Are you muted? I can not hear you!', 'Talk to me! Please my friend!', 'Listen my friend, you should answer my questions. If you want to eat today!', 'Well, as you did not answer, lets continue with your order, What do you want to eat?']
+        answer = ['Please. Answer to me!', 'Check your microphone. I can not hear you!', 'Talk to me! Please my friend!', 'Listen my friend, you should answer my questions. If you want to eat today!', 'Well, as you did not answer, lets continue with your order, What do you want to eat?']
         answer = random.choice(answer)
 
     elif frame == "request_order_update":
         answer = ['Sure!, Now your order is: + spacystring()']
+        answer = random.choice(answer)
+
+    elif frame == "request_cancel":
+        answer = ['Sure! I am cancelling the order. Have a nice day!', 'Okay. I hope, i did not do, something wrong my friend!']
         answer = random.choice(answer)
 
     elif frame == "answer_bread":
@@ -95,12 +99,11 @@ def answer(frame):
         answer = random.choice(answer)
 
     else:
-        answer = ['HA HA HA HA!', 'I can not help you with that, amigo. Sorry.']
+        answer = ['HA HA HA HA! I can not understand you!', 'I can not help you with that, amigo. Sorry.']
         answer = random.choice(answer)
     return answer
 ################################################################################
 def answer_ingredient(ingredient_list):
-    #FOR BETTER USER EXPERIENCE USE A LIST LIKE THIS ingredients= ['flour,', 'butter,', 'sugar,', 'salt,', 'yeast,']
     str1 = " "
     ingredient_list = str1.join(ingredient_list)
     answer = 'This food my friend, contains:' + ingredient_list
@@ -108,11 +111,13 @@ def answer_ingredient(ingredient_list):
 
 ################################################################################
 def answer_order(vegetable_list,sauce_list,bread,protein,cheese):
-    #FOR BETTER USER EXPERIENCE USE A LIST LIKE THIS ingredients= ['flour,', 'butter,', 'sugar,', 'salt,', 'yeast,']
     str1 = " "
     vegetable_list = ','.join(vegetable_list)
     str2 = " "
     sauce_list = ','.join(sauce_list)
+
+    bread=bread.replace("_", ",")
+    cheese=cheese.replace("_", ",")
     answer = 'Dear friend, you have ordered a sandwich, with' + vegetable_list +','+ sauce_list +','+ bread +','+ protein +','+ cheese
     return answer
 ################################################################################
@@ -148,18 +153,27 @@ if __name__=="__main__":
     new_customer =  Customer()
     nlp = spacy.load("en_core_web_sm")
     message = speech_to_text()
-    while message != "bye":
+    doc = nlp(message)
+    nelly.update_state(customer=new_customer, parsed_tree=doc)
+    frame = nelly.determine_semantic_frame_from_parsed_tree(doc)
+    while message != "bye" and frame != 'request_cancel':
         while message == "silence":
             answer1= answer("silence")
             text_to_speech(answer1)
             message = speech_to_text()
         if message != "bye":
-            doc = nlp(message)
-            nelly.update_state(customer=new_customer, parsed_tree=doc)
-            frame = nelly.determine_semantic_frame_from_parsed_tree(doc)
-
             if frame == "request_order_update":
-                if not new_customer.order.vegetable_list:
+                if new_customer.order.bread_type == None:
+                    answer1= answer("answer_bread")
+                    text_to_speech(answer1)
+                    message = speech_to_text()
+
+                elif new_customer.order.protein == None:
+                    answer1= answer("answer_protein")
+                    text_to_speech(answer1)
+                    message = speech_to_text()
+
+                elif not new_customer.order.vegetable_list:
                     answer1= answer("answer_vegetable")
                     text_to_speech(answer1)
                     message = speech_to_text()
@@ -169,15 +183,6 @@ if __name__=="__main__":
                     text_to_speech(answer1)
                     message = speech_to_text()
 
-                elif new_customer.order.bread_type == None:
-                    answer1= answer("answer_bread")
-                    text_to_speech(answer1)
-                    message = speech_to_text()
-
-                elif new_customer.order.protein == None:
-                    answer1= answer("answer_protein")
-                    text_to_speech(answer1)
-                    message = speech_to_text()
 
                 elif new_customer.order.cheese == None:
                     answer1= answer("answer_cheese")
@@ -202,6 +207,9 @@ if __name__=="__main__":
                         answer1= answer(frame)
                         text_to_speech(answer1)
                         message = speech_to_text()
+            doc = nlp(message)
+            nelly.update_state(customer=new_customer, parsed_tree=doc)
+            frame = nelly.determine_semantic_frame_from_parsed_tree(doc)
 
 
 
