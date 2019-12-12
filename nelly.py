@@ -147,7 +147,6 @@ def triggers_request_order_update(root_tuple, parsed_tree):
     root_lemma, root_text = root_tuple
     modal_verbs = ['would', 'like']
     there_is_a_verb = is_there_a_verb(parsed_tree)
-
     if there_is_a_verb and root_lemma not in ['sandwich', 'have', 'like', 'want',
                                               'give', 'need', "add", "order"]:
         return False
@@ -253,8 +252,8 @@ def get_food_type_strung(parsed_tree, food_type):
     return '_'.join(food_type_list)
 
 def filter_food_type_children(children, food_type):
-    bread_list = ["wheat", "whole", "rice", "sourdough"]
-    cheese_list = ["regular", "vegan"]
+    bread_list = ["wheat", "whole", "rice", "sourdough", "oregano", "pita"]
+    cheese_list = ["regular", "vegan", "cheddar", "cottage", "cream"]
     filter_in_list = bread_list if food_type == 'bread' else cheese_list
     filtered_list = []
     for child in children:
@@ -266,7 +265,7 @@ def filter_food_type_children(children, food_type):
 if __name__=="__main__":
     new_customer =  Customer()
     nlp = spacy.load("en_core_web_sm")
-    doc = nlp("cancel")
+    doc = nlp("i want a sandwich rice bread")
     # doc = displacy.serve(doc, style="dep")
     # for token in doc:
     #     print(token.text, token.head,  token.lemma_, token.pos_, token.tag_, token.dep_,

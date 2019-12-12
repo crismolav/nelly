@@ -269,12 +269,13 @@ class NellyTests(unittest.TestCase):
         self.assertTrue(result)
 
     def test_determine_semantic_frame_from_parsed_tree__request_cancel_False(self):
-        parsed_tree = nlp("Hello Nelly my old friendr")
+        parsed_tree = nlp("Hello Nelly my old friend")
         root_tuple = nelly.get_parse_tree_root_tuple(parsed_tree)
 
         result = nelly.triggers_request_cancel(root_tuple=root_tuple, parsed_tree= parsed_tree)
 
         self.assertFalse(result)
+
 
     def test_determine_Semantic_frame_from_parsed_tree__triggers_cancel(self):
         parsed_tree = nlp("cancel my order")
@@ -284,6 +285,16 @@ class NellyTests(unittest.TestCase):
         expected = 'request_cancel'
 
         self.assertEqual(expected, result)
+
+    #TODO:
+    # def test_triggers_request_order_update__special_case(self):
+    #     parsed_tree = nlp("i want to eat rice bread")
+    #     root_tuple = nelly.get_parse_tree_root_tuple(parsed_tree)
+    #     result = nelly.triggers_request_order_update(
+    #     root_tuple=root_tuple, parsed_tree=parsed_tree)
+    #     self.assertTrue(result)
+
+
     # def test_triggers_a_request_for_information__verb_to_be__False(self):
     #
     #     parsed_tree = nlp("Is the whole wheat bread vegan")
