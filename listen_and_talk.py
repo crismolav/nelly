@@ -87,7 +87,7 @@ def answer(frame):
         answer = random.choice(answer)
 
     elif frame == "answer_vegetable":
-        answer = ['Please tell me which vegetables do you want in your sandwich', 'You dont like vegetables?. Add some vegetables to your order, please!']
+        answer = ['Please tell me which vegetables do you want in your sandwich', 'Dont you like vegetables?. Add some vegetables to your order, please!']
         answer = random.choice(answer)
 
     elif frame == "answer_sauce":
@@ -95,7 +95,7 @@ def answer(frame):
         answer = random.choice(answer)
 
     elif frame == "answer_cheese":
-        answer = ['Please tell me which kind of cheese do you want in your sandwich','If you are not lactose intolerant, please tell me which cheese you want in the sandwich, my friend!']
+        answer = ['Please tell me which kind of cheese do you want in your sandwich', 'Dear friend, please tell me which cheese you want in the sandwich!']
         answer = random.choice(answer)
 
     else:
@@ -118,7 +118,7 @@ def answer_order(vegetable_list,sauce_list,bread,protein,cheese):
 
     bread=bread.replace("_", ",")
     cheese=cheese.replace("_", ",")
-    answer = 'Dear friend, you have ordered a sandwich, with' + vegetable_list +','+ sauce_list +','+ bread +','+ protein +','+ cheese
+    answer = 'Dear friend, you have ordered a sandwich which contains.' + bread +'.'+ protein +'. With, '+ vegetable_list +','+ sauce_list +','+ cheese
     return answer
 ################################################################################
 def speech_to_text():
