@@ -18,6 +18,8 @@ def update_state(customer, parsed_tree, question_context={}):
         provide_information(customer=customer, parsed_tree=parsed_tree)
     elif semantic_frame == 'request_special_need':
         update_nutritional_restrictions(customer=customer, parsed_tree=parsed_tree)
+    elif semantic_frame == "triggers_cancel":
+        pass
     else:
         pass
 
@@ -91,9 +93,13 @@ def determine_semantic_frame_from_parsed_tree(parsed_tree, question_context={}):
         return 'request_order_update'
     elif triggers_greeting(root_tuple=root_tuple, parsed_tree= parsed_tree):
         return "greeting"
+    elif triggers_request_goodbye(root_tuple=root_tuple, parsed_tree=parsed_tree):
+        return "request_goodbye"
+    elif triggers_request_cancel(root_tuple=root_tuple, parsed_tree= parsed_tree):
+        return "request_cancel"
     else:
         return False
-
+#asdfadsfasdfsa
 def triggers_a_request_for_information(root_tuple, parsed_tree):
     root_lemma, root_text = root_tuple
     if root_lemma in ["tell", "know", "contain", "include"]:
@@ -124,6 +130,27 @@ def triggers_greeting(root_tuple, parsed_tree):
             return True
 
     return False
+
+
+def get_trigger_words_goodbye():
+    return ["bye", "goodbye", "ciao", "au-revoir", "soon"]
+def triggers_request_goodbye(root_tuple, parsed_tree):
+    trigger_words_goodbye= get_trigger_words_goodbye()
+    for token in parsed_tree:
+        if str(token.lemma_) in trigger_words_goodbye:
+            return True
+
+    return False
+
+def get_trigger_words_cancel():
+    return ["cancel", "stop"]
+def triggers_request_cancel(root_tuple, parsed_tree):
+    trigger_words_cancel = get_trigger_words_cancel()
+    for token in parsed_tree:
+        if str(token.lemma_) in trigger_words_cancel:
+            return True
+    return False
+
     # root_lemma, root_text = root_tuple
     # if root_lemma in ["hi", "hey", "hello", "morning", "afternoon", "evening", "night"]:
     #     return True
@@ -244,8 +271,8 @@ def get_food_type_strung(parsed_tree, food_type):
     return '_'.join(food_type_list)
 
 def filter_food_type_children(children, food_type):
-    bread_list = ["wheat", "whole", "rice", "sourdough"]
-    cheese_list = ["regular", "vegan"]
+    bread_list = ["wheat", "whole", "rice", "sourdough", "oregano", "pita"]
+    cheese_list = ["regular", "vegan", "cheddar", "cottage", "cream"]
     filter_in_list = bread_list if food_type == 'bread' else cheese_list
     filtered_list = []
     for child in children:
@@ -257,7 +284,7 @@ def filter_food_type_children(children, food_type):
 if __name__=="__main__":
     new_customer =  Customer()
     nlp = spacy.load("en_core_web_sm")
-    doc = nlp("I want a sandwich with tomato, lettuce, onions and cheese and rice bread please")
+    doc = nlp("i want whole wheat bread")
     # doc = displacy.serve(doc, style="dep")
     # for token in doc:
     #     print(token.text, token.head,  token.lemma_, token.pos_, token.tag_, token.dep_,
