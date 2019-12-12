@@ -17,6 +17,8 @@ def update_state(customer, parsed_tree):
         provide_information(customer=customer, parsed_tree=parsed_tree)
     elif semantic_frame == 'request_special_need':
         update_nutritional_restrictions(customer=customer, parsed_tree=parsed_tree)
+    elif semantic_frame == "triggers_cancel":
+        pass
     else:
         pass
 
@@ -87,7 +89,7 @@ def determine_semantic_frame_from_parsed_tree(parsed_tree):
         return 'request_order_update'
     elif triggers_greeting(root_tuple=root_tuple, parsed_tree= parsed_tree):
         return "greeting"
-    elif triggers_cancel(root_tuple=root_tuple, parsed_tree= parsed_tree):
+    elif triggers_request_cancel(root_tuple=root_tuple, parsed_tree= parsed_tree):
         return "request_cancel"
     else:
         return False
@@ -123,19 +125,14 @@ def triggers_greeting(root_tuple, parsed_tree):
 
     return False
 
-
-###############################################################################
 def get_trigger_words_cancel():
     return ["cancel", "stop"]
-def triggers_cancel(root_tuple, parsed_tree):
+def triggers_request_cancel(root_tuple, parsed_tree):
     trigger_words_cancel = get_trigger_words_cancel()
     for token in parsed_tree:
         if str(token.lemma_) in trigger_words_cancel:
             return True
-
     return False
-###############################################################################
-
 
     # root_lemma, root_text = root_tuple
     # if root_lemma in ["hi", "hey", "hello", "morning", "afternoon", "evening", "night"]:
