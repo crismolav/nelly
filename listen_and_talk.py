@@ -203,14 +203,17 @@ if __name__=="__main__":
                         answer1= answer("two_times_greeting")
                         text_to_speech(answer1)
                         message = speech_to_text()
+                    else:
+                        answer1= answer(frame)
+                        text_to_speech(answer1)
+                        message = speech_to_text()
                 else:
                         answer1= answer(frame)
                         text_to_speech(answer1)
                         message = speech_to_text()
-            doc = nlp(message)
-            nelly.update_state(customer=new_customer, parsed_tree=doc)
-            frame = nelly.determine_semantic_frame_from_parsed_tree(doc)
-
+        doc = nlp(message)
+        nelly.update_state(customer=new_customer, parsed_tree=doc)
+        frame = nelly.determine_semantic_frame_from_parsed_tree(doc)
 
 
     answer1= answer("answer_goodbye")
