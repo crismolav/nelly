@@ -2,6 +2,7 @@ import unittest
 import spacy
 import nelly
 import semantic_frames as sf
+from pdb import set_trace
 
 nlp = spacy.load("en_core_web_sm")
 class NellyTests(unittest.TestCase):
@@ -188,8 +189,20 @@ class NellyTests(unittest.TestCase):
                         new_customer.order.cheese, new_customer.order.bread_type, new_customer.order.sauce_list]
 
         expected_list =[["onion"], "beef", "regular_cheese", "rice_bread", ["ketchup"]]
+        expected_last_state_change = {
+            'semantic_frames': ['request_order_update'],
+            'state_changed': {
+                'order': {
+                    'vegetable_list': 'onion', 'protein': 'beef',
+                    'sauce_list': 'ketchup', 'bread_type': 'rice_bread',
+                    'cheese': 'regular_cheese'}
+            }
+        }
 
+        print(new_customer.last_state_change)
+        
         self.assertEqual(expected_list, results_list)
+        self.assertEqual(expected_last_state_change, new_customer.last_state_change)
 
     def test_triggers_a_request_order_update_for_bread(self):
         new_customer = sf.Customer()
@@ -226,7 +239,7 @@ class NellyTests(unittest.TestCase):
 
         nelly.update_customer_with_greeting(customer=new_customer)
         result = new_customer.last_state_change
-        expected = {'semantic_frames': ['greeting'], 'status_changed': {'customer': {'number_of_greetings'}}}
+        expected = {'semantic_frames': ['greeting'], 'state_changed': {'number_of_greetings': 1}}
 
         self.assertEqual(expected, result)
 
