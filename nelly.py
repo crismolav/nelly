@@ -6,8 +6,9 @@ from ingredients import ingredients_dict
 from food_restrictions import food_restrictions_dict
 
 
-def update_state(customer, parsed_tree):
-    semantic_frame = determine_semantic_frame_from_parsed_tree(parsed_tree)
+def update_state(customer, parsed_tree, question_context={}):
+    semantic_frame = determine_semantic_frame_from_parsed_tree(
+        parsed_tree=parsed_tree, question_context=question_context)
     print("semantic_frame: %s" % semantic_frame)
     if semantic_frame == 'greeting':
         update_customer_with_greeting(customer=customer)
@@ -77,13 +78,16 @@ def determine_what_ingredient_is_being_queried(parsed_tree):
             queried_list.append(token.lemma_)
     return queried_list
 
-def determine_semantic_frame_from_parsed_tree(parsed_tree):
+def determine_semantic_frame_from_parsed_tree(parsed_tree, question_context={}):
     root_tuple = get_parse_tree_root_tuple(parsed_tree)
-    if triggers_a_request_for_information(root_tuple=root_tuple, parsed_tree=parsed_tree):
+    if triggers_a_request_for_information(
+            root_tuple=root_tuple, parsed_tree=parsed_tree):
         return "request_for_information"
-    elif triggers_request_special_need(root_tuple=root_tuple, parsed_tree=parsed_tree):
+    elif triggers_request_special_need(
+            root_tuple=root_tuple, parsed_tree=parsed_tree):
         return 'request_special_need'
-    elif triggers_request_order_update(root_tuple=root_tuple, parsed_tree=parsed_tree):
+    elif triggers_request_order_update(
+            root_tuple=root_tuple, parsed_tree=parsed_tree, question_context=question_context):
         return 'request_order_update'
     elif triggers_greeting(root_tuple=root_tuple, parsed_tree= parsed_tree):
         return "greeting"
@@ -129,11 +133,12 @@ def triggers_greeting(root_tuple, parsed_tree):
     #             return True
     # return False
 
-def triggers_request_order_update(root_tuple, parsed_tree):
+def triggers_request_order_update(root_tuple, parsed_tree, question_context={}):
+    # if question_context != {}:
+    #     if question_context[]
     root_lemma, root_text = root_tuple
     modal_verbs = ['would', 'like']
     there_is_a_verb = is_there_a_verb(parsed_tree)
-
     if there_is_a_verb and root_lemma not in ['sandwich', 'have', 'like', 'want',
                                               'give', 'need', "add", "order"]:
         return False
