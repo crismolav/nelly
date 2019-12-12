@@ -2,6 +2,7 @@ import unittest
 import spacy
 import nelly
 import semantic_frames as sf
+from pdb import set_trace
 
 nlp = spacy.load("en_core_web_sm")
 class NellyTests(unittest.TestCase):
@@ -188,8 +189,20 @@ class NellyTests(unittest.TestCase):
                         new_customer.order.cheese, new_customer.order.bread_type, new_customer.order.sauce_list]
 
         expected_list =[["onion"], "beef", "regular_cheese", "rice_bread", ["ketchup"]]
+        expected_last_state_change = {
+            'semantic_frames': ['request_order_update'],
+            'state_changed': {
+                'order': {
+                    'vegetable_list': 'onion', 'protein': 'beef',
+                    'sauce_list': 'ketchup', 'bread_type': 'rice_bread',
+                    'cheese': 'regular_cheese'}
+            }
+        }
 
+        print(new_customer.last_state_change)
+        
         self.assertEqual(expected_list, results_list)
+        self.assertEqual(expected_last_state_change, new_customer.last_state_change)
 
     def test_triggers_a_request_order_update_for_bread(self):
         new_customer = sf.Customer()
@@ -221,9 +234,19 @@ class NellyTests(unittest.TestCase):
 
         self.assertEqual(expected_list, results_list)
 
-    def test_filter_food_type_children(self):
+    def test_update_customer_with_greeting__updated_info_is_correct(self):
+        new_customer = sf.Customer()
+
+        nelly.update_customer_with_greeting(customer=new_customer)
+        result = new_customer.last_state_change
+        expected = {'semantic_frames': ['greeting'], 'state_changed': {'number_of_greetings': 1}}
+
+        self.assertEqual(expected, result)
+
+    def test_filter_food_type_children__bread_filter(self):
         children = ["ketchup", "rice", "whole", "onions"]
         food_type = "bread"
+    
         result_list  = nelly.filter_food_type_children(children=children, food_type= food_type)
         expected_list= ["rice", "whole"]
 
@@ -237,6 +260,22 @@ class NellyTests(unittest.TestCase):
         expected = 'whole_wheat_bread'
 
         self.assertEqual(expected, result)
+
+    def test_determine_semantic_frame_from_parsed_tree__request_cancel_True(self):
+        parsed_tree = nlp("cancel the order")
+        root_tuple = nelly.get_parse_tree_root_tuple(parsed_tree)
+
+        result = nelly.triggers_cancel(root_tuple=root_tuple, parsed_tree= parsed_tree)
+
+        self.assertTrue(result)
+
+    def test_determine_semantic_frame_from_parsed_tree__request_cancel_False(self):
+        parsed_tree = nlp("Helly Nelly my old friendr")
+        root_tuple = nelly.get_parse_tree_root_tuple(parsed_tree)
+
+        result = nelly.triggers_cancel(root_tuple=root_tuple, parsed_tree= parsed_tree)
+
+        self.assertFalse(result)
 
     # def test_triggers_a_request_for_information__verb_to_be__False(self):
     #

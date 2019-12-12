@@ -35,6 +35,7 @@ class Customer():
         self.order = Order()
         self.food_restrictions_list = []
         self.number_of_greetings = 0
+        self.last_state_change = {}
 
     def add_one_greeting(self):
         self.number_of_greetings += 1
@@ -50,7 +51,12 @@ class Order():
         self.cheese = None
         self.sauce_list = []
         self.vegetable_list = []
-        #self.food_restriction = FoodRestriction()
+
+        self.wants_cheese = True
+        self.wants_protein = True
+        self.wants_sauce = True
+        self.wants_vegetables = True
+
     def add_bread_type(self, bread_type):
         self.bread_type = bread_type
     def add_protein_type(self, protein_type):
