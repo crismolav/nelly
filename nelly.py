@@ -31,24 +31,36 @@ def update_customer_with_greeting(customer):
     customer.add_one_greeting()
     last_state_change = {}
     last_state_change.setdefault('semantic_frames', []).append('greeting')
-    last_state_change['status_changed'] = {'customer':{'number_of_greetings'}}
+    last_state_change['state_changed'] = {'number_of_greetings': customer.number_of_greetings}
     customer.last_state_change = last_state_change
+
 
 def update_order_with_request(customer, parsed_tree):
     #TODO: use spacey labels ("PRODUCT")
+    last_state_change = {}
+    last_state_change.setdefault('semantic_frames', []).append('request_order_update')
+    last_state_change['state_changed'] = {'order':{}}
+
     for token in parsed_tree:
         if token.lemma_ in ingredients_dict['protein'].keys():
             customer.order.add_protein_type(protein_type=token.lemma_)
+            last_state_change['state_changed']['order']['protein'] = token.lemma_
         elif token.lemma_ in ingredients_dict['vegetable'].keys():
             customer.order.add_vegetable(vegetable=token.lemma_)
+            last_state_change['state_changed']['order']['vegetable_list'] = token.lemma_
         elif token.lemma_ in ingredients_dict['sauce'].keys():
             customer.order.add_sauce(sauce=token.lemma_)
+            last_state_change['state_changed']['order']['sauce_list'] = token.lemma_
         elif token.lemma_ == "bread":
             token.lemma_ = get_food_type_strung(parsed_tree, "bread")
             customer.order.add_bread_type(bread_type=token.lemma_)
+            last_state_change['state_changed']['order']['bread_type'] = token.lemma_
         elif token.lemma_ == "cheese":
             token.lemma_ =get_food_type_strung(parsed_tree, "cheese")
             customer.order.add_cheese(cheese=token.lemma_)
+            last_state_change['state_changed']['order']['cheese'] = token.lemma_
+
+    customer.last_state_change = last_state_change
 
 def update_nutritional_restrictions(customer, parsed_tree):
     for token in parsed_tree:
