@@ -14,6 +14,9 @@ def update_state(customer, parsed_tree, question_context={}):
         update_customer_with_greeting(customer=customer)
     elif semantic_frame == 'request_order_update':
         update_order_with_request(customer=customer, parsed_tree=parsed_tree)
+    elif semantic_frame == 'request_ignore_food_type':
+        update_order_with_request_ignore_food_type(
+            customer=customer, question_context=question_context)
     elif semantic_frame == 'request_for_information':
         provide_information(customer=customer, parsed_tree=parsed_tree)
     elif semantic_frame == 'request_special_need':
@@ -63,6 +66,16 @@ def update_nutritional_restrictions(customer, parsed_tree):
         if token.lemma_ in food_restrictions_dict.keys():
             customer.add_food_restriction(food_restriction=token.lemma_)
 
+def update_order_with_request_ignore_food_type(customer, question_context):
+    food_type = question_context['type']
+    customer.order.wants_food_type[food_type] = False
+
+    last_state_change = {}
+    last_state_change.setdefault('semantic_frames', []).append('request_ignore_food_type')
+    last_state_change['state_changed'] = {'order': {}}
+    last_state_change['state_changed']['order']['wants_food_type'] = food_type
+    customer.last_state_change = last_state_change
+
 def provide_information(customer, parsed_tree):
     root_lemma, root_text = get_parse_tree_root_tuple(parsed_tree)
     queried_list = determine_what_ingredient_is_being_queried(parsed_tree)
@@ -91,6 +104,9 @@ def determine_semantic_frame_from_parsed_tree(parsed_tree, question_context={}):
     elif triggers_request_order_update(
             root_tuple=root_tuple, parsed_tree=parsed_tree, question_context=question_context):
         return 'request_order_update'
+    elif triggers_request_ignore_food_type(
+            parsed_tree=parsed_tree, question_context=question_context):
+        return 'request_ignore_food_type'
     elif triggers_greeting(root_tuple=root_tuple, parsed_tree= parsed_tree):
         return "greeting"
     elif triggers_request_goodbye(root_tuple=root_tuple, parsed_tree=parsed_tree):
@@ -102,10 +118,10 @@ def determine_semantic_frame_from_parsed_tree(parsed_tree, question_context={}):
 #asdfadsfasdfsa
 def triggers_a_request_for_information(root_tuple, parsed_tree):
     root_lemma, root_text = root_tuple
+
     if root_lemma in ["tell", "know", "contain", "include"]:
         return True
     elif root_lemma in ["have", "want", "need", "would", "like", "be"]:
-
         for token in parsed_tree:
             if token.lemma_ in get_trigger_words_greeting():
                 return False
@@ -116,7 +132,9 @@ def triggers_a_request_for_information(root_tuple, parsed_tree):
                 # E.g. "Is this bread vegan"
                 else:
                     return True
-            if str(token.lemma_) in ["do", "tell", "know", "contain", "include", "find", "inquire"]:
+            if str(token.lemma_) in ["tell", "know", "contain", "include", "find", "inquire"]:
+                return True
+            elif str(token.lemma_) == 'do' and token.i ==0:
                 return True
     return False
 
@@ -144,6 +162,7 @@ def triggers_request_goodbye(root_tuple, parsed_tree):
 
 def get_trigger_words_cancel():
     return ["cancel", "stop"]
+
 def triggers_request_cancel(root_tuple, parsed_tree):
     trigger_words_cancel = get_trigger_words_cancel()
     for token in parsed_tree:
@@ -160,9 +179,21 @@ def triggers_request_cancel(root_tuple, parsed_tree):
     #             return True
     # return False
 
+def triggers_request_ignore_food_type(parsed_tree, question_context):
+    if question_context == {}:
+        return False
+
+    for token in parsed_tree:
+        if token.i == 0 and token.lemma_.lower() == 'no':
+            return True
+        if (str(token.dep_) == 'neg'
+                and str(token.head) in ['want', 'eat', 'like', 'need', 'add', 'have']):
+            return True
+
+    return False
+
 def triggers_request_order_update(root_tuple, parsed_tree, question_context={}):
-    # if question_context != {}:
-    #     if question_context[]
+
     root_lemma, root_text = root_tuple
     modal_verbs = ['would', 'like']
     there_is_a_verb = is_there_a_verb(parsed_tree)
@@ -284,8 +315,8 @@ def filter_food_type_children(children, food_type):
 if __name__=="__main__":
     new_customer =  Customer()
     nlp = spacy.load("en_core_web_sm")
-    doc = nlp("i want whole wheat bread")
-    # doc = displacy.serve(doc, style="dep")
+    doc = nlp("i don't")
+    doc = displacy.serve(doc, style="dep")
     # for token in doc:
     #     print(token.text, token.head,  token.lemma_, token.pos_, token.tag_, token.dep_,
     #           token.shape_, token.is_alpha, token.is_stop)
@@ -302,4 +333,3 @@ if __name__=="__main__":
     print("Nutritional restriction: %s" %new_customer.food_restrictions_list)
     print("*****")
 
-    displacy.serve(doc, style="dep")

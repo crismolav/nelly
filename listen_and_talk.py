@@ -87,7 +87,7 @@ def answer(frame):
         answer = random.choice(answer)
 
     elif frame == "answer_vegetable":
-        answer = ['Please tell me which vegetables do you want in your sandwich', 'Dont you like vegetables?. Add some vegetables to your order, please!']
+        answer = ['Would you like to add any vegetables', 'Dont you like vegetables?. Add some vegetables to your order']
         answer = random.choice(answer)
 
     elif frame == "answer_sauce":
@@ -161,6 +161,7 @@ if __name__=="__main__":
             answer1= answer("silence")
             text_to_speech(answer1)
             message = speech_to_text()
+        question_context = {}
         if frame != "request_goodbye":
             if frame == "request_order_update":
                 if new_customer.order.bread_type == None:
@@ -168,26 +169,30 @@ if __name__=="__main__":
                     text_to_speech(answer1)
                     message = speech_to_text()
 
+
                 elif new_customer.order.protein == None:
                     answer1= answer("answer_protein")
                     text_to_speech(answer1)
                     message = speech_to_text()
+                    question_context = {'type': 'protein'}
 
                 elif not new_customer.order.vegetable_list:
                     answer1= answer("answer_vegetable")
                     text_to_speech(answer1)
                     message = speech_to_text()
+                    question_context = {'type': 'vegetable'}
 
                 elif not new_customer.order.sauce_list:
                     answer1= answer("answer_sauce")
                     text_to_speech(answer1)
                     message = speech_to_text()
-
+                    question_context = {'type': 'sauce'}
 
                 elif new_customer.order.cheese == None:
                     answer1= answer("answer_cheese")
                     text_to_speech(answer1)
                     message = speech_to_text()
+                    question_context = {'type': 'cheese'}
 
                 else:
                     answer1= answer_order(new_customer.order.vegetable_list, new_customer.order.sauce_list, new_customer.order.bread_type, new_customer.order.protein, new_customer.order.cheese)
@@ -208,11 +213,12 @@ if __name__=="__main__":
                         text_to_speech(answer1)
                         message = speech_to_text()
                 else:
-                        answer1= answer(frame)
-                        text_to_speech(answer1)
-                        message = speech_to_text()
+                    answer1= answer(frame)
+                    text_to_speech(answer1)
+                    message = speech_to_text()
         doc = nlp(message)
-        nelly.update_state(customer=new_customer, parsed_tree=doc)
+        nelly.update_state(
+            customer=new_customer, parsed_tree=doc, question_context=question_context)
         frame = nelly.determine_semantic_frame_from_parsed_tree(doc)
 
 

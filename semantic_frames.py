@@ -52,10 +52,7 @@ class Order():
         self.sauce_list = []
         self.vegetable_list = []
 
-        self.wants_cheese = True
-        self.wants_protein = True
-        self.wants_sauce = True
-        self.wants_vegetables = True
+        self.wants_food_type = {'cheese':True , 'protein':True, 'sauce':True, 'vegetable':True}
 
     def add_bread_type(self, bread_type):
         self.bread_type = bread_type

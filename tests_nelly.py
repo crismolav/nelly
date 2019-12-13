@@ -33,6 +33,16 @@ class NellyTests(unittest.TestCase):
 
         self.assertEqual(expected, result)
 
+    def test_determine_semantic_frame_from_parsed_tree__request_ignore_food_type(self):
+        parsed_tree = nlp("I don't want vegetables")
+        question_context =  {'type':'vegetable'}
+
+        result = nelly.determine_semantic_frame_from_parsed_tree(
+            parsed_tree=parsed_tree, question_context=question_context)
+        expected = 'request_ignore_food_type'
+
+        self.assertEqual(expected, result)
+
     def test_determine_semantic_frame_from_parsed_tree__greeting_with_name(self):
         parsed_tree = nlp("Hello Nelly")
 
@@ -204,6 +214,18 @@ class NellyTests(unittest.TestCase):
         self.assertEqual(expected_list, results_list)
         self.assertEqual(expected_last_state_change, new_customer.last_state_change)
 
+    def test_update_order_with_request_ignore_food_type__cheese(self):
+        new_customer = sf.Customer()
+        question_context = {'type':'cheese'}
+
+        nelly.update_order_with_request_ignore_food_type(
+            customer=new_customer, question_context=question_context)
+        expected_wants_food_type = {
+            'cheese': False, 'protein': True, 'sauce': True, 'vegetable': True}
+
+        self.assertEqual(expected_wants_food_type, new_customer.order.wants_food_type)
+
+
     def test_triggers_a_request_order_update_for_bread(self):
         new_customer = sf.Customer()
 
@@ -301,7 +323,41 @@ class NellyTests(unittest.TestCase):
         expected = 'request_goodbye'
         self.assertEqual(result,expected)
 
+    def test_triggers_request_ignore_food_type__simple__True(self):
+        parsed_tree = nlp("no")
+        question_context = {'type':'vegetable'}
 
+        result = nelly.triggers_request_ignore_food_type(
+            parsed_tree=parsed_tree, question_context=question_context)
+
+        self.assertTrue(result)
+
+    def test_triggers_request_ignore_food_type__no_thanks__True(self):
+        parsed_tree = nlp("no thanks")
+        question_context = {'type':'vegetable'}
+
+        result = nelly.triggers_request_ignore_food_type(
+            parsed_tree=parsed_tree, question_context=question_context)
+
+        self.assertTrue(result)
+
+    def test_triggers_request_ignore_food_type__complex_want__True(self):
+        parsed_tree = nlp("I don't want vegetables")
+        question_context = {'type':'vegetable'}
+
+        result = nelly.triggers_request_ignore_food_type(
+            parsed_tree=parsed_tree, question_context=question_context)
+
+        self.assertTrue(result)
+
+    def test_triggers_request_ignore_food_type__complex_like_True(self):
+        parsed_tree = nlp("I do not like vegetables")
+        question_context = {'type':'vegetable'}
+
+        result = nelly.triggers_request_ignore_food_type(
+            parsed_tree=parsed_tree, question_context=question_context)
+
+        self.assertTrue(result)
     # def test_triggers_a_request_for_information__verb_to_be__False(self):
     #
     #     parsed_tree = nlp("Is the whole wheat bread vegan")
