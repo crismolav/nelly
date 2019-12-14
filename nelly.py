@@ -22,6 +22,8 @@ def update_state(customer, parsed_tree, question_context={}):
         update_nutritional_restrictions(customer=customer, parsed_tree=parsed_tree)
     elif semantic_frame == "triggers_cancel":
         pass
+    elif semantic_frame == "request_nelly_gender":
+        pass
     else:
         pass
 
@@ -238,10 +240,10 @@ def determine_what_ingredient_is_being_queried(parsed_tree):
 
 def determine_semantic_frame_from_parsed_tree(parsed_tree, question_context={}):
     root_tuple = get_parse_tree_root_tuple(parsed_tree)
-    if triggers_a_request_for_information(
-            root_tuple=root_tuple, parsed_tree=parsed_tree):
-        return "request_for_information"
-    elif triggers_request_special_need(
+    # if triggers_a_request_for_information(
+    #         root_tuple=root_tuple, parsed_tree=parsed_tree):
+    #     return "request_for_information"
+    if triggers_request_special_need(
             root_tuple=root_tuple, parsed_tree=parsed_tree):
         return 'request_special_need'
     elif triggers_remove_item_from_the_order(root_tuple=root_tuple, parsed_tree= parsed_tree):
@@ -258,10 +260,19 @@ def determine_semantic_frame_from_parsed_tree(parsed_tree, question_context={}):
         return "request_goodbye"
     elif triggers_request_cancel(root_tuple=root_tuple, parsed_tree= parsed_tree):
         return "request_cancel"
+    elif triggers_nelly_gender(parsed_tree=parsed_tree):
+        return "request_nelly_gender"
     # elif triggers_remove_item_from_the_order(root_tuple=root_tuple, parsed_tree= parsed_tree):
     #     return "request_removal"
     else:
         return "False"
+
+def triggers_nelly_gender(parsed_tree):
+    for token in parsed_tree:
+        if token.lemma_ == 'gender':
+            return True
+
+    return False
 
 def triggers_a_request_for_information(root_tuple, parsed_tree):
     root_lemma, root_text = root_tuple

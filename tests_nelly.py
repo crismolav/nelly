@@ -192,6 +192,24 @@ class NellyTests(unittest.TestCase):
 
         self.assertFalse(result)
 
+    def test_triggers_nelly_gender__True(self):
+        parsed_tree = nlp("What is your gender")
+        root_tuple = nelly.get_parse_tree_root_tuple(parsed_tree)
+
+        result = nelly.triggers_a_request_for_information(
+            root_tuple=root_tuple, parsed_tree=parsed_tree)
+
+        self.assertTrue(result)
+
+    def test_triggers_nelly_gender__False(self):
+        parsed_tree = nlp("Hey there what's up")
+        root_tuple = nelly.get_parse_tree_root_tuple(parsed_tree)
+
+        result = nelly.triggers_a_request_for_information(
+            root_tuple=root_tuple, parsed_tree=parsed_tree)
+
+        self.assertFalse(result)
+
     def test_update_customer_with_greeting__True(self):
         new_customer = sf.Customer()
         nelly.update_customer_with_greeting(customer=new_customer)
@@ -327,6 +345,7 @@ class NellyTests(unittest.TestCase):
 
     def test_determine_semantic_frame_from_parsed_tree__request_removal_false(self):
         parsed_tree = nlp("Nelly, i do not want to remove tomato")
+
         root_tuple = nelly.get_parse_tree_root_tuple(parsed_tree)
 
         result = nelly.triggers_remove_item_from_the_order(root_tuple=root_tuple, parsed_tree=parsed_tree)
