@@ -26,8 +26,14 @@ def update_state(customer, parsed_tree, question_context={}):
         pass
     elif semantic_frame == "request_nelly_gender":
         pass
+    elif semantic_frame == "request_no_food_restriction":
+        update_customer_with_request_no_food_restriction(customer)
     else:
         pass
+
+def update_customer_with_request_no_food_restriction(customer):
+    customer.ignore_food_restriction = True
+
 
 def update_customer_with_greeting(customer):
     customer.add_one_greeting()
@@ -281,18 +287,39 @@ def determine_semantic_frame_from_parsed_tree(parsed_tree, question_context={}):
     elif triggers_request_ignore_food_type(
             parsed_tree=parsed_tree, question_context=question_context):
         return 'request_ignore_food_type'
-    elif triggers_greeting(root_tuple=root_tuple, parsed_tree= parsed_tree):
+    elif triggers_greeting(
+            root_tuple=root_tuple, parsed_tree= parsed_tree):
         return "greeting"
-    elif triggers_request_goodbye(root_tuple=root_tuple, parsed_tree=parsed_tree):
+    elif triggers_request_goodbye(
+            root_tuple=root_tuple, parsed_tree=parsed_tree):
         return "request_goodbye"
-    elif triggers_request_cancel(root_tuple=root_tuple, parsed_tree= parsed_tree):
+    elif triggers_request_cancel(
+            root_tuple=root_tuple, parsed_tree= parsed_tree):
         return "request_cancel"
-    elif triggers_nelly_gender(parsed_tree=parsed_tree):
+    elif triggers_nelly_gender(
+            parsed_tree=parsed_tree):
         return "request_nelly_gender"
+    elif triggers_request_no_food_restriction(
+            parsed_tree=parsed_tree, question_context=question_context):
+        return "request_no_food_restriction"
     # elif triggers_remove_item_from_the_order(root_tuple=root_tuple, parsed_tree= parsed_tree):
     #     return "request_removal"
     else:
         return "False"
+
+def triggers_request_no_food_restriction(parsed_tree, question_context):
+    if question_context == {}:
+        return False
+
+    for token in parsed_tree:
+        if token.i == 0 and token.lemma_.lower() == 'no':
+            return True
+        if (str(token.dep_) == 'neg'
+                and str(token.head) in ['do', 'have']):
+            return True
+
+    return False
+
 
 def triggers_nelly_gender(parsed_tree):
     for token in parsed_tree:
@@ -372,7 +399,7 @@ def triggers_request_cancel(root_tuple, parsed_tree):
     # return False
 
 def triggers_request_ignore_food_type(parsed_tree, question_context):
-    if question_context == {}:
+    if question_context == {} or question_context['type'] == 'food_restriction':
         return False
 
     for token in parsed_tree:
