@@ -200,6 +200,7 @@ if __name__=="__main__":
 
 
             else:
+                print(new_customer.last_state_change)
                 if new_customer.number_of_greetings > 1:
                     if  frame == "greeting":
                         answer1= answer("two_times_greeting")
