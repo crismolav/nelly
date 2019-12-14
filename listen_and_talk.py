@@ -135,13 +135,31 @@ def answer_ingredient(ingredient_list):
 ################################################################################
 def answer_order(vegetable_list,sauce_list,bread,protein,cheese):
     str1 = " "
-    vegetable_list = ','.join(vegetable_list)
     str2 = " "
-    sauce_list = ','.join(sauce_list)
 
-    bread=bread.replace("_", ",")
-    cheese=cheese.replace("_", ",")
-    answer = 'Dear friend, you have ordered a sandwich which contains.' + bread +'.'+ protein +'. With, '+ vegetable_list +','+ sauce_list +','+ cheese
+    if not vegetable_list:
+        vegetable_list = ','.join(vegetable_list)
+        vegetable = vegetable_list
+    else:
+        vegetable= " "
+
+    if not sauce_list:
+        sauce_list = ','.join(sauce_list)
+        sauce = sauce_list
+    else:
+        sauce= " "
+
+    if not bread:
+        bread=bread.replace("_", ",")
+    else:
+        bread= " "
+
+    if not cheese:
+        cheese=cheese.replace("_", ",")
+    else:
+        cheese= " "
+
+    answer = 'Dear friend, you have ordered a sandwich which contains.' + bread +'.'+ protein +'. With, '+ vegetable +','+ sauce +','+ cheese
     return answer
 ################################################################################
 def speech_to_text():
