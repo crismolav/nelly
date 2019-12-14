@@ -122,7 +122,7 @@ def answer(frame):
         answer = random.choice(answer)
 
     elif frame == "request_nelly_gender":
-        answer = ["That's a very personal question. Anyway, I am non binary. Even though I am a machine. Isn't that ironic" ]
+        answer = ["That's a very personal question. Anyway, I identify myself as non binary. Even though I am a machine. Isn't that ironic" ]
         answer = random.choice(answer)
 
     else:
