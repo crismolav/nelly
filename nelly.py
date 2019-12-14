@@ -21,7 +21,7 @@ def update_state(customer, parsed_tree, question_context={}):
     elif semantic_frame == 'request_special_need':
         update_nutritional_restrictions(customer=customer, parsed_tree=parsed_tree)
     elif semantic_frame == "request_removal":
-        for i in customer.last_state_change["state_changed"]["order"].values:
+        for i in customer.last_state_change["state_changed"]["order"].values():
             if i in ingredients_dict["vegetables"].keys() \
                     or ingredients_dict["protein"].key() \
                     or ingredients_dict["cheese"].keys() \
