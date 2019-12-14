@@ -142,8 +142,8 @@ def answer_price():
     if ("avocado" in new_customer.order.vegetable_list):
         price = price + 3
 
-    if (len(new_customer.order.vegetable_list > 5):
-        price = (len(new_customer.order.vegetable_list - 5)*1 + price
+    if (len(new_customer.order.vegetable_list > 5)):
+        price = len(new_customer.order.vegetable_list - 5)*1 + price
 
     if (new_customer.order.protein):
         price = price + 2
@@ -238,6 +238,7 @@ if __name__=="__main__":
             nelly.update_state(customer=new_customer, parsed_tree=doc)
             frame = nelly.determine_semantic_frame_from_parsed_tree(doc)
         question_context = {}
+
         if frame != "request_goodbye":
 
             if (frame == "request_order_update") or (frame == "False" and enter_value==1) or (frame == "request_ignore_food_type") or (frame == "request_removal") :
@@ -299,6 +300,7 @@ if __name__=="__main__":
                     question_context = {'type': 'cheese'}
                     enter_value = 1
 
+
                 else:
                     enter_value = 0
                     answer1 = answer_order(new_customer.order.vegetable_list, new_customer.order.sauce_list, new_customer.order.bread_type, new_customer.order.protein, new_customer.order.cheese)
@@ -322,6 +324,7 @@ if __name__=="__main__":
                     answer1 = answer(frame)
                     text_to_speech(answer1)
                     message = speech_to_text()
+
 
         doc = nlp(message)
         nelly.update_state(customer=new_customer, parsed_tree=doc, question_context=question_context)
