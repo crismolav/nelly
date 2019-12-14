@@ -66,6 +66,9 @@ def update_nutritional_restrictions(customer, parsed_tree):
         if token.lemma_ in food_restrictions_dict.keys():
             customer.add_food_restriction(food_restriction=token.lemma_)
 
+def check_nutritional_inconsistencies(customer):
+    pass
+
 def update_order_with_request_ignore_food_type(customer, question_context):
     food_type = question_context['type']
     customer.order.wants_food_type[food_type] = False
