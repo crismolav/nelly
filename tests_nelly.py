@@ -192,19 +192,19 @@ class NellyTests(unittest.TestCase):
     def test_triggers_a_request_order_update_all_ingredients(self):
         new_customer = sf.Customer()
 
-        parsed_tree = nlp("I want a sandwich with onions beef ketchup rice bread and regular cheese")
+        parsed_tree = nlp("I want a sandwich with onions tomato beef ketchup rice bread and regular cheese")
         nelly.update_state(customer=new_customer, parsed_tree=parsed_tree)
 
         results_list = [new_customer.order.vegetable_list, new_customer.order.protein,
                         new_customer.order.cheese, new_customer.order.bread_type, new_customer.order.sauce_list]
 
-        expected_list =[["onion"], "beef", "regular_cheese", "rice_bread", ["ketchup"]]
+        expected_list =[["onion","tomato"], "beef", "regular_cheese", "rice_bread", ["ketchup"]]
         expected_last_state_change = {
             'semantic_frames': ['request_order_update'],
             'state_changed': {
                 'order': {
-                    'vegetable_list': 'onion', 'protein': 'beef',
-                    'sauce_list': 'ketchup', 'bread_type': 'rice_bread',
+                    'vegetable_list': ['onion', 'tomato'], 'protein': 'beef',
+                    'sauce_list': ['ketchup'], 'bread_type': 'rice_bread',
                     'cheese': 'regular_cheese'}
             }
         }

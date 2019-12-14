@@ -46,10 +46,10 @@ def update_order_with_request(customer, parsed_tree):
             last_state_change['state_changed']['order']['protein'] = token.lemma_
         elif token.lemma_ in ingredients_dict['vegetable'].keys():
             customer.order.add_vegetable(vegetable=token.lemma_)
-            last_state_change['state_changed']['order']['vegetable_list'] = token.lemma_
+            last_state_change['state_changed']['order'].setdefault('vegetable_list', []).append(token.lemma_)
         elif token.lemma_ in ingredients_dict['sauce'].keys():
             customer.order.add_sauce(sauce=token.lemma_)
-            last_state_change['state_changed']['order']['sauce_list'] = token.lemma_
+            last_state_change['state_changed']['order'].setdefault('sauce_list', []).append(token.lemma_)
         elif token.lemma_ == "bread":
             token.lemma_ = get_food_type_strung(parsed_tree, "bread")
             customer.order.add_bread_type(bread_type=token.lemma_)
@@ -65,6 +65,12 @@ def update_nutritional_restrictions(customer, parsed_tree):
     for token in parsed_tree:
         if token.lemma_ in food_restrictions_dict.keys():
             customer.add_food_restriction(food_restriction=token.lemma_)
+
+def check_nutritional_inconsistencies(customer):
+    pass
+
+def Triggers_remove_item_from_the_order():
+    pass
 
 def update_order_with_request_ignore_food_type(customer, question_context):
     food_type = question_context['type']
@@ -157,12 +163,10 @@ def triggers_request_goodbye(root_tuple, parsed_tree):
     for token in parsed_tree:
         if str(token.lemma_) in trigger_words_goodbye:
             return True
-
     return False
 
 def get_trigger_words_cancel():
     return ["cancel", "stop"]
-
 def triggers_request_cancel(root_tuple, parsed_tree):
     trigger_words_cancel = get_trigger_words_cancel()
     for token in parsed_tree:
@@ -332,4 +336,3 @@ if __name__=="__main__":
     update_state(customer=new_customer, parsed_tree=doc)
     print("Nutritional restriction: %s" %new_customer.food_restrictions_list)
     print("*****")
-
