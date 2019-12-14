@@ -193,6 +193,10 @@ if __name__=="__main__":
 
             if (frame == "request_order_update") or (frame == "False" and enter_value==1) or (frame == "request_ignore_food_type") or (frame == "request_removal"):
 
+                if frame == "request_ignore_food_type" or frame == "request_removal":
+                    answer1 = answer(frame)
+                    text_to_speech(answer1)
+
                 if frame == "False" and enter_value==1:
                     answer1= answer(frame)
                     text_to_speech(answer1)
@@ -235,9 +239,10 @@ if __name__=="__main__":
                     text_to_speech(answer1)
                     message = speech_to_text()
                     question_context = {'type': 'cheese'}
-                    enter_value = 0
+                    enter_value = 1
 
                 else:
+                    enter_value = 0
                     answer1 = answer_order(new_customer.order.vegetable_list, new_customer.order.sauce_list, new_customer.order.bread_type, new_customer.order.protein, new_customer.order.cheese)
                     text_to_speech(answer1)
                     answer1 = answer("answer_price")
