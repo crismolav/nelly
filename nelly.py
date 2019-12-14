@@ -173,11 +173,8 @@ def triggers_remove_item_from_the_order(root_tuple, parsed_tree):
                 return False
         if str(root_lemma) == "want" and str(token.lemma_) in trigger_words_removal:
             return True
-
-        if str(root_lemma) == "want" and str(token.dep_) == "neg" and str(token) not in trigger_words_removal:
+        if str(token.dep_) == "neg" and str(root_lemma) == "want":
             return False
-        # if str(token.dep_) == "neg" and str(root_lemma) == "want":
-        #     return False
     return False
 
 
