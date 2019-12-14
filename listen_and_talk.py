@@ -212,9 +212,8 @@ if __name__=="__main__":
             frame = nelly.determine_semantic_frame_from_parsed_tree(doc)
         question_context = {}
         if frame != "request_goodbye":
-            if ((frame == "request_order_update") or (frame == "False" and enter_value==1)
-                    or (frame == "request_ignore_food_type") or (frame == "request_removal")
-                    ):
+            
+            if (frame == "request_order_update") or (frame == "False" and enter_value==1) or (frame == "request_ignore_food_type") or (frame == "request_removal") :
 
                 if frame == "request_ignore_food_type" or frame == "request_removal":
                     answer1 = answer(frame)
