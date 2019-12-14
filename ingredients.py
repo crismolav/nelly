@@ -28,6 +28,10 @@ ingredients_dict = {
             "restriction": [],
             "ingredients": ["mushrooms"]
         },
+        "avocado":{
+            "restriction": [],
+            "ingredients": ["avocado"]
+        }
     },
 
     "protein":{
