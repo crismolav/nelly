@@ -69,6 +69,9 @@ def update_nutritional_restrictions(customer, parsed_tree):
 def check_nutritional_inconsistencies(customer):
     pass
 
+def Triggers_remove_item_from_the_order():
+    pass
+
 def update_order_with_request_ignore_food_type(customer, question_context):
     food_type = question_context['type']
     customer.order.wants_food_type[food_type] = False
@@ -160,12 +163,10 @@ def triggers_request_goodbye(root_tuple, parsed_tree):
     for token in parsed_tree:
         if str(token.lemma_) in trigger_words_goodbye:
             return True
-
     return False
 
 def get_trigger_words_cancel():
     return ["cancel", "stop"]
-
 def triggers_request_cancel(root_tuple, parsed_tree):
     trigger_words_cancel = get_trigger_words_cancel()
     for token in parsed_tree:
@@ -335,4 +336,3 @@ if __name__=="__main__":
     update_state(customer=new_customer, parsed_tree=doc)
     print("Nutritional restriction: %s" %new_customer.food_restrictions_list)
     print("*****")
-
