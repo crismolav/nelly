@@ -82,6 +82,8 @@ def triggers_remove_item_from_the_order(root_tuple, parsed_tree):
         if str(root_lemma) == "want":
             if str(token.lemma_) in trigger_words_removal:
                 return True
+        if str(token.dep_) == "neg":
+            return False
     return False
 
 
@@ -185,10 +187,18 @@ def triggers_request_goodbye(root_tuple, parsed_tree):
 def get_trigger_words_cancel():
     return ["cancel", "stop"]
 def triggers_request_cancel(root_tuple, parsed_tree):
+    root_lemma, root_text = root_tuple
     trigger_words_cancel = get_trigger_words_cancel()
     for token in parsed_tree:
         if str(token.lemma_) in trigger_words_cancel:
             return True
+        if str(token.lemma_) in trigger_words_cancel and str(token.dep_) == "neg":
+            return False
+    if str(root_lemma) == "want":
+        if str(token.lemma_) in trigger_words_cancel:
+            return True
+    if str(token.dep_) == "neg":
+        return False
     return False
 
     # root_lemma, root_text = root_tuple

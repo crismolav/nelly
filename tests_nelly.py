@@ -283,7 +283,15 @@ class NellyTests(unittest.TestCase):
         self.assertEqual(expected, result)
 
     def test_determine_semantic_frame_from_parsed_tree__request_cancel_True(self):
-        parsed_tree = nlp("cancel the order")
+        parsed_tree = nlp("i want to cancel the order")
+        root_tuple = nelly.get_parse_tree_root_tuple(parsed_tree)
+
+        result = nelly.triggers_request_cancel(root_tuple=root_tuple, parsed_tree= parsed_tree)
+
+        self.assertTrue(result)
+
+    def test_determine_semantic_frame_from_parsed_tree__request_cancel_false(self):
+        parsed_tree = nlp("dont cancel the order")
         root_tuple = nelly.get_parse_tree_root_tuple(parsed_tree)
 
         result = nelly.triggers_request_cancel(root_tuple=root_tuple, parsed_tree= parsed_tree)
@@ -299,7 +307,7 @@ class NellyTests(unittest.TestCase):
         self.assertTrue(result)
 
     def test_determine_semantic_frame_from_parsed_tree__request_removal_false(self):
-        parsed_tree = nlp("Nelly, i want some tomato")
+        parsed_tree = nlp("Nelly, i dont want to remove tomato")
         root_tuple = nelly.get_parse_tree_root_tuple(parsed_tree)
 
         result = nelly.triggers_remove_item_from_the_order(root_tuple=root_tuple, parsed_tree=parsed_tree)
