@@ -237,7 +237,7 @@ class NellyTests(unittest.TestCase):
         }
 
         print(new_customer.last_state_change)
-        
+
         self.assertEqual(expected_list, results_list)
         self.assertEqual(expected_last_state_change, new_customer.last_state_change)
 
@@ -485,7 +485,7 @@ class NellyTests(unittest.TestCase):
         expected = {
             'vegan': {
                 'bread': ['oregano_bread'], 'protein': ['bacon'],
-                'cheese': [], 'vegetable': [], 'sauce': ['ranch']}
+                'sauce': ['ranch']}
         }
 
         self.assertEqual(expected, result)
@@ -503,16 +503,26 @@ class NellyTests(unittest.TestCase):
         expected = {
             'vegan': {'bread': ['oregano_bread'],
                       'protein': ['bacon'],
-                      'cheese': [],
-                      'vegetable': [],
                       'sauce': ['ranch']},
-            'gluten': {'bread': ['oregano_bread'],
-                       'protein': [],
-                       'cheese': [],
-                       'vegetable': [],
-                       'sauce': []}}
+            'gluten': {'bread': ['oregano_bread']} }
 
         self.assertEqual(expected, result)
+
+    def test_update_nutritional_restrictions__update_feedback(self):
+        new_customer = sf.Customer()
+        new_customer.order.add_bread_type("oregano_bread")
+        new_customer.order.add_vegetable("tomato")
+        new_customer.order.add_protein_type("bacon")
+        new_customer.order.add_sauce("ranch")
+        parsed_tree = nlp("I am vegan")
+
+        nelly.update_nutritional_restrictions(customer=new_customer, parsed_tree=parsed_tree)
+        update_feedback_expected = {
+            'nutritional_violations': {'vegan': {'bread': ['oregano_bread'],
+                                                 'protein': ['bacon'],
+                                                 'sauce': ['ranch']}}}
+
+        self.assertEqual(update_feedback_expected, new_customer.feedback)
 
     def test_check_update_order_with_removal_request_vegetables(self):
         new_customer = sf.Customer()

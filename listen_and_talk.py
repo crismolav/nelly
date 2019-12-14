@@ -135,12 +135,28 @@ def answer_ingredient(ingredient_list):
     answer = 'This food my friend, contains:' + ingredient_list
     return answer
 ################################################################################
-def answer_price(ingredient_list):
-    answer = ['Its 5 euros in total! Thank you!','For you, I can leave it at 6 euros!', 'Its 10 euros. Have a nice day my friend.', 'Today, this sandwich is free for you!']
+def answer_price():
+
+    price = 0
+
+    if ("avocado" in new_customer.order.vegetable_list):
+        price = price + 3
+
+    if (len(new_customer.order.vegetable_list > 5):
+        price = (len(new_customer.order.vegetable_list - 5)*1 + price
+
+    if (new_customer.order.protein):
+        price = price + 2
+
+    if (new_customer.order.cheese):
+        price = price + 1
+
+    answer = "Its" + price +  "euros. Have a nice day my friend."
+
+    answer = [answer, 'Today, this sandwich is free for you!']
     answer = random.choice(answer)
+
     return answer
-
-
 ################################################################################
 def answer_order(vegetable_list,sauce_list,bread,protein,cheese):
     str1 = " "
@@ -237,11 +253,13 @@ if __name__=="__main__":
                     answer1 = answer(frame)
                     text_to_speech(answer1)
 
+
                 if frame == "False" and enter_value==1:
                     answer1= answer(frame)
                     text_to_speech(answer1)
                     text_to_speech("Please my friend, lets continue with the order")
                     enter_value=0
+
 
                 if new_customer.order.bread_type == None:
                     answer1= answer("answer_bread")
@@ -285,7 +303,7 @@ if __name__=="__main__":
                     enter_value = 0
                     answer1 = answer_order(new_customer.order.vegetable_list, new_customer.order.sauce_list, new_customer.order.bread_type, new_customer.order.protein, new_customer.order.cheese)
                     text_to_speech(answer1)
-                    answer1 = answer("answer_price")
+                    answer1 = answer_price()
                     text_to_speech(answer1)
                     message = speech_to_text()
 

@@ -44,25 +44,43 @@ def update_order_with_request(customer, parsed_tree):
     last_state_change['state_changed'] = {'order':{}}
 
     for token in parsed_tree:
-        if token.lemma_ in ingredients_dict['protein'].keys():
-            customer.order.add_protein_type(protein_type=token.lemma_)
-            last_state_change['state_changed']['order']['protein'] = token.lemma_
-        elif token.lemma_ in ingredients_dict['vegetable'].keys():
-            customer.order.add_vegetable(vegetable=token.lemma_)
-            last_state_change['state_changed']['order'].setdefault('vegetable_list', []).append(token.lemma_)
-        elif token.lemma_ in ingredients_dict['sauce'].keys():
-            customer.order.add_sauce(sauce=token.lemma_)
-            last_state_change['state_changed']['order'].setdefault('sauce_list', []).append(token.lemma_)
-        elif token.lemma_ == "bread":
-            token.lemma_ = get_food_type_strung(parsed_tree, "bread")
-            customer.order.add_bread_type(bread_type=token.lemma_)
-            last_state_change['state_changed']['order']['bread_type'] = token.lemma_
-        elif token.lemma_ == "cheese":
-            token.lemma_ =get_food_type_strung(parsed_tree, "cheese")
-            customer.order.add_cheese(cheese=token.lemma_)
-            last_state_change['state_changed']['order']['cheese'] = token.lemma_
+        update_order_for_food_type(token, customer, parsed_tree, last_state_change)
 
     customer.last_state_change = last_state_change
+
+def update_order_for_food_type(token, customer, parsed_tree, last_state_change):
+    if token.lemma_ in ingredients_dict['protein'].keys():
+        customer.order.add_protein_type(protein_type=token.lemma_)
+        variable_name = 'protein'
+    elif token.lemma_ in ingredients_dict['vegetable'].keys():
+        customer.order.add_vegetable(vegetable=token.lemma_)
+        variable_name = 'vegetable_list'
+    elif token.lemma_ in ingredients_dict['sauce'].keys():
+        customer.order.add_sauce(sauce=token.lemma_)
+        variable_name = 'sauce_list'
+    elif token.lemma_ == "bread":
+        token.lemma_ = get_food_type_strung(parsed_tree, "bread")
+        customer.order.add_bread_type(bread_type=token.lemma_)
+        variable_name = 'bread_type'
+    elif token.lemma_ == "cheese":
+        token.lemma_ = get_food_type_strung(parsed_tree, "cheese")
+        customer.order.add_cheese(cheese=token.lemma_)
+        variable_name = 'cheese'
+    else:
+        return
+    if variable_name in ['sauce_list', 'vegetable_list']:
+        last_state_change['state_changed']['order'].setdefault(variable_name, []).append(token.lemma_)
+    else:
+        last_state_change['state_changed']['order'][variable_name] = token.lemma_
+
+    # last_state_change['food_restriction_violation'].setdefault(token.lemma_, []).append()
+
+def from_variable_name_to_food_type(variable_name):
+    conv_dict = {
+        'vegetable_list': 'vegetable',
+        'sauce_list': 'sauce',
+    }
+    return conv_dict[variable_name]
 
 def update_order_with_removal_request(customer, parsed_tree):
     last_state_change = {}
@@ -96,6 +114,9 @@ def update_nutritional_restrictions(customer, parsed_tree):
     for token in parsed_tree:
         if token.lemma_ in food_restrictions_dict.keys():
             customer.add_food_restriction(food_restriction=token.lemma_)
+
+    nutritional_inconsistencies = check_nutritional_inconsistencies(customer)
+    customer.feedback = {'nutritional_violations': nutritional_inconsistencies}
 
 def check_nutritional_inconsistencies(customer):
     nutritional_inconsistencies = {}
@@ -166,13 +187,18 @@ def check_nutritional_inconsistencies_for_food_restriction(customer, food_restri
 
 def make_nutritional_inconsistencies_dict(
         bread_list, protein_list, cheese_list, vegetable_list, sauce_list):
-    return {
-        "bread" :bread_list,
-        "protein": protein_list,
-        "cheese": cheese_list,
-        "vegetable": vegetable_list,
-        "sauce": sauce_list,
-    }
+    nutritional_inconsistencies_dict = {}
+    if bread_list != []:
+        nutritional_inconsistencies_dict["bread"] = bread_list
+    if protein_list != []:
+        nutritional_inconsistencies_dict["protein"] = protein_list
+    if cheese_list != []:
+        nutritional_inconsistencies_dict["cheese"] = cheese_list
+    if vegetable_list != []:
+        nutritional_inconsistencies_dict["vegetable"] = vegetable_list
+    if sauce_list != []:
+        nutritional_inconsistencies_dict["sauce"] = sauce_list
+    return nutritional_inconsistencies_dict
 
 def check_item_food_restriction(food_type, food_name, food_restriction,
                                 ignored_food_restrictions_items):
