@@ -481,13 +481,15 @@ def filter_food_type_children(children, food_type):
 def return_last_elements_added_to_the_order(customer):
     customer_dict = customer.last_state_change
     keys = customer_dict["state_changed"]["order"].values()
-    keys = [i for i in keys]
-    return keys
+    keys_clean = []
+    for i in keys:
+        keys_clean.append(i.replace("_", ","))
+    return keys_clean
 
 if __name__=="__main__":
     new_customer =  Customer()
     nlp = spacy.load("en_core_web_sm")
-    doc = nlp("i want a sandwich with tomato, beef")
+    doc = nlp("i want a sandwich with whole wheat bread, beef")
     print(doc)
     #doc = displacy.serve(doc, style="dep")
     # for token in doc:
