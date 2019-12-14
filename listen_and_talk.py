@@ -182,7 +182,7 @@ if __name__=="__main__":
     frame = nelly.determine_semantic_frame_from_parsed_tree(doc)
     while frame != 'request_goodbye' and frame != 'request_cancel':
         while message == "silence":
-            answer1= answer("silence")
+            answer1 = answer("silence")
             text_to_speech(answer1)
             message = speech_to_text()
             doc = nlp(message)
@@ -190,12 +190,15 @@ if __name__=="__main__":
             frame = nelly.determine_semantic_frame_from_parsed_tree(doc)
         question_context = {}
         if frame != "request_goodbye":
-            if (frame == "request_order_update") or (frame == "False" and enter_value==1):
+
+            if (frame == "request_order_update") or (frame == "False" and enter_value==1) or (frame == "request_ignore_food_type") or (frame == "request_removal"):
+
                 if frame == "False" and enter_value==1:
                     answer1= answer(frame)
                     text_to_speech(answer1)
                     text_to_speech("Please my friend, lets continue with the order")
                     enter_value=0
+
                 if new_customer.order.bread_type == None:
                     answer1= answer("answer_bread")
                     text_to_speech(answer1)
@@ -204,7 +207,7 @@ if __name__=="__main__":
 
 
                 elif new_customer.order.wants_food_type['protein'] and new_customer.order.protein == None:
-                    answer1= answer("answer_protein")
+                    answer1 = answer("answer_protein")
                     text_to_speech(answer1)
                     message = speech_to_text()
                     question_context = {'type': 'protein'}
@@ -212,7 +215,7 @@ if __name__=="__main__":
 
 
                 elif new_customer.order.wants_food_type['vegetable'] and not new_customer.order.vegetable_list:
-                    answer1= answer("answer_vegetable")
+                    answer1 = answer("answer_vegetable")
                     text_to_speech(answer1)
                     message = speech_to_text()
                     question_context = {'type': 'vegetable'}
@@ -220,7 +223,7 @@ if __name__=="__main__":
 
 
                 elif new_customer.order.wants_food_type['sauce'] and not new_customer.order.sauce_list:
-                    answer1= answer("answer_sauce")
+                    answer1 = answer("answer_sauce")
                     text_to_speech(answer1)
                     message = speech_to_text()
                     question_context = {'type': 'sauce'}
@@ -228,16 +231,16 @@ if __name__=="__main__":
 
 
                 elif new_customer.order.wants_food_type['cheese'] and new_customer.order.cheese == None:
-                    answer1= answer("answer_cheese")
+                    answer1 = answer("answer_cheese")
                     text_to_speech(answer1)
                     message = speech_to_text()
                     question_context = {'type': 'cheese'}
-                    enter_value=0
+                    enter_value = 0
 
                 else:
-                    answer1= answer_order(new_customer.order.vegetable_list, new_customer.order.sauce_list, new_customer.order.bread_type, new_customer.order.protein, new_customer.order.cheese)
+                    answer1 = answer_order(new_customer.order.vegetable_list, new_customer.order.sauce_list, new_customer.order.bread_type, new_customer.order.protein, new_customer.order.cheese)
                     text_to_speech(answer1)
-                    answer1= answer("answer_price")
+                    answer1 = answer("answer_price")
                     text_to_speech(answer1)
                     message = speech_to_text()
 
@@ -245,21 +248,22 @@ if __name__=="__main__":
             else:
                 if new_customer.number_of_greetings > 1:
                     if  frame == "greeting":
-                        answer1= answer("two_times_greeting")
+                        answer1 = answer("two_times_greeting")
                         text_to_speech(answer1)
                         message = speech_to_text()
                     else:
-                        answer1= answer(frame)
+                        answer1 = answer(frame)
                         text_to_speech(answer1)
                         message = speech_to_text()
                 else:
-                    answer1= answer(frame)
+                    answer1 = answer(frame)
                     text_to_speech(answer1)
                     message = speech_to_text()
+
         doc = nlp(message)
         nelly.update_state(customer=new_customer, parsed_tree=doc, question_context=question_context)
         frame = nelly.determine_semantic_frame_from_parsed_tree(doc,question_context=question_context)
 
 
-    answer1= answer(frame)
+    answer1 = answer(frame)
     text_to_speech(answer1)
