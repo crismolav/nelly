@@ -81,11 +81,13 @@ def triggers_remove_item_from_the_order(root_tuple, parsed_tree):
                 return True
             if str(token.lemma_) in trigger_words_removal and str(token.dep_)=="neg":
                 return False
-        if str(root_lemma) == "want":
-            if str(token.lemma_) in trigger_words_removal:
-                return True
-        if str(token.dep_) == "neg":
+        if str(root_lemma) == "want" and str(token.lemma_) in trigger_words_removal:
+            return True
+
+        if str(root_lemma) == "want" and str(token.dep_) == "neg" and str(token) not in trigger_words_removal:
             return False
+        # if str(token.dep_) == "neg" and str(root_lemma) == "want":
+        #     return False
     return False
 
 
@@ -126,6 +128,8 @@ def determine_semantic_frame_from_parsed_tree(parsed_tree, question_context={}):
     elif triggers_request_special_need(
             root_tuple=root_tuple, parsed_tree=parsed_tree):
         return 'request_special_need'
+    elif triggers_remove_item_from_the_order(root_tuple=root_tuple, parsed_tree= parsed_tree):
+        return "request_removal"
     elif triggers_request_order_update(
             root_tuple=root_tuple, parsed_tree=parsed_tree, question_context=question_context):
         return 'request_order_update'
@@ -138,11 +142,11 @@ def determine_semantic_frame_from_parsed_tree(parsed_tree, question_context={}):
         return "request_goodbye"
     elif triggers_request_cancel(root_tuple=root_tuple, parsed_tree= parsed_tree):
         return "request_cancel"
-    elif triggers_remove_item_from_the_order(root_tuple=root_tuple, parsed_tree= parsed_tree):
-        return "request_removal"
+    # elif triggers_remove_item_from_the_order(root_tuple=root_tuple, parsed_tree= parsed_tree):
+    #     return "request_removal"
     else:
         return "False"
-#asdfadsfasdfsa
+
 def triggers_a_request_for_information(root_tuple, parsed_tree):
     root_lemma, root_text = root_tuple
 
@@ -348,8 +352,8 @@ def filter_food_type_children(children, food_type):
 if __name__=="__main__":
     new_customer =  Customer()
     nlp = spacy.load("en_core_web_sm")
-    doc = nlp("i don't")
-    doc = displacy.serve(doc, style="dep")
+    doc = nlp("i want to remove tomato")
+    #doc = displacy.serve(doc, style="dep")
     # for token in doc:
     #     print(token.text, token.head,  token.lemma_, token.pos_, token.tag_, token.dep_,
     #           token.shape_, token.is_alpha, token.is_stop)
