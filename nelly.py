@@ -20,6 +20,8 @@ def update_state(customer, parsed_tree, question_context={}):
     #     provide_information(customer=customer, parsed_tree=parsed_tree)
     elif semantic_frame == 'request_special_need':
         update_nutritional_restrictions(customer=customer, parsed_tree=parsed_tree)
+    elif semantic_frame == "request_removal":
+        update_order_with_removal_request(customer = customer, parsed_tree=parsed_tree)
     elif semantic_frame == "triggers_cancel":
         pass
     elif semantic_frame == "request_nelly_gender":
@@ -480,7 +482,7 @@ def filter_food_type_children(children, food_type):
 if __name__=="__main__":
     new_customer =  Customer()
     nlp = spacy.load("en_core_web_sm")
-    doc = nlp("i want to remove tomato")
+    doc = nlp("i want a sandwich with tomato, lettuce, onions, beef and ketchup")
     #doc = displacy.serve(doc, style="dep")
     # for token in doc:
     #     print(token.text, token.head,  token.lemma_, token.pos_, token.tag_, token.dep_,
@@ -496,4 +498,12 @@ if __name__=="__main__":
     doc = nlp("i am vegan and vegetarian")
     update_state(customer=new_customer, parsed_tree=doc)
     print("Nutritional restriction: %s" %new_customer.food_restrictions_list)
+
     print("*****")
+    doc = nlp("please remove tomato")
+    update_state(customer=new_customer, parsed_tree=doc)
+    print("New order vegetables: %s"%new_customer.order.vegetable_list)
+    print("New order protein: %s" % new_customer.order.protein)
+    print("New order cheese: %s" % new_customer.order.cheese)
+    print("New order bread: %s" % new_customer.order.bread_type)
+    print("New order sauce: %s" % new_customer.order.sauce_list)

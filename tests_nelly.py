@@ -526,7 +526,16 @@ class NellyTests(unittest.TestCase):
         result = new_customer.vegetable_list = ["onion", "lettuce"]
         self.assertTrue(result)
 
+    def test_check_update_order_with_removal_request_sauces(self):
+        new_customer = sf.Customer()
+        new_customer.order.add_sauce("ketchup")
+        new_customer.order.add_sauce("mustard")
+        parsed_tree = nlp("Nelly, please remove ketchup")
 
+        nelly.update_order_with_removal_request(customer=new_customer, parsed_tree=parsed_tree)
+
+        result = new_customer.sauce_list = ["mustard"]
+        self.assertTrue(result)
 
     # def test_triggers_a_request_for_information__verb_to_be__False(self):
     #
