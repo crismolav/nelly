@@ -169,26 +169,27 @@ if __name__=="__main__":
                     text_to_speech(answer1)
                     message = speech_to_text()
 
-
-                elif new_customer.order.protein == None:
+                elif (new_customer.order.wants_food_type('protein') and
+                      new_customer.order.protein == None):
                     answer1= answer("answer_protein")
                     text_to_speech(answer1)
                     message = speech_to_text()
                     question_context = {'type': 'protein'}
 
-                elif not new_customer.order.vegetable_list:
+                elif (new_customer.order.wants_food_type('vegetable') and
+                      not new_customer.order.vegetable_list):
                     answer1= answer("answer_vegetable")
                     text_to_speech(answer1)
                     message = speech_to_text()
                     question_context = {'type': 'vegetable'}
 
-                elif not new_customer.order.sauce_list:
+                elif (new_customer.order.wants_food_type('sauce') and not new_customer.order.sauce_list):
                     answer1= answer("answer_sauce")
                     text_to_speech(answer1)
                     message = speech_to_text()
                     question_context = {'type': 'sauce'}
 
-                elif new_customer.order.cheese == None:
+                elif (new_customer.order.wants_food_type('cheese') and new_customer.order.cheese == None):
                     answer1= answer("answer_cheese")
                     text_to_speech(answer1)
                     message = speech_to_text()
