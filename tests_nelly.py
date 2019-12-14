@@ -97,14 +97,14 @@ class NellyTests(unittest.TestCase):
 
         self.assertEqual(expected, result)
 
-    def test_determine_semantic_frame_from_parsed_tree__request_for_information(self):
-        parsed_tree = nlp("does my sandwich has lactose")
-
-        result = nelly.determine_semantic_frame_from_parsed_tree(
-            parsed_tree=parsed_tree)
-        expected = "request_for_information"
-
-        self.assertEqual(expected, result)
+    # def test_determine_semantic_frame_from_parsed_tree__request_for_information(self):
+    #     parsed_tree = nlp("does my sandwich has lactose")
+    #
+    #     result = nelly.determine_semantic_frame_from_parsed_tree(
+    #         parsed_tree=parsed_tree)
+    #     expected = "request_for_information"
+    #
+    #     self.assertEqual(expected, result)
 
     def test_triggers_request_order_update__would__True(self):
         parsed_tree = nlp("I would like a sandwich with tomato")
@@ -174,14 +174,14 @@ class NellyTests(unittest.TestCase):
 
         self.assertTrue(result)
 
-    # def test_triggers_a_request_for_information__verb_to_be__wrong(self):
-    #     parsed_tree = nlp("I don't know")
-    #     root_tuple = nelly.get_parse_tree_root_tuple(parsed_tree)
-    #
-    #     result = nelly.triggers_a_request_for_information(
-    #         root_tuple=root_tuple, parsed_tree=parsed_tree)
-    #
-    #     self.assertFalse(result)
+    def test_triggers_a_request_for_information__verb_to_be__wrong(self):
+        parsed_tree = nlp("I don't know")
+        root_tuple = nelly.get_parse_tree_root_tuple(parsed_tree)
+
+        result = nelly.triggers_a_request_for_information(
+            root_tuple=root_tuple, parsed_tree=parsed_tree)
+
+        self.assertFalse(result)
 
     def test_triggers_a_request_for_information__verb_to_be__False(self):
         parsed_tree = nlp("We are vegan")
