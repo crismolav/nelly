@@ -151,6 +151,7 @@ def text_to_speech(answer):
 
 if __name__=="__main__":
     new_customer =  Customer()
+    enter_value=0
     nlp = spacy.load("en_core_web_sm")
     message = speech_to_text()
     doc = nlp(message)
@@ -161,35 +162,37 @@ if __name__=="__main__":
             answer1= answer("silence")
             text_to_speech(answer1)
             message = speech_to_text()
+            doc = nlp(message)
+            nelly.update_state(customer=new_customer, parsed_tree=doc)
+            frame = nelly.determine_semantic_frame_from_parsed_tree(doc)
         question_context = {}
         if frame != "request_goodbye":
             if frame == "request_order_update":
+                enter_value=1
                 if new_customer.order.bread_type == None:
                     answer1= answer("answer_bread")
                     text_to_speech(answer1)
                     message = speech_to_text()
 
-                elif (new_customer.order.wants_food_type('protein') and
-                      new_customer.order.protein == None):
+                elif new_customer.order.wants_food_type['protein'] and new_customer.order.protein == None:
                     answer1= answer("answer_protein")
                     text_to_speech(answer1)
                     message = speech_to_text()
                     question_context = {'type': 'protein'}
 
-                elif (new_customer.order.wants_food_type('vegetable') and
-                      not new_customer.order.vegetable_list):
+                elif new_customer.order.wants_food_type['vegetable'] and not new_customer.order.vegetable_list:
                     answer1= answer("answer_vegetable")
                     text_to_speech(answer1)
                     message = speech_to_text()
                     question_context = {'type': 'vegetable'}
 
-                elif (new_customer.order.wants_food_type('sauce') and not new_customer.order.sauce_list):
+                elif new_customer.order.wants_food_type['sauce'] and not new_customer.order.sauce_list:
                     answer1= answer("answer_sauce")
                     text_to_speech(answer1)
                     message = speech_to_text()
                     question_context = {'type': 'sauce'}
 
-                elif (new_customer.order.wants_food_type('cheese') and new_customer.order.cheese == None):
+                elif new_customer.order.wants_food_type['cheese'] and new_customer.order.cheese == None:
                     answer1= answer("answer_cheese")
                     text_to_speech(answer1)
                     message = speech_to_text()
@@ -218,8 +221,7 @@ if __name__=="__main__":
                     text_to_speech(answer1)
                     message = speech_to_text()
         doc = nlp(message)
-        nelly.update_state(
-            customer=new_customer, parsed_tree=doc, question_context=question_context)
+        nelly.update_state(customer=new_customer, parsed_tree=doc, question_context=question_context)
         frame = nelly.determine_semantic_frame_from_parsed_tree(doc)
 
 
