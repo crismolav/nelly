@@ -65,7 +65,6 @@ def update_order_with_request(customer, parsed_tree):
     customer.last_state_change = last_state_change
 
 def update_order_with_removal_request(customer, parsed_tree):
-    #TODO: use spacey labels ("PRODUCT")
     last_state_change = {}
     last_state_change.setdefault('semantic_frames', []).append('request_removal')
     last_state_change['state_changed'] = {'order':{}}
