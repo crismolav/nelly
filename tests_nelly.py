@@ -15,6 +15,26 @@ class NellyTests(unittest.TestCase):
 
         self.assertEqual(expected, result)
 
+    def test_determine_semantic_frame_from_parsed_tree__request_no_food_restriction(self):
+        parsed_tree = nlp("I don't")
+        question_context = {'type': 'food_restriction'}
+
+        result = nelly.determine_semantic_frame_from_parsed_tree(
+            parsed_tree=parsed_tree, question_context=question_context)
+        expected = 'request_no_food_restriction'
+
+        self.assertEqual(expected, result)
+
+    def test_determine_semantic_frame_from_parsed_tree__False(self):
+        parsed_tree = nlp("I do")
+        question_context = {'type': 'food_restriction'}
+
+        result = nelly.determine_semantic_frame_from_parsed_tree(
+            parsed_tree=parsed_tree, question_context=question_context)
+        expected = 'False'
+
+        self.assertEqual(expected, result)
+
     def test_determine_semantic_frame_from_parsed_tree__greeting_simple(self):
         parsed_tree = nlp("Hello")
 
@@ -560,6 +580,27 @@ class NellyTests(unittest.TestCase):
         result = new_customer.sauce_list = ["mustard"]
 
         self.assertTrue(result)
+
+    def test_triggers_request_no_food_restriction__True(self):
+
+        parsed_tree = nlp("No I don't")
+        question_context = {'type': 'food_restriction'}
+
+        result = nelly.triggers_request_no_food_restriction(
+            parsed_tree=parsed_tree, question_context=question_context)
+
+        self.assertTrue(result)
+
+    def test_triggers_request_no_food_restriction__True(self):
+
+        parsed_tree = nlp("I don't")
+        question_context = {'type': 'food_restriction'}
+
+        result = nelly.triggers_request_no_food_restriction(
+            parsed_tree=parsed_tree, question_context=question_context)
+
+        self.assertTrue(result)
+
 
     # def test_triggers_a_request_for_information__verb_to_be__False(self):
     #

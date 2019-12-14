@@ -34,6 +34,7 @@ class Customer():
         self.name = None
         self.order = Order()
         self.food_restrictions_list = []
+        self.ignore_food_restriction = False
         self.number_of_greetings = 0
         self.last_state_change = {}
         self.ignored_food_restrictions_items = {}
