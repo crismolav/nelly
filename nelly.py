@@ -16,8 +16,8 @@ def update_state(customer, parsed_tree, question_context={}):
     elif semantic_frame == 'request_ignore_food_type':
         update_order_with_request_ignore_food_type(
             customer=customer, question_context=question_context)
-    elif semantic_frame == 'request_for_information':
-        provide_information(customer=customer, parsed_tree=parsed_tree)
+    # elif semantic_frame == 'request_for_information':
+    #     provide_information(customer=customer, parsed_tree=parsed_tree)
     elif semantic_frame == 'request_special_need':
         update_nutritional_restrictions(customer=customer, parsed_tree=parsed_tree)
     elif semantic_frame == "triggers_cancel":
