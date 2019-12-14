@@ -32,6 +32,8 @@ def update_state(customer, parsed_tree, question_context={}):
         pass
     elif semantic_frame == "request_no_food_restriction":
         update_customer_with_request_no_food_restriction(customer)
+    elif semantic_frame == "accept_remove_suggested_items":
+        update_customer_with_request_no_food_restriction(customer)
     else:
         pass
 
@@ -144,7 +146,7 @@ def update_nutritional_restrictions(customer, parsed_tree):
             customer.add_food_restriction(food_restriction=token.lemma_)
 
     nutritional_inconsistencies = check_nutritional_inconsistencies(customer)
-    customer.feedback = {'nutritional_violations': nutritional_inconsistencies}
+    # customer.feedback = {'nutritional_violations': nutritional_inconsistencies}
 
 
 def check_nutritional_inconsistencies(customer):
