@@ -228,6 +228,7 @@ if __name__=="__main__":
 
                 if frame == "request_order_update" and enter_value == 1:
                     answer1 =  answer(frame='restate_last_state_change', customer=new_customer)
+
                     answer1  = answer1.join(nelly.return_last_elements_added_to_the_order(new_customer))
                     print(answer1)
                     text_to_speech(answer1)

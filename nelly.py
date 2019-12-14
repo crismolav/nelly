@@ -481,7 +481,7 @@ def filter_food_type_children(children, food_type):
 def return_last_elements_added_to_the_order(customer):
     customer_dict = customer.last_state_change
     keys = customer_dict["state_changed"]["order"].values()
-    keys = [str(i) for i in keys]
+    keys = [i for i in keys]
     return keys
 
 if __name__=="__main__":
