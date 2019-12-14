@@ -21,7 +21,11 @@ def update_state(customer, parsed_tree, question_context={}):
     elif semantic_frame == 'request_special_need':
         update_nutritional_restrictions(customer=customer, parsed_tree=parsed_tree)
     elif semantic_frame == "request_removal":
-        update_order_with_removal_request(customer = customer, parsed_tree=parsed_tree)
+        if parsed_tree in ingredients_dict.keys():
+            set_trace()
+            update_order_with_removal_request(customer = customer, parsed_tree=parsed_tree)
+        else:
+            pass
     elif semantic_frame == "triggers_cancel":
         pass
     elif semantic_frame == "request_nelly_gender":
