@@ -76,12 +76,12 @@ def triggers_remove_item_from_the_order(root_tuple, parsed_tree):
     trigger_words_removal = get_trigger_words_removal()
 
     for token in parsed_tree:
-        if str(token.lemma_) in trigger_words_removal:
-            return True
-    if str(root_lemma) == "want":
-        for token in parsed_tree:
-            if str(token.lemma_) in get_trigger_words_removal():
+        if str(root_lemma) in get_trigger_words_removal():
+            if str(token.lemma_) in trigger_words_removal:
                 return True
+
+    return False
+
 
 
 def update_order_with_request_ignore_food_type(customer, question_context):
