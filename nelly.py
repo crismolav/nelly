@@ -79,6 +79,8 @@ def triggers_remove_item_from_the_order(root_tuple, parsed_tree):
         if str(root_lemma) in get_trigger_words_removal():
             if str(token.lemma_) in trigger_words_removal:
                 return True
+            if str(token.lemma_) in trigger_words_removal and str(token.dep_)=="neg":
+                return False
         if str(root_lemma) == "want":
             if str(token.lemma_) in trigger_words_removal:
                 return True
@@ -176,7 +178,7 @@ def triggers_greeting(root_tuple, parsed_tree):
 
 
 def get_trigger_words_goodbye():
-    return ["bye", "goodbye", "ciao", "au-revoir", "soon"]
+    return ["bye", "goodbye", "ciao", "au-revoir"]
 def triggers_request_goodbye(root_tuple, parsed_tree):
     trigger_words_goodbye= get_trigger_words_goodbye()
     for token in parsed_tree:
@@ -194,11 +196,11 @@ def triggers_request_cancel(root_tuple, parsed_tree):
             return True
         if str(token.lemma_) in trigger_words_cancel and str(token.dep_) == "neg":
             return False
-    if str(root_lemma) == "want":
-        if str(token.lemma_) in trigger_words_cancel:
-            return True
-    if str(token.dep_) == "neg":
-        return False
+    # if str(root_lemma) == "want":
+    #     if str(token.lemma_) in trigger_words_cancel:
+    #         return True
+    # if str(token.dep_) == "neg":
+    #     return False
     return False
 
     # root_lemma, root_text = root_tuple
