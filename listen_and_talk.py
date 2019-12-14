@@ -7,6 +7,8 @@ from playsound import playsound
 from semantic_frames import Order, Customer
 from ingredients import ingredients_dict
 import nelly
+from pdb import set_trace
+
 
 ################################################################################
 def answer(frame):
@@ -160,36 +162,49 @@ if __name__=="__main__":
             frame = nelly.determine_semantic_frame_from_parsed_tree(doc)
         question_context = {}
         if frame != "request_goodbye":
-            if frame == "request_order_update":
-                enter_value=1
+            if (frame == "request_order_update") or (frame == "False" and enter_value==1):
+                if frame == "False" and enter_value==1:
+                    answer1= answer(frame)
+                    text_to_speech(answer1)
+                    text_to_speech("Please my friend, lets continue with the order")
+                    enter_value=0
                 if new_customer.order.bread_type == None:
                     answer1= answer("answer_bread")
                     text_to_speech(answer1)
                     message = speech_to_text()
+                    enter_value = 1
+
 
                 elif new_customer.order.wants_food_type['protein'] and new_customer.order.protein == None:
                     answer1= answer("answer_protein")
                     text_to_speech(answer1)
                     message = speech_to_text()
                     question_context = {'type': 'protein'}
+                    enter_value = 1
+
 
                 elif new_customer.order.wants_food_type['vegetable'] and not new_customer.order.vegetable_list:
                     answer1= answer("answer_vegetable")
                     text_to_speech(answer1)
                     message = speech_to_text()
                     question_context = {'type': 'vegetable'}
+                    enter_value = 1
+
 
                 elif new_customer.order.wants_food_type['sauce'] and not new_customer.order.sauce_list:
                     answer1= answer("answer_sauce")
                     text_to_speech(answer1)
                     message = speech_to_text()
                     question_context = {'type': 'sauce'}
+                    enter_value = 1
+
 
                 elif new_customer.order.wants_food_type['cheese'] and new_customer.order.cheese == None:
                     answer1= answer("answer_cheese")
                     text_to_speech(answer1)
                     message = speech_to_text()
                     question_context = {'type': 'cheese'}
+                    enter_value=0
 
                 else:
                     answer1= answer_order(new_customer.order.vegetable_list, new_customer.order.sauce_list, new_customer.order.bread_type, new_customer.order.protein, new_customer.order.cheese)
@@ -200,7 +215,6 @@ if __name__=="__main__":
 
 
             else:
-                print(new_customer.last_state_change)
                 if new_customer.number_of_greetings > 1:
                     if  frame == "greeting":
                         answer1= answer("two_times_greeting")
