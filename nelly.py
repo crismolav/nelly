@@ -141,7 +141,7 @@ def determine_semantic_frame_from_parsed_tree(parsed_tree, question_context={}):
     elif triggers_remove_item_from_the_order(root_tuple=root_tuple, parsed_tree= parsed_tree):
         return "request_removal"
     else:
-        return False
+        return "False"
 #asdfadsfasdfsa
 def triggers_a_request_for_information(root_tuple, parsed_tree):
     root_lemma, root_text = root_tuple
