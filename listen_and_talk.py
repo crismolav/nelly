@@ -114,7 +114,7 @@ def answer(frame):
         answer = random.choice(answer)
 
     elif frame == "request_ignore_food_type":
-        answer = ['Sure we will, continue ordering', 'Sure! Removed!', 'Dont worry. I am removing it right now!' ]
+        answer = ['Okay my friend.', 'Sure! Removed!', 'Dont worry. I am removing it right now!' ]
         answer = random.choice(answer)
 
     elif frame == "request_removal":
@@ -141,27 +141,32 @@ def answer_order(vegetable_list,sauce_list,bread,protein,cheese):
     str1 = " "
     str2 = " "
 
-    if not vegetable_list:
+    if vegetable_list:
         vegetable_list = ','.join(vegetable_list)
         vegetable = vegetable_list
     else:
         vegetable= " "
 
-    if not sauce_list:
+    if sauce_list:
         sauce_list = ','.join(sauce_list)
         sauce = sauce_list
     else:
         sauce= " "
 
-    if not bread:
+    if bread:
         bread=bread.replace("_", ",")
     else:
         bread= " "
 
-    if not cheese:
+    if cheese:
         cheese=cheese.replace("_", ",")
     else:
         cheese= " "
+        
+    if protein:
+        protein=protein.replace("_", ",")
+    else:
+        protein= " "
 
     answer = 'Dear friend, you have ordered a sandwich which contains.' + bread +'.'+ protein +'. With, '+ vegetable +','+ sauce +','+ cheese
     return answer
