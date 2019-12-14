@@ -22,6 +22,8 @@ def update_state(customer, parsed_tree, question_context={}):
         update_nutritional_restrictions(customer=customer, parsed_tree=parsed_tree)
     elif semantic_frame == "triggers_cancel":
         pass
+    elif semantic_frame == "request_nelly_gender":
+        pass
     else:
         pass
 
@@ -229,6 +231,8 @@ def determine_semantic_frame_from_parsed_tree(parsed_tree, question_context={}):
         return "request_goodbye"
     elif triggers_request_cancel(root_tuple=root_tuple, parsed_tree= parsed_tree):
         return "request_cancel"
+    elif triggers_nelly_gender(parsed_tree=parsed_tree):
+        return "request_nelly_gender"
     # elif triggers_remove_item_from_the_order(root_tuple=root_tuple, parsed_tree= parsed_tree):
     #     return "request_removal"
     else:

@@ -121,6 +121,10 @@ def answer(frame):
         answer = ['Of course my friend. I am removing this ingredient', 'Sure! Removed!', 'Okay. I am removing it right now!' ]
         answer = random.choice(answer)
 
+    elif frame == "request_nelly_gender":
+        answer = ["That's a very personal question. Anyway, I am non binary. Even though I am a machine. Isn't that ironic" ]
+        answer = random.choice(answer)
+
     else:
         answer = ['HA HA HA HA! I can not understand you!', 'I can not help you with that, amigo. Sorry.']
         answer = random.choice(answer)
@@ -190,8 +194,9 @@ if __name__=="__main__":
             frame = nelly.determine_semantic_frame_from_parsed_tree(doc)
         question_context = {}
         if frame != "request_goodbye":
-
-            if (frame == "request_order_update") or (frame == "False" and enter_value==1) or (frame == "request_ignore_food_type") or (frame == "request_removal"):
+            if ((frame == "request_order_update") or (frame == "False" and enter_value==1)
+                    or (frame == "request_ignore_food_type") or (frame == "request_removal")
+                    ):
 
                 if frame == "False" and enter_value==1:
                     answer1= answer(frame)
