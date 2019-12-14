@@ -478,7 +478,8 @@ def filter_food_type_children(children, food_type):
 
     return filtered_list
 
-def return_last_elements_added_to_the_order(customer_dict):
+def return_last_elements_added_to_the_order(customer):
+    customer_dict = customer.last_state_change
     keys = customer_dict["state_changed"]["order"].values()
     return keys
 
@@ -501,4 +502,4 @@ if __name__=="__main__":
     print("New order sauce: %s" % new_customer.order.sauce_list)
     print("*****")
 
-    print("you just added", return_last_elements_added_to_the_order(new_customer.last_state_change))
+    print("you just added", return_last_elements_added_to_the_order(new_customer))

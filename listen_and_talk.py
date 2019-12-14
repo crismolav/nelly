@@ -226,11 +226,11 @@ if __name__=="__main__":
 
             if (frame == "request_order_update") or (frame == "False" and enter_value==1) or (frame == "request_ignore_food_type") or (frame == "request_removal") :
 
-                # if frame == "request_order_update" and enter_value == 1:
-                #     answer1 =  answer(frame='restate_last_state_change', customer=new_customer)
-                #     answer1  = answer1.join(new_customer.last_state_change)
-                #     print(answer1)
-                #     text_to_speech(answer1)
+                if frame == "request_order_update" and enter_value == 1:
+                    answer1 =  answer(frame='restate_last_state_change', customer=new_customer)
+                    answer1  = answer1.join(nelly.return_last_elements_added_to_the_order(new_customer))
+                    print(answer1)
+                    text_to_speech(answer1)
 
 
                 if frame == "request_ignore_food_type" or frame == "request_removal":
