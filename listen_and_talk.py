@@ -136,8 +136,8 @@ def answer_ingredient(ingredient_list):
     return answer
 ################################################################################
 def answer_price():
-    price = 0
 
+    price = 0
 
     if ("avocado" in new_customer.order.vegetable_list):
         price = price + 3
@@ -155,9 +155,8 @@ def answer_price():
 
     answer = [answer, 'Today, this sandwich is free for you!']
     answer = random.choice(answer)
+
     return answer
-
-
 ################################################################################
 def answer_order(vegetable_list,sauce_list,bread,protein,cheese):
     str1 = " "
