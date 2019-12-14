@@ -77,20 +77,44 @@ def answer(frame):
         answer = ['Please tell me which kind of bread do you want for your sandwich', 'Which of the bread options you want my friend?']
         answer = random.choice(answer)
 
+    elif frame == "answer_NO_bread":
+        answer = ['You can not have a sandwich whithout bread my friend', 'If you take your sandwich without bread we can call it a salad!','Dont try to trick me. You can not have a breadless sandwich!', 'Please!, Tell me which bread you want!']
+        answer = random.choice(answer)
+
     elif frame == "answer_protein":
         answer = ['Please tell me which protein do you want in your sandwich', 'Would you want any protein for your sandwich?']
+        answer = random.choice(answer)
+
+    elif frame == "answer_NO_protein":
+        answer = ['Oh, what a shame you dont like to add any protein to your sandwich','Oh! No protein kind of people!. Nice!.', 'Ok, lets continue without proteins then']
         answer = random.choice(answer)
 
     elif frame == "answer_vegetable":
         answer = ['Would you like to add any vegetables', 'Dont you like vegetables?. Add some vegetables to your order']
         answer = random.choice(answer)
 
+    elif frame == "answer_NO_vegetable":
+        answer = ['Oh Friend you should eat your veggies!, but its ok for today', 'No vegetables, perfect!', 'Okay, roger that!, No veggies.']
+        answer = random.choice(answer)
+
     elif frame == "answer_sauce":
         answer = ['Please tell me which sauces do you want in your sandwich', 'If you add sauce the sandwich taste better. Please tell me which sauce you want to add.']
         answer = random.choice(answer)
 
+    elif frame == "answer_NO_sauce":
+        answer = ['Nice! Without sauce its a good fitness option!','Ok, No sauce, I will write that down right now!', 'So, a fitness sandwich for you, without sauces']
+        answer = random.choice(answer)
+
     elif frame == "answer_cheese":
         answer = ['Please tell me which kind of cheese do you want in your sandwich', 'Dear friend, please tell me which cheese you want in the sandwich!']
+        answer = random.choice(answer)
+
+    elif frame == "answer_NO_cheese":
+        answer = ['Nice, I am not adding cheese to your order!','No cheese, for the friend, here!', 'George!, Prepare the sandwich without cheese please.' ]
+        answer = random.choice(answer)
+
+    elif frame == "request_ignore_food_type":
+        answer = ['Sure we will, continue ordering', 'Sure!, Removed', 'Dont worry. I am removing it right now!' ]
         answer = random.choice(answer)
 
     else:
@@ -230,7 +254,7 @@ if __name__=="__main__":
                     message = speech_to_text()
         doc = nlp(message)
         nelly.update_state(customer=new_customer, parsed_tree=doc, question_context=question_context)
-        frame = nelly.determine_semantic_frame_from_parsed_tree(doc)
+        frame = nelly.determine_semantic_frame_from_parsed_tree(doc,question_context=question_context)
 
 
     answer1= answer(frame)
