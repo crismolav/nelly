@@ -11,7 +11,7 @@ from pdb import set_trace
 
 
 ################################################################################
-def answer(frame):
+def answer(frame, customer=None):
 
     if frame == "greeting":
         answer = ['Hows your day going. What do you want to eat?', 'Hello my friend, what do you want to order?', 'Hello. My name is Nelly! What do you want to order?', 'Hi! Nice to meet you. Please proceed to order!']
@@ -125,6 +125,9 @@ def answer(frame):
         answer = ["That's a very personal question. Anyway, I identify myself as non binary. Even though I am a machine. Isn't that ironic" ]
         answer = random.choice(answer)
 
+    elif frame == "restate_last_state_change":
+        answer = ["That's a very personal question. Anyway, I identify myself as non binary. Even though I am a machine. Isn't that ironic" ]
+        answer = random.choice(answer)
     else:
         answer = ['HA HA HA HA! I can not understand you!', 'I can not help you with that, amigo. Sorry.']
         answer = random.choice(answer)
@@ -220,6 +223,9 @@ if __name__=="__main__":
             
             if (frame == "request_order_update") or (frame == "False" and enter_value==1) or (frame == "request_ignore_food_type") or (frame == "request_removal") :
 
+                # if frame == "request_order_update":
+                #     answer1 =  answer(frame='restate_last_state_change', customer=new_customer)
+                #     text_to_speech(answer1)
                 if frame == "request_ignore_food_type" or frame == "request_removal":
                     answer1 = answer(frame)
                     text_to_speech(answer1)
