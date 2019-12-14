@@ -483,6 +483,7 @@ if __name__=="__main__":
     new_customer =  Customer()
     nlp = spacy.load("en_core_web_sm")
     doc = nlp("i want a sandwich with tomato, lettuce, onions, beef and ketchup")
+    print(doc)
     #doc = displacy.serve(doc, style="dep")
     # for token in doc:
     #     print(token.text, token.head,  token.lemma_, token.pos_, token.tag_, token.dep_,
@@ -496,11 +497,13 @@ if __name__=="__main__":
     print("New order bread: %s" % new_customer.order.bread_type)
     print("New order sauce: %s" % new_customer.order.sauce_list)
     doc = nlp("i am vegan and vegetarian")
+    print(doc)
     update_state(customer=new_customer, parsed_tree=doc)
     print("Nutritional restriction: %s" %new_customer.food_restrictions_list)
 
     print("*****")
-    doc = nlp("please remove tomato")
+    doc = nlp("please remove onions")
+    print(doc)
     update_state(customer=new_customer, parsed_tree=doc)
     print("New order vegetables: %s"%new_customer.order.vegetable_list)
     print("New order protein: %s" % new_customer.order.protein)

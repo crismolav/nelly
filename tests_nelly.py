@@ -535,6 +535,20 @@ class NellyTests(unittest.TestCase):
         nelly.update_order_with_removal_request(customer=new_customer, parsed_tree=parsed_tree)
 
         result = new_customer.sauce_list = ["mustard"]
+        expected_last_state_change = {'semantic_frames': ['request_removal'],
+        'state_changed': {'order': {'sauce_list': ['ketchup']}}}
+        self.assertEqual(expected_last_state_change, new_customer.last_state_change)
+        self.assertTrue(result)
+
+    def test_check_update_order_with_removal_request_sauces_that_does_not_exist(self):
+        new_customer = sf.Customer()
+        new_customer.order.add_sauce("ketchup")
+        parsed_tree = nlp("Nelly, please remove mustard")
+
+        nelly.update_order_with_removal_request(customer=new_customer, parsed_tree=parsed_tree)
+
+        result = new_customer.sauce_list = ["mustard"]
+
         self.assertTrue(result)
 
     # def test_triggers_a_request_for_information__verb_to_be__False(self):
