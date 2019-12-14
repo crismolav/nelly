@@ -225,7 +225,8 @@ if __name__=="__main__":
 
                 if frame == "request_order_update" and enter_value == 1:
                     answer1 =  answer(frame='restate_last_state_change', customer=new_customer)
-                    answer1  = answer1.join(new_customer.last_state_change)
+                    food_type = new_customer.last_sate_change["order"].items()
+                    answer1  = answer1.join(new_customer.last_state_change[food_type].keys())
                     print(answer1)
                     text_to_speech(answer1)
 

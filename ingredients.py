@@ -27,7 +27,7 @@ ingredients_dict = {
         "mushrooms":{
             "restriction": [],
             "ingredients": ["mushrooms"]
-        }
+        },
     },
 
     "protein":{

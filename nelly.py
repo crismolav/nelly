@@ -478,6 +478,10 @@ def filter_food_type_children(children, food_type):
 
     return filtered_list
 
+def return_last_elements_added_to_the_order(customer_dict):
+    keys = customer_dict["state_changed"]["order"].values()
+    return keys
+
 if __name__=="__main__":
     new_customer =  Customer()
     nlp = spacy.load("en_core_web_sm")
@@ -495,17 +499,6 @@ if __name__=="__main__":
     print("New order cheese: %s" % new_customer.order.cheese)
     print("New order bread: %s" % new_customer.order.bread_type)
     print("New order sauce: %s" % new_customer.order.sauce_list)
-    doc = nlp("i am vegan and vegetarian")
-    print(doc)
-    update_state(customer=new_customer, parsed_tree=doc)
-    print("Nutritional restriction: %s" %new_customer.food_restrictions_list)
-
     print("*****")
-    doc = nlp("please remove onions")
-    print(doc)
-    update_state(customer=new_customer, parsed_tree=doc)
-    print("New order vegetables: %s"%new_customer.order.vegetable_list)
-    print("New order protein: %s" % new_customer.order.protein)
-    print("New order cheese: %s" % new_customer.order.cheese)
-    print("New order bread: %s" % new_customer.order.bread_type)
-    print("New order sauce: %s" % new_customer.order.sauce_list)
+
+    print("you just added", return_last_elements_added_to_the_order(new_customer.last_state_change))
