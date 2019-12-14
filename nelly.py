@@ -5,7 +5,6 @@ from semantic_frames import Order, Customer
 from ingredients import ingredients_dict
 from food_restrictions import food_restrictions_dict
 
-
 def update_state(customer, parsed_tree, question_context={}):
     semantic_frame = determine_semantic_frame_from_parsed_tree(
         parsed_tree=parsed_tree, question_context=question_context)
@@ -67,7 +66,98 @@ def update_nutritional_restrictions(customer, parsed_tree):
             customer.add_food_restriction(food_restriction=token.lemma_)
 
 def check_nutritional_inconsistencies(customer):
-    pass
+    nutritional_inconsistencies = {}
+    customer_restriction_list = customer.food_restrictions_list
+
+    for food_restriction in customer_restriction_list:
+        nutritional_inconsistencies[food_restriction] = \
+            check_nutritional_inconsistencies_for_food_restriction(
+                customer=customer, food_restriction=food_restriction)
+
+    return nutritional_inconsistencies
+
+def check_nutritional_inconsistencies_for_food_restriction(customer, food_restriction):
+    nutritional_inconsistencies = {}
+    customer_restriction_list = customer.food_restrictions_list
+    ignored_food_restrictions_items = customer.ignored_food_restrictions_items
+    if customer.food_restrictions_list == []:
+        return nutritional_inconsistencies
+    #check bread
+    bread_list = []
+    if customer.order.bread_type is not None:
+        if check_item_food_restriction(
+            food_type='bread', food_name=customer.order.bread_type,
+            food_restriction=food_restriction,
+            ignored_food_restrictions_items=ignored_food_restrictions_items):
+            bread_list.append(customer.order.bread_type)
+
+    # check protein
+    protein_inconsistencies = []
+    if customer.order.protein is not None:
+        if check_item_food_restriction(
+            food_type='protein', food_name=customer.order.protein,
+            food_restriction=food_restriction,
+            ignored_food_restrictions_items=ignored_food_restrictions_items):
+            protein_inconsistencies.append(customer.order.protein)
+
+    # check cheese
+    cheese_inconsistencies = []
+    if customer.order.cheese is not None:
+        if check_item_food_restriction(
+            food_type='cheese', food_name=customer.order.cheese,
+            food_restriction=food_restriction,
+            ignored_food_restrictions_items=ignored_food_restrictions_items):
+            cheese_inconsistencies.append(customer.order.cheese)
+
+    # check vegetables
+    vegetable_inconsistencies = []
+    for vegetable in customer.order.vegetable_list:
+        if check_item_food_restriction(
+            food_type='vegetable', food_name=vegetable,
+            food_restriction=food_restriction,
+            ignored_food_restrictions_items=ignored_food_restrictions_items):
+            vegetable_inconsistencies.append(vegetable)
+
+    # check sauce
+    sauce_inconsistencies = []
+    for sauce in customer.order.sauce_list:
+        if check_item_food_restriction(
+            food_type='sauce', food_name=sauce,
+            food_restriction=food_restriction,
+            ignored_food_restrictions_items=ignored_food_restrictions_items):
+            sauce_inconsistencies.append(sauce)
+
+    return make_nutritional_inconsistencies_dict(
+        bread_list=bread_list, protein_list=protein_inconsistencies,
+        cheese_list=cheese_inconsistencies, vegetable_list=vegetable_inconsistencies,
+        sauce_list=sauce_inconsistencies)
+
+def make_nutritional_inconsistencies_dict(
+        bread_list, protein_list, cheese_list, vegetable_list, sauce_list):
+    return {
+        "bread" :bread_list,
+        "protein": protein_list,
+        "cheese": cheese_list,
+        "vegetable": vegetable_list,
+        "sauce": sauce_list,
+    }
+
+def check_item_food_restriction(food_type, food_name, food_restriction,
+                                ignored_food_restrictions_items):
+
+    if food_name in ignored_food_restrictions_items.get(food_type,[]):
+        return False
+    item_restriction_list = ingredients_dict.get(
+        food_type, {}).get(food_name, {}).get("restriction", [])
+
+    if food_restriction in item_restriction_list:
+        return True
+    else:
+        return False
+    # item_restriction_set = set(item_restriction_list)
+    # customer_restriction_set = set(food_restriction)
+    #
+    # inconsistencies = list(item_restriction_set.intersection(customer_restriction_set))
 
 def get_trigger_words_removal():
     return["remove", "delete"]
@@ -148,7 +238,8 @@ def triggers_a_request_for_information(root_tuple, parsed_tree):
     root_lemma, root_text = root_tuple
 
     if root_lemma in ["tell", "know", "contain", "include"]:
-        return True
+        if not root_verb_is_negated(root_tuple=root_tuple, parsed_tree=parsed_tree):
+            return True
     elif root_lemma in ["have", "want", "need", "would", "like", "be"]:
         for token in parsed_tree:
             if token.lemma_ in get_trigger_words_greeting():
