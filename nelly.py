@@ -241,7 +241,8 @@ def triggers_a_request_for_information(root_tuple, parsed_tree):
     root_lemma, root_text = root_tuple
 
     if root_lemma in ["tell", "know", "contain", "include"]:
-        return True
+        if not root_verb_is_negated(root_tuple=root_tuple, parsed_tree=parsed_tree):
+            return True
     elif root_lemma in ["have", "want", "need", "would", "like", "be"]:
         for token in parsed_tree:
             if token.lemma_ in get_trigger_words_greeting():
