@@ -69,8 +69,18 @@ def update_nutritional_restrictions(customer, parsed_tree):
 def check_nutritional_inconsistencies(customer):
     pass
 
-def Triggers_remove_item_from_the_order():
-    pass
+def get_trigger_words_removal():
+    return["remove", "delete"]
+def Triggers_remove_item_from_the_order(root_tuple, parsed_tree):
+    root_lemma, root_text = root_tuple
+    trigger_words_removal = get_trigger_words_removal()
+    for token in parsed_tree:
+        if str(token.lemma_) in trigger_words_removal:
+            return True
+    if str(root_lemma) == "want":
+        for token in parsed_tree:
+            if str(token.lemma_) in get_trigger_words_removal():
+                return True
 
 def update_order_with_request_ignore_food_type(customer, question_context):
     food_type = question_context['type']
