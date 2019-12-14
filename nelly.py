@@ -60,6 +60,35 @@ def update_order_with_request(customer, parsed_tree):
 
     customer.last_state_change = last_state_change
 
+def update_order_with_removal_request(customer, parsed_tree):
+    #TODO: use spacey labels ("PRODUCT")
+    last_state_change = {}
+    last_state_change.setdefault('semantic_frames', []).append('request_removal')
+    last_state_change['state_changed'] = {'order':{}}
+
+    for token in parsed_tree:
+        if token.lemma_ in ingredients_dict['protein'].keys():
+            customer.order.remove_protein_type(protein_type=token.lemma_)
+            last_state_change['state_changed']['order']['protein'] = token.lemma_
+        elif token.lemma_ in ingredients_dict['vegetable'].keys():
+            customer.order.remove_vegetable(vegetable=token.lemma_)
+            last_state_change['state_changed']['order'].setdefault('vegetable_list', []).append(token.lemma_)
+        elif token.lemma_ in ingredients_dict['sauce'].keys():
+            customer.order.remove_sauce(sauce=token.lemma_)
+            last_state_change['state_changed']['order'].setdefault('sauce_list', []).append(token.lemma_)
+        elif token.lemma_ == "bread":
+            token.lemma_ = get_food_type_strung(parsed_tree, "bread")
+            customer.order.remove_bread_type(bread_type=token.lemma_)
+            last_state_change['state_changed']['order']['bread_type'] = token.lemma_
+        elif token.lemma_ == "cheese":
+            token.lemma_ =get_food_type_strung(parsed_tree, "cheese")
+            customer.order.remove_cheese(cheese=token.lemma_)
+            last_state_change['state_changed']['order']['cheese'] = token.lemma_
+
+    customer.last_state_change = last_state_change
+
+
+
 def update_nutritional_restrictions(customer, parsed_tree):
     for token in parsed_tree:
         if token.lemma_ in food_restrictions_dict.keys():

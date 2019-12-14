@@ -66,4 +66,14 @@ class Order():
     def add_cheese(self, cheese):
         self.cheese =cheese
 
+    def remove_bread_type(self, bread_type):
+        self.bread_type = None
+    def remove__protein_type(self, protein_type):
+        self.protein = None
+    def remove_vegetable(self, vegetable):
+        self.vegetable_list = [i for i in self.vegetable_list if i != vegetable]
+    def remove_sauce(self, sauce):
+        self.sauce_list = [i for i in self.sauce_list if i != sauce]
+    def remove_cheese(self, cheese):
+        self.cheese = None
 
