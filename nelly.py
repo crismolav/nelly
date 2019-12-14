@@ -83,7 +83,6 @@ def from_variable_name_to_food_type(variable_name):
     return conv_dict[variable_name]
 
 def update_order_with_removal_request(customer, parsed_tree):
-    #TODO: use spacey labels ("PRODUCT")
     last_state_change = {}
     last_state_change.setdefault('semantic_frames', []).append('request_removal')
     last_state_change['state_changed'] = {'order':{}}
@@ -505,10 +504,17 @@ def filter_food_type_children(children, food_type):
 
     return filtered_list
 
+def return_last_elements_added_to_the_order(customer):
+    customer_dict = customer.last_state_change
+    keys = customer_dict["state_changed"]["order"].values()
+    keys = [str(i) for i in keys]
+    return keys
+
 if __name__=="__main__":
     new_customer =  Customer()
     nlp = spacy.load("en_core_web_sm")
-    doc = nlp("i want a sandwich with tomato, lettuce, onions, beef and ketchup")
+    doc = nlp("i want a sandwich with tomato, beef")
+    print(doc)
     #doc = displacy.serve(doc, style="dep")
     # for token in doc:
     #     print(token.text, token.head,  token.lemma_, token.pos_, token.tag_, token.dep_,
@@ -521,15 +527,6 @@ if __name__=="__main__":
     print("New order cheese: %s" % new_customer.order.cheese)
     print("New order bread: %s" % new_customer.order.bread_type)
     print("New order sauce: %s" % new_customer.order.sauce_list)
-    doc = nlp("i am vegan and vegetarian")
-    update_state(customer=new_customer, parsed_tree=doc)
-    print("Nutritional restriction: %s" %new_customer.food_restrictions_list)
-
     print("*****")
-    doc = nlp("please remove tomato")
-    update_state(customer=new_customer, parsed_tree=doc)
-    print("New order vegetables: %s"%new_customer.order.vegetable_list)
-    print("New order protein: %s" % new_customer.order.protein)
-    print("New order cheese: %s" % new_customer.order.cheese)
-    print("New order bread: %s" % new_customer.order.bread_type)
-    print("New order sauce: %s" % new_customer.order.sauce_list)
+
+    print("you just added", return_last_elements_added_to_the_order(new_customer))

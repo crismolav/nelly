@@ -27,6 +27,10 @@ ingredients_dict = {
         "mushrooms":{
             "restriction": [],
             "ingredients": ["mushrooms"]
+        },
+        "avocado":{
+            "restriction": [],
+            "ingredients": ["avocado"]
         }
     },
 
@@ -85,10 +89,6 @@ ingredients_dict = {
         "cheddar_cheese":{
             "restriction": ["lactose", "vegan"],
             "ingredients": ["milk", "coagulants", "yellow colorant"]
-        },
-        "cheese":{
-            "restriction": ["lactose", "vegan"],
-            "ingredients": ["milk", "coagulants"]
         },
         "cottage_cheese":{
             "restriction": ["lactose", "vegan"],

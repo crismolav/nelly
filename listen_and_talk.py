@@ -53,10 +53,6 @@ def answer(frame, customer=None):
         answer = ['Sorry we dont have ingredients information for what you asked']
         answer = random.choice(answer)
 
-    elif frame == "answer_price":
-        answer = ['Its 5 euros in total! Thank you!','For you, I can leave it at 6 euros!', 'Its 10 euros. Have a nice day my friend.', 'Today, this sandwich is free for you!']
-        answer = random.choice(answer)
-
     elif frame == "request_goodbye":
         answer = ['Thank you, for buying in Nellys, have a nice day!','Thank you, for your order.', 'Bon apetit. Goodbye!']
         answer = random.choice(answer)
@@ -126,7 +122,7 @@ def answer(frame, customer=None):
         answer = random.choice(answer)
 
     elif frame == "restate_last_state_change":
-        answer = ["That's a very personal question. Anyway, I identify myself as non binary. Even though I am a machine. Isn't that ironic" ]
+        answer = ["You just added, "]
         answer = random.choice(answer)
     else:
         answer = ['HA HA HA HA! I can not understand you!', 'I can not help you with that, amigo. Sorry.']
@@ -138,6 +134,12 @@ def answer_ingredient(ingredient_list):
     ingredient_list = str1.join(ingredient_list)
     answer = 'This food my friend, contains:' + ingredient_list
     return answer
+################################################################################
+def answer_price(ingredient_list):
+    answer = ['Its 5 euros in total! Thank you!','For you, I can leave it at 6 euros!', 'Its 10 euros. Have a nice day my friend.', 'Today, this sandwich is free for you!']
+    answer = random.choice(answer)
+    return answer
+
 
 ################################################################################
 def answer_order(vegetable_list,sauce_list,bread,protein,cheese):
@@ -165,7 +167,7 @@ def answer_order(vegetable_list,sauce_list,bread,protein,cheese):
         cheese=cheese.replace("_", ",")
     else:
         cheese= " "
-        
+
     if protein:
         protein=protein.replace("_", ",")
     else:
@@ -205,6 +207,7 @@ def text_to_speech(answer):
 if __name__=="__main__":
     new_customer =  Customer()
     enter_value=0
+    inside=0
     nlp = spacy.load("en_core_web_sm")
     message = speech_to_text()
     doc = nlp(message)
@@ -220,12 +223,16 @@ if __name__=="__main__":
             frame = nelly.determine_semantic_frame_from_parsed_tree(doc)
         question_context = {}
         if frame != "request_goodbye":
-            
+
             if (frame == "request_order_update") or (frame == "False" and enter_value==1) or (frame == "request_ignore_food_type") or (frame == "request_removal") :
 
-                # if frame == "request_order_update":
-                #     answer1 =  answer(frame='restate_last_state_change', customer=new_customer)
-                #     text_to_speech(answer1)
+                if frame == "request_order_update" and enter_value == 1:
+                    answer1 =  answer(frame='restate_last_state_change', customer=new_customer)
+                    answer1  = answer1.join(nelly.return_last_elements_added_to_the_order(new_customer))
+                    print(answer1)
+                    text_to_speech(answer1)
+
+
                 if frame == "request_ignore_food_type" or frame == "request_removal":
                     answer1 = answer(frame)
                     text_to_speech(answer1)
@@ -301,6 +308,9 @@ if __name__=="__main__":
         doc = nlp(message)
         nelly.update_state(customer=new_customer, parsed_tree=doc, question_context=question_context)
         frame = nelly.determine_semantic_frame_from_parsed_tree(doc,question_context=question_context)
+        if ("avocado" in new_customer.order.vegetable_list) and inside==0:
+            text_to_speech("You have added Avocado. Be carefull it is, expensive!")
+            inside = 1
 
 
     answer1 = answer(frame)
