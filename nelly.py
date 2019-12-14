@@ -21,11 +21,15 @@ def update_state(customer, parsed_tree, question_context={}):
     elif semantic_frame == 'request_special_need':
         update_nutritional_restrictions(customer=customer, parsed_tree=parsed_tree)
     elif semantic_frame == "request_removal":
-        if parsed_tree in ingredients_dict.keys():
-            set_trace()
-            update_order_with_removal_request(customer = customer, parsed_tree=parsed_tree)
-        else:
-            pass
+        for i in customer.last_state_change["state_changed"]["order"].values:
+            if i in ingredients_dict["vegetables"].keys() \
+                    or ingredients_dict["protein"].key() \
+                    or ingredients_dict["cheese"].keys() \
+                    or ingredients_dict["sauces"] \
+                    or ingredients_dict["bread"]:
+                update_order_with_removal_request(customer = customer, parsed_tree=parsed_tree)
+            else:
+                pass
     elif semantic_frame == "triggers_cancel":
         pass
     elif semantic_frame == "request_nelly_gender":
@@ -239,9 +243,6 @@ def triggers_remove_item_from_the_order(root_tuple, parsed_tree):
             return False
     return False
 
-
-
-
 def update_order_with_request_ignore_food_type(customer, question_context):
     food_type = question_context['type']
     customer.order.wants_food_type[food_type] = False
@@ -277,7 +278,8 @@ def determine_semantic_frame_from_parsed_tree(parsed_tree, question_context={}):
     if triggers_request_special_need(
             root_tuple=root_tuple, parsed_tree=parsed_tree):
         return 'request_special_need'
-    elif triggers_remove_item_from_the_order(root_tuple=root_tuple, parsed_tree= parsed_tree):
+    elif triggers_remove_item_from_the_order(
+            root_tuple=root_tuple, parsed_tree= parsed_tree):
         return "request_removal"
     elif triggers_request_order_update(
             root_tuple=root_tuple, parsed_tree=parsed_tree, question_context=question_context):
