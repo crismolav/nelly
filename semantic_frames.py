@@ -69,7 +69,7 @@ class Order():
 
     def remove_bread_type(self, bread_type):
         self.bread_type = None
-    def remove__protein_type(self, protein_type):
+    def remove_protein_type(self, protein_type):
         self.protein = None
     def remove_vegetable(self, vegetable):
         self.vegetable_list = [i for i in self.vegetable_list if i != vegetable]
