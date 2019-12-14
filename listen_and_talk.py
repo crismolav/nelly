@@ -205,6 +205,7 @@ def text_to_speech(answer):
 if __name__=="__main__":
     new_customer =  Customer()
     enter_value=0
+    inside=0
     nlp = spacy.load("en_core_web_sm")
     message = speech_to_text()
     doc = nlp(message)
@@ -223,11 +224,11 @@ if __name__=="__main__":
 
             if (frame == "request_order_update") or (frame == "False" and enter_value==1) or (frame == "request_ignore_food_type") or (frame == "request_removal") :
 
-                if frame == "request_order_update" and enter_value == 1:
-                    answer1 =  answer(frame='restate_last_state_change', customer=new_customer)
-                    answer1  = answer1.join(new_customer.last_state_change)
-                    print(answer1)
-                    text_to_speech(answer1)
+                # if frame == "request_order_update" and enter_value == 1:
+                #     answer1 =  answer(frame='restate_last_state_change', customer=new_customer)
+                #     answer1  = answer1.join(new_customer.last_state_change)
+                #     print(answer1)
+                #     text_to_speech(answer1)
 
 
                 if frame == "request_ignore_food_type" or frame == "request_removal":
@@ -305,6 +306,10 @@ if __name__=="__main__":
         doc = nlp(message)
         nelly.update_state(customer=new_customer, parsed_tree=doc, question_context=question_context)
         frame = nelly.determine_semantic_frame_from_parsed_tree(doc,question_context=question_context)
+        if ("avocado" in new_customer.order.vegetable_list) and inside==0:
+            text_to_speech("You have added Avocado. Be carefull it is, expensive!")
+            inside = 1
+        set_trace()
 
 
     answer1 = answer(frame)
