@@ -114,7 +114,11 @@ def answer(frame):
         answer = random.choice(answer)
 
     elif frame == "request_ignore_food_type":
-        answer = ['Sure we will, continue ordering', 'Sure!, Removed', 'Dont worry. I am removing it right now!' ]
+        answer = ['Sure we will, continue ordering', 'Sure! Removed!', 'Dont worry. I am removing it right now!' ]
+        answer = random.choice(answer)
+
+    elif frame == "request_removal":
+        answer = ['Of course my friend. I am removing this ingredient', 'Sure! Removed!', 'Okay. I am removing it right now!' ]
         answer = random.choice(answer)
 
     else:
