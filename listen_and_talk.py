@@ -53,10 +53,6 @@ def answer(frame, customer=None):
         answer = ['Sorry we dont have ingredients information for what you asked']
         answer = random.choice(answer)
 
-    elif frame == "answer_price":
-        answer = ['Its 5 euros in total! Thank you!','For you, I can leave it at 6 euros!', 'Its 10 euros. Have a nice day my friend.', 'Today, this sandwich is free for you!']
-        answer = random.choice(answer)
-
     elif frame == "request_goodbye":
         answer = ['Thank you, for buying in Nellys, have a nice day!','Thank you, for your order.', 'Bon apetit. Goodbye!']
         answer = random.choice(answer)
@@ -138,6 +134,12 @@ def answer_ingredient(ingredient_list):
     ingredient_list = str1.join(ingredient_list)
     answer = 'This food my friend, contains:' + ingredient_list
     return answer
+################################################################################
+def answer_price(ingredient_list):
+    answer = ['Its 5 euros in total! Thank you!','For you, I can leave it at 6 euros!', 'Its 10 euros. Have a nice day my friend.', 'Today, this sandwich is free for you!']
+    answer = random.choice(answer)
+    return answer
+
 
 ################################################################################
 def answer_order(vegetable_list,sauce_list,bread,protein,cheese):
@@ -309,7 +311,6 @@ if __name__=="__main__":
         if ("avocado" in new_customer.order.vegetable_list) and inside==0:
             text_to_speech("You have added Avocado. Be carefull it is, expensive!")
             inside = 1
-        set_trace()
 
 
     answer1 = answer(frame)
