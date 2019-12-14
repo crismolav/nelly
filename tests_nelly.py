@@ -358,6 +358,100 @@ class NellyTests(unittest.TestCase):
             parsed_tree=parsed_tree, question_context=question_context)
 
         self.assertTrue(result)
+
+    def test_check_item_food_restriction__gluten(self):
+        food_type = 'bread'
+        food_name = 'oregano_bread'
+        food_restriction = 'gluten'
+        ignored_food_restrictions_items = {'bread':['oregano_bread']}
+
+        result = nelly.check_item_food_restriction(
+            food_type=food_type, food_name=food_name,
+            food_restriction=food_restriction,
+            ignored_food_restrictions_items=ignored_food_restrictions_items
+        )
+
+        self.assertFalse(result)
+
+    def test_check_item_food_restriction__gluten__already_ignored(self):
+        food_type = 'bread'
+        food_name = 'oregano_bread'
+        food_restriction = 'gluten'
+        ignored_food_restrictions_items = {}
+
+        result = nelly.check_item_food_restriction(
+            food_type=food_type, food_name=food_name,
+            food_restriction=food_restriction,
+            ignored_food_restrictions_items=ignored_food_restrictions_items
+        )
+
+        self.assertTrue(result)
+
+    def test_check_item_food_restriction__gluten__empty_list(self):
+        food_type = 'bread'
+        food_name = 'rice_bread'
+        food_restriction = 'gluten'
+        ignored_food_restrictions_items = {}
+
+        result = nelly.check_item_food_restriction(
+            food_type=food_type, food_name=food_name,
+            food_restriction=food_restriction,
+            ignored_food_restrictions_items=ignored_food_restrictions_items
+        )
+
+        self.assertFalse(result)
+
+    def test_check_nutritional_inconsistencies__empty(self):
+        new_customer = sf.Customer()
+
+        result = nelly.check_nutritional_inconsistencies(customer=new_customer)
+        expected = {}
+
+        self.assertEqual(expected, result)
+
+
+    def test_check_nutritional_inconsistencies__vegan_non_empty(self):
+        new_customer = sf.Customer()
+        new_customer.food_restrictions_list = ['vegan']
+
+        new_customer.order.add_bread_type("oregano_bread")
+        new_customer.order.add_vegetable("tomato")
+        new_customer.order.add_protein_type("bacon")
+        new_customer.order.add_sauce("ranch")
+
+        result = nelly.check_nutritional_inconsistencies(customer=new_customer)
+        expected = {
+            'vegan': {
+                'bread': ['oregano_bread'], 'protein': ['bacon'],
+                'cheese': [], 'vegetable': [], 'sauce': ['ranch']}
+        }
+
+        self.assertEqual(expected, result)
+
+    def test_check_nutritional_inconsistencies__vegan_gluten__non_empty(self):
+        new_customer = sf.Customer()
+        new_customer.food_restrictions_list = ['vegan', 'gluten']
+
+        new_customer.order.add_bread_type("oregano_bread")
+        new_customer.order.add_vegetable("tomato")
+        new_customer.order.add_protein_type("bacon")
+        new_customer.order.add_sauce("ranch")
+
+        result = nelly.check_nutritional_inconsistencies(customer=new_customer)
+        expected = {
+            'vegan': {'bread': ['oregano_bread'],
+                      'protein': ['bacon'],
+                      'cheese': [],
+                      'vegetable': [],
+                      'sauce': ['ranch']},
+            'gluten': {'bread': ['oregano_bread'],
+                       'protein': [],
+                       'cheese': [],
+                       'vegetable': [],
+                       'sauce': []}}
+
+        self.assertEqual(expected, result)
+
     # def test_triggers_a_request_for_information__verb_to_be__False(self):
     #
     #     parsed_tree = nlp("Is the whole wheat bread vegan")

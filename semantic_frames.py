@@ -36,7 +36,7 @@ class Customer():
         self.food_restrictions_list = []
         self.number_of_greetings = 0
         self.last_state_change = {}
-        self.ignored_food_restrictions_items = []
+        self.ignored_food_restrictions_items = {}
 
     def add_one_greeting(self):
         self.number_of_greetings += 1
