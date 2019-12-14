@@ -46,10 +46,10 @@ def update_order_with_request(customer, parsed_tree):
             last_state_change['state_changed']['order']['protein'] = token.lemma_
         elif token.lemma_ in ingredients_dict['vegetable'].keys():
             customer.order.add_vegetable(vegetable=token.lemma_)
-            last_state_change['state_changed']['order']['vegetable_list'] = token.lemma_
+            last_state_change['state_changed']['order'].setdefault('vegetable_list', []).append(token.lemma_)
         elif token.lemma_ in ingredients_dict['sauce'].keys():
             customer.order.add_sauce(sauce=token.lemma_)
-            last_state_change['state_changed']['order']['sauce_list'] = token.lemma_
+            last_state_change['state_changed']['order'].setdefault('sauce_list', []).append(token.lemma_)
         elif token.lemma_ == "bread":
             token.lemma_ = get_food_type_strung(parsed_tree, "bread")
             customer.order.add_bread_type(bread_type=token.lemma_)
