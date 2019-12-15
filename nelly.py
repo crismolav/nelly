@@ -635,7 +635,7 @@ def return_last_elements_added_to_the_order(customer):
 if __name__ == "__main__":
     new_customer = Customer()
     nlp = spacy.load("en_core_web_sm")
-    doc = nlp("i want a sandwich with tomato, beef and whole wheat bread")
+    doc = nlp("i want a sandwich with tomato lettuce and onions and beef")
     print(doc)
     # doc = displacy.serve(doc, style="dep")
     # for token in doc:
