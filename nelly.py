@@ -22,10 +22,8 @@ def update_state(customer, parsed_tree, question_context={}):
     elif semantic_frame == 'request_special_need':
         update_nutritional_restrictions(customer=customer, parsed_tree=parsed_tree)
     elif semantic_frame == "request_removal":
-        if parsed_tree in ingredients_dict.keys():
-            update_order_with_removal_request(customer=customer, parsed_tree=parsed_tree)
-        else:
-            pass
+        update_order_with_removal_request(customer = customer, parsed_tree=parsed_tree)
+
     elif semantic_frame == "triggers_cancel":
         pass
     elif semantic_frame == "request_nelly_gender":
@@ -271,7 +269,7 @@ def triggers_remove_item_from_the_order(root_tuple, parsed_tree):
     trigger_words_removal = get_trigger_words_removal()
 
     for token in parsed_tree:
-        if str(root_lemma) in get_trigger_words_removal():
+        if str(root_lemma) in get_trigger_words_removal() :
             if str(token.lemma_) in trigger_words_removal:
                 return True
             if str(token.lemma_) in trigger_words_removal and str(token.dep_) == "neg":
@@ -322,7 +320,9 @@ def determine_semantic_frame_from_parsed_tree(parsed_tree, question_context={}):
     if triggers_request_special_need(
             root_tuple=root_tuple, parsed_tree=parsed_tree):
         return 'request_special_need'
-    elif triggers_remove_item_from_the_order(root_tuple=root_tuple, parsed_tree=parsed_tree):
+    elif triggers_remove_item_from_the_order(
+            root_tuple=root_tuple, parsed_tree= parsed_tree):
+
         return "request_removal"
     elif triggers_request_order_update(
             root_tuple=root_tuple, parsed_tree=parsed_tree, question_context=question_context):
