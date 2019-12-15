@@ -150,7 +150,7 @@ def answer_price():
     if ("avocado" in new_customer.order.vegetable_list):
         price = price + 3
 
-    if (len(new_customer.order.vegetable_list > 5)):
+    if (len(new_customer.order.vegetable_list) > 5):
         price = len(new_customer.order.vegetable_list - 5)*1 + price
 
     if (new_customer.order.protein):
@@ -197,7 +197,7 @@ def answer_order(vegetable_list,sauce_list,bread,protein,cheese):
     else:
         protein= " "
 
-    answer = 'Dear friend, you have ordered a sandwich which contains.' + bread +'.'+ protein +'. With, '+ vegetable +','+ sauce +','+ cheese
+    answer = 'Dear friend, you have ordered a sandwich which contains.' + bread +'.'+ protein +'.'+ vegetable +','+ sauce +','+ cheese
     return answer
 ################################################################################
 def speech_to_text():
@@ -262,14 +262,14 @@ if __name__=="__main__":
                     text_to_speech("First of all. Do you have any food restriction?")
                     message = speech_to_text()
                     doc = nlp(message)
-                    nelly.update_state(customer=new_customer, parsed_tree=doc, question_context=question_context)
-                    frame = nelly.determine_semantic_frame_from_parsed_tree(doc,question_context=question_context)
+                    nelly.update_state(customer=new_customer, parsed_tree=doc, question_context = {'type': 'food_restriction'})
+                    frame = nelly.determine_semantic_frame_from_parsed_tree(doc,question_context = {'type': 'food_restriction'})
                     while frame != 'request_no_food_restriction' and frame != 'request_special_need':
                         text_to_speech("You have to answer me. Its important! Do you have any food restriction?")
                         message = speech_to_text()
                         doc = nlp(message)
-                        nelly.update_state(customer=new_customer, parsed_tree=doc, question_context=question_context)
-                        frame = nelly.determine_semantic_frame_from_parsed_tree(doc,question_context=question_context)
+                        nelly.update_state(customer=new_customer, parsed_tree=doc, question_context = {'type': 'food_restriction'})
+                        frame = nelly.determine_semantic_frame_from_parsed_tree(doc,question_context = {'type': 'food_restriction'})
                     entering=1
 
 
@@ -289,7 +289,7 @@ if __name__=="__main__":
                 if frame == "False" and enter_value==1:
                     answer1= answer(frame)
                     text_to_speech(answer1)
-                    text_to_speech("Please my friend, lets continue with the order")
+                    text_to_speech("Please my friend, lets continue with the order!")
                     enter_value=0
 
 
@@ -358,14 +358,14 @@ if __name__=="__main__":
                         text_to_speech("Dear friend. Do you have any food restriction?")
                         message = speech_to_text()
                         doc = nlp(message)
-                        nelly.update_state(customer=new_customer, parsed_tree=doc, question_context=question_context)
-                        frame = nelly.determine_semantic_frame_from_parsed_tree(doc,question_context=question_context)
+                        nelly.update_state(customer=new_customer, parsed_tree=doc, question_context = {'type': 'food_restriction'})
+                        frame = nelly.determine_semantic_frame_from_parsed_tree(doc,question_context = {'type': 'food_restriction'})
                         while frame != 'request_no_food_restriction' and frame != 'request_special_need':
                             text_to_speech("You have to answer me. Its important! Do you have any food restriction?")
                             message = speech_to_text()
                             doc = nlp(message)
-                            nelly.update_state(customer=new_customer, parsed_tree=doc, question_context=question_context)
-                            frame = nelly.determine_semantic_frame_from_parsed_tree(doc,question_context=question_context)
+                            nelly.update_state(customer=new_customer, parsed_tree=doc, question_context = {'type': 'food_restriction'})
+                            frame = nelly.determine_semantic_frame_from_parsed_tree(doc,question_context = {'type': 'food_restriction'})
                         entering=1
                         answer1 = answer(frame)
                         text_to_speech(answer1)
@@ -379,6 +379,10 @@ if __name__=="__main__":
         if ("avocado" in new_customer.order.vegetable_list) and inside==0:
             text_to_speech("You have added Avocado. Be carefull it is, expensive!")
             inside = 1
+
+        if new_customer.ignore_food_restriction == False:
+            print(new_customer.feedback)
+
 
 
     answer1 = answer(frame)

@@ -35,6 +35,26 @@ class NellyTests(unittest.TestCase):
 
         self.assertEqual(expected, result)
 
+    def test_determine_semantic_frame_from_parsed_tree__accept_remove_suggested_items(self):
+        parsed_tree = nlp("I do")
+        question_context = {'type': 'remove_suggested_items'}
+
+        result = nelly.determine_semantic_frame_from_parsed_tree(
+            parsed_tree=parsed_tree, question_context=question_context)
+        expected = 'accept_remove_suggested_items'
+
+        self.assertEqual(expected, result)
+
+    def test_determine_semantic_frame_from_parsed_tree__accept_remove_suggested_items_False(self):
+        parsed_tree = nlp("I don't")
+        question_context = {'type': 'remove_suggested_items'}
+
+        result = nelly.determine_semantic_frame_from_parsed_tree(
+            parsed_tree=parsed_tree, question_context=question_context)
+        expected = 'False'
+
+        self.assertEqual(expected, result)
+
     def test_determine_semantic_frame_from_parsed_tree__greeting_simple(self):
         parsed_tree = nlp("Hello")
 
@@ -272,6 +292,16 @@ class NellyTests(unittest.TestCase):
 
         self.assertEqual(expected_wants_food_type, new_customer.order.wants_food_type)
 
+    def test_update_order_with_request__check_feedback(self):
+        new_customer = sf.Customer()
+        new_customer.food_restrictions_list = ['vegan']
+        parsed_tree = nlp("I want a sandwich with whole wheat bread")
+
+        nelly.update_order_with_request(
+            customer=new_customer, parsed_tree=parsed_tree)
+        expected_feedback = {'nutritional_violations': ['whole_wheat_bread']}
+
+        self.assertEqual(expected_feedback, new_customer.feedback)
 
     def test_triggers_a_request_order_update_for_bread(self):
         new_customer = sf.Customer()
@@ -591,15 +621,23 @@ class NellyTests(unittest.TestCase):
 
         self.assertTrue(result)
 
-    def test_triggers_request_no_food_restriction__True(self):
+    def test_check_item_food_restrictions__general_test(self):
+        food_type = 'bread'
+        food_name = 'oregano_bread'
+        food_restrictions = ['gluten', 'vegan']
+        ignored_food_restrictions_items = {}
 
-        parsed_tree = nlp("I don't")
-        question_context = {'type': 'food_restriction'}
+        result = nelly.check_item_food_restrictions(
+            food_type=food_type, food_name=food_name,
+            food_restrictions = food_restrictions,
+            ignored_food_restrictions_items=ignored_food_restrictions_items
+        )
+        expected = ['gluten', 'vegan']
 
-        result = nelly.triggers_request_no_food_restriction(
-            parsed_tree=parsed_tree, question_context=question_context)
+        self.assertEqual(expected, result)
 
-        self.assertTrue(result)
+
+
 
 
     # def test_triggers_a_request_for_information__verb_to_be__False(self):
