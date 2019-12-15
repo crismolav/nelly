@@ -6,6 +6,28 @@ from pdb import set_trace
 
 nlp = spacy.load("en_core_web_sm")
 class NellyTests(unittest.TestCase):
+    def test_determine_semantic_frame_from_parsed_tree__triggers_accept_remove_suggested_items_True(self):
+        parsed_tree = nlp("Yes remove it")
+        question_context = {'type': 'accept_remove_items',
+                            'items': ['whole_wheat_bread']}
+
+        result = nelly.determine_semantic_frame_from_parsed_tree(
+            parsed_tree=parsed_tree, question_context=question_context)
+        expected = 'accept_remove_suggested_items'
+
+        self.assertEqual(expected, result)
+
+    def test_determine_semantic_frame_from_parsed_tree__triggers_accept_remove_suggested_items_False(self):
+        parsed_tree = nlp("No")
+        question_context = {'type': 'accept_remove_items',
+                            'items': ['whole_wheat_bread']}
+
+        result = nelly.determine_semantic_frame_from_parsed_tree(
+            parsed_tree=parsed_tree, question_context=question_context)
+        expected = 'deny_remove_suggested_items'
+
+        self.assertEqual(expected, result)
+
     def test_determine_semantic_frame_from_parsed_tree__request_special_need__have(self):
         parsed_tree = nlp("I have gluten allergy")
 
@@ -37,7 +59,7 @@ class NellyTests(unittest.TestCase):
 
     def test_determine_semantic_frame_from_parsed_tree__accept_remove_suggested_items(self):
         parsed_tree = nlp("I do")
-        question_context = {'type': 'remove_suggested_items'}
+        question_context = {'type': 'accept_remove_items'}
 
         result = nelly.determine_semantic_frame_from_parsed_tree(
             parsed_tree=parsed_tree, question_context=question_context)
@@ -313,6 +335,7 @@ class NellyTests(unittest.TestCase):
         expected = "whole_wheat_bread"
 
         self.assertEqual(expected, results)
+
 
     def test_get_bread_type_strung__no_bread_mention(self):
         parsed_tree = nlp("hello how are you")
@@ -636,9 +659,28 @@ class NellyTests(unittest.TestCase):
 
         self.assertEqual(expected, result)
 
+    def test_update_order_with_removal_acceptance__check_order_and_feedback(self):
+        new_customer = sf.Customer()
+        new_customer.order.add_bread_type("sourdough_bread")
+        new_customer.order.add_sauce("mayonnaise")
+        new_customer.order.add_sauce("ranch")
 
+        question_context = {
+            'type': 'accept_remove_items',
+            'items': ['mayonnaise', 'ranch']
+        }
 
+        nelly.update_order_with_removal_acceptance(
+            customer=new_customer, question_context=question_context)
+        expected = [[],
+                    'sourdough_bread']
+        expected_feedback = {'items_deleted': ['mayonnaise', 'ranch']}
+        result = [new_customer.order.sauce_list,
+                  new_customer.order.bread_type]
+        result_feedback = new_customer.feedback
 
+        self.assertEqual(expected, result)
+        self.assertEqual(expected_feedback, result_feedback)
 
     # def test_triggers_a_request_for_information__verb_to_be__False(self):
     #

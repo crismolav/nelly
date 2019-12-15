@@ -14,7 +14,7 @@ from pdb import set_trace
 def answer(frame, customer=None):
 
     if frame == "greeting":
-        answer = ['Welcome to Nellys! Hows your day going.', 'Hello my friend. Welcome to my restaurant!', 'Hello. My name is Nelly!', 'Hi! Nice to meet you!']
+        answer = ['Welcome to Nellys!', 'Hello my friend. Welcome to my restaurant!', 'Hello. My name is Nelly!', 'Hi! Nice to meet you!']
         answer = random.choice(answer)
 
     elif frame == "request_no_food_restriction":
@@ -131,6 +131,13 @@ def answer(frame, customer=None):
 
     elif frame == "restate_last_state_change":
         answer = ["You just added, "]
+        answer = random.choice(answer)
+
+    elif frame == "accept_remove_suggested_items":
+        answer = ["Got it. Items removed!"]
+        answer = random.choice(answer)
+    elif frame == "deny_remove_suggested_items":
+        answer = ["Got it"]
         answer = random.choice(answer)
     else:
         answer = ['HA HA HA HA! I can not understand you!', 'I can not help you with that, amigo. Sorry.']
@@ -255,7 +262,7 @@ if __name__=="__main__":
 
         if frame != "request_goodbye":
 
-            if (frame == "request_order_update") or (frame == "False" and enter_value==1) or (frame == "request_ignore_food_type") or (frame == "request_removal") :
+            if (frame == "request_order_update") or (frame == "False" and enter_value==1) or (frame == "request_ignore_food_type") or (frame == "request_removal") or (frame == "accept_remove_items") or (frame == "deny_remove_suggested_items"):
 
 
                 if entering==0:
@@ -381,18 +388,26 @@ if __name__=="__main__":
             inside = 1
 
         if new_customer.ignore_food_restriction == False:
-            set_trace()
+            # set_trace()
             if new_customer.feedback:
-                a=new_customer.feedback['nutritional_violations']
-                answer1= a[0]
-                if "_"  in answer1:
-                    answer1=answer1.replace("_", ",")
-                answer1= "You should remove, " + answer1 + ", because of your food restriction."
-                text_to_speech(answer1)
+                if 'nutritional_violations' in new_customer.feedback:
+                    a=new_customer.feedback['nutritional_violations']
+                    answer1= a[0]
+                    if "_"  in answer1:
+                        answer1=answer1.replace("_", ",")
+                    # answer1= "You should remove, " + answer1 + ", because of your food restriction."
+                    answer1 = "Be careful " + answer1 + "violate your food restrictions. Would you like me to remove them from your order"
+                    text_to_speech(answer1)
+                    question_context = {'type': 'accept_remove_items', 'items':new_customer.feedback['nutritional_violations']}
+                    message = speech_to_text()
+                    doc = nlp(message)
+                    nelly.update_state(customer=new_customer, parsed_tree=doc,  question_context=question_context)
+                    frame = nelly.determine_semantic_frame_from_parsed_tree(doc, question_context=question_context)
+
+                # elif 'items_deleted' in new_customer.feedback:
+                #     answer1 = "Got it. Items removed"
+                #     text_to_speech(answer1)
                 new_customer.feedback = {}
-
-
-
 
     answer1 = answer(frame)
     text_to_speech(answer1)

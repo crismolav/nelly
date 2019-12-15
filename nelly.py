@@ -31,10 +31,32 @@ def update_state(customer, parsed_tree, question_context={}):
     elif semantic_frame == "request_no_food_restriction":
         update_customer_with_request_no_food_restriction(customer)
     elif semantic_frame == "accept_remove_suggested_items":
-        update_customer_with_request_no_food_restriction(customer)
+        update_order_with_removal_acceptance(customer = customer, question_context=question_context)
     else:
         pass
 
+
+def update_order_with_removal_acceptance(customer, question_context):
+    items_to_remove = question_context['items']
+    for item_to_remove in items_to_remove:
+        if item_to_remove in ingredients_dict['protein'].keys():
+            customer.order.remove_protein_type(protein_type=item_to_remove)
+
+        elif item_to_remove in ingredients_dict['vegetable'].keys():
+            customer.order.remove_vegetable(vegetable=item_to_remove)
+
+        elif item_to_remove in ingredients_dict['sauce'].keys():
+            customer.order.remove_sauce(sauce=item_to_remove)
+
+        elif item_to_remove in ingredients_dict['bread'].keys():
+            customer.order.remove_bread_type(bread_type=item_to_remove)
+
+        elif item_to_remove in ingredients_dict['sauce'].keys():
+            customer.order.remove_cheese(cheese=item_to_remove)
+        else:
+            continue
+
+        customer.feedback.setdefault('items_deleted', []).append(item_to_remove)
 
 def update_customer_with_request_no_food_restriction(customer):
     customer.ignore_food_restriction = True
@@ -264,7 +286,9 @@ def get_trigger_words_removal():
     return ["remove", "delete"]
 
 
-def triggers_remove_item_from_the_order(root_tuple, parsed_tree):
+def triggers_remove_item_from_the_order(root_tuple, parsed_tree, question_context={}):
+    if question_context != {} and question_context['type'] == 'accept_remove_items':
+        return False
     root_lemma, root_text = root_tuple
     trigger_words_removal = get_trigger_words_removal()
 
@@ -321,7 +345,7 @@ def determine_semantic_frame_from_parsed_tree(parsed_tree, question_context={}):
             root_tuple=root_tuple, parsed_tree=parsed_tree):
         return 'request_special_need'
     elif triggers_remove_item_from_the_order(
-            root_tuple=root_tuple, parsed_tree= parsed_tree):
+            root_tuple=root_tuple, parsed_tree= parsed_tree, question_context=question_context):
 
         return "request_removal"
     elif triggers_request_order_update(
@@ -348,18 +372,36 @@ def determine_semantic_frame_from_parsed_tree(parsed_tree, question_context={}):
     elif triggers_accept_remove_suggested_items(
             parsed_tree=parsed_tree, question_context=question_context):
         return "accept_remove_suggested_items"
+    elif triggers_deny_remove_suggested_items(
+            parsed_tree=parsed_tree, question_context=question_context):
+        return "deny_remove_suggested_items"
     # elif triggers_remove_item_from_the_order(root_tuple=root_tuple, parsed_tree= parsed_tree):
     #     return "request_removal"
     else:
         return "False"
 
+def triggers_deny_remove_suggested_items(parsed_tree, question_context):
+    if question_context == {} or 'accept_remove_items' not in question_context.get('type', {}):
+        return False
+    for token in parsed_tree:
+        if token.i == 0 and token.lemma_.lower() == 'no':
+            return True
+        if token.i == 0 and token.lemma_.lower() == 'yes':
+            return False
+        if (str(token.dep_) == 'neg'
+                and str(token.head) in ['do', 'have']):
+            return True
+
+    return True
 
 def triggers_accept_remove_suggested_items(parsed_tree, question_context):
-    if question_context == {} or 'remove_suggested_items' not in question_context.get('type', {}):
+    if question_context == {} or 'accept_remove_items' not in question_context.get('type', {}):
         return False
     for token in parsed_tree:
         if token.i == 0 and token.lemma_.lower() == 'yes':
             return True
+        if token.i == 0 and token.lemma_.lower() == 'no':
+            return False
         if (str(token.dep_) == 'neg'
                 and str(token.head) in ['do', 'have']):
             return False
@@ -468,7 +510,7 @@ def triggers_request_cancel(root_tuple, parsed_tree):
 
 
 def triggers_request_ignore_food_type(parsed_tree, question_context):
-    if question_context == {} or question_context['type'] == 'food_restriction':
+    if question_context == {} or question_context['type'] in ['food_restriction', 'accept_remove_items']:
         return False
 
     for token in parsed_tree:
