@@ -534,14 +534,18 @@ def return_last_elements_added_to_the_order(customer):
     customer_dict = customer.last_state_change
     keys = customer_dict["state_changed"]["order"].values()
     keys_clean = []
+
     for i in keys:
-        keys_clean.append(i.replace("_", ","))
+        if "_" in i:
+            keys_clean.append(i.replace("_", " "))
+        else:
+            keys_clean.append(i)
     return keys_clean
 
 if __name__=="__main__":
     new_customer =  Customer()
     nlp = spacy.load("en_core_web_sm")
-    doc = nlp("i want a sandwich with whole wheat bread, beef")
+    doc = nlp("i want a sandwich with whole wheat bread, beef, and tomato")
     print(doc)
     #doc = displacy.serve(doc, style="dep")
     # for token in doc:
