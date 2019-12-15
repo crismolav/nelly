@@ -381,9 +381,16 @@ if __name__=="__main__":
             inside = 1
 
         if new_customer.ignore_food_restriction == False:
-            a=new_customer.feedback 
-            print(a)
-            new_customer.feedback = {}
+            set_trace()
+            if new_customer.feedback:
+                a=new_customer.feedback['nutritional_violations']
+                answer1= a[0]
+                if "_"  in answer1:
+                    answer1=answer1.replace("_", ",")
+                answer1= "You should remove, " + answer1 + ", because of your food restriction."
+                text_to_speech(answer1)
+                new_customer.feedback = {}
+
 
 
 
