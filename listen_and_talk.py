@@ -381,7 +381,9 @@ if __name__=="__main__":
             inside = 1
 
         if new_customer.ignore_food_restriction == False:
-            print(new_customer.feedback)
+            a=new_customer.feedback 
+            print(a)
+            new_customer.feedback = {}
 
 
 
