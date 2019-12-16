@@ -83,6 +83,7 @@ def update_order_with_request(customer, parsed_tree):
 
 
 def update_order_for_food_type(token, customer, parsed_tree, last_state_change):
+    food_type = ''
     if token.lemma_ in ingredients_dict['protein'].keys():
         food_type = 'protein'
         customer.order.add_protein_type(protein_type=token.lemma_)
@@ -95,12 +96,12 @@ def update_order_for_food_type(token, customer, parsed_tree, last_state_change):
         food_type = 'sauce'
         customer.order.add_sauce(sauce=token.lemma_)
         variable_name = 'sauce_list'
-    elif token.lemma_ == "bread":
+    elif "bread" in token.lemma_:
         food_type = 'bread'
         token.lemma_ = get_food_type_strung(parsed_tree, "bread")
         customer.order.add_bread_type(bread_type=token.lemma_)
         variable_name = 'bread_type'
-    elif token.lemma_ == "cheese":
+    elif "cheese" in token.lemma_:
         food_type = 'cheese'
         token.lemma_ = get_food_type_strung(parsed_tree, "cheese")
         customer.order.add_cheese(cheese=token.lemma_)
@@ -507,21 +508,8 @@ def triggers_request_cancel(root_tuple, parsed_tree):
             return True
         if str(token.lemma_) in trigger_words_cancel and str(token.dep_) == "neg":
             return False
-    # if str(root_lemma) == "want":
-    #     if str(token.lemma_) in trigger_words_cancel:
-    #         return True
-    # if str(token.dep_) == "neg":
-    #     return False
-    return False
 
-    # root_lemma, root_text = root_tuple
-    # if root_lemma in ["hi", "hey", "hello", "morning", "afternoon", "evening", "night"]:
-    #     return True
-    # if root_lemma == "be":
-    #     for token in parsed_tree:
-    #         if str(token.lemma_) in ["how"]:
-    #             return True
-    # return False
+    return False
 
 
 def triggers_request_ignore_food_type(parsed_tree, question_context):
@@ -569,7 +557,9 @@ def is_there_a_verb(parsed_tree):
 
 def triggers_request_special_need(root_tuple, parsed_tree):
     root_lemma, root_text = root_tuple
-    if root_lemma in ['eat', 'drink', 'ingest', 'consume', 'tolerate', 'have', 'be']:
+    if root_lemma in ['eat', 'drink', 'ingest', 'consume', 'tolerate', 'have', 'be', 'vegan', 'vegetarian']:
+        if root_lemma in ['vegan', 'vegetarian']:
+            return True
         if root_verb_is_negated(root_tuple, parsed_tree):
             if triggers_request_special_need_verb_with_negation(
                     root_tuple=root_tuple, parsed_tree=parsed_tree):
@@ -685,10 +675,7 @@ def return_last_elements_added_to_the_order(customer):
                 values_clean.append(i.replace("_", " "))
             else:
                 values_clean.append(i)
-        # if "_" in i:
-        #     values_clean.append(i.replace("_", " "))
-        # else:
-        #     values_clean.append(i)
+
     return values_clean
 
 
@@ -697,10 +684,6 @@ if __name__ == "__main__":
     nlp = spacy.load("en_core_web_sm")
     doc = nlp("i want a sandwich with tomato lettuce and onions and beef")
     print(doc)
-    # doc = displacy.serve(doc, style="dep")
-    # for token in doc:
-    #     print(token.text, token.head,  token.lemma_, token.pos_, token.tag_, token.dep_,
-    #           token.shape_, token.is_alpha, token.is_stop)
 
     update_state(customer=new_customer, parsed_tree=doc)
     print("*****")

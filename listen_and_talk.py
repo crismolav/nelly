@@ -98,7 +98,7 @@ def answer(frame, customer=None):
         answer = random.choice(answer)
 
     elif frame == "answer_sauce":
-        answer = ['Please tell me which sauces do you want in your sandwich', 'If you add sauce the sandwich taste better. Please tell me which sauce you want to add.']
+        answer = ['Please tell me which sauces do you want', 'If you add sauce it tastes better. Please tell me which sauce you want to add.']
         answer = random.choice(answer)
 
     elif frame == "answer_NO_sauce":
@@ -106,7 +106,7 @@ def answer(frame, customer=None):
         answer = random.choice(answer)
 
     elif frame == "answer_cheese":
-        answer = ['Please tell me which kind of cheese do you want in your sandwich', 'Dear friend, please tell me which cheese you want in the sandwich!']
+        answer = ['Please tell me which kind of cheese do you want', 'Dear friend, please tell me which cheese you want in the sandwich!']
         answer = random.choice(answer)
 
     elif frame == "answer_NO_cheese":
@@ -114,7 +114,7 @@ def answer(frame, customer=None):
         answer = random.choice(answer)
 
     elif frame == "request_ignore_food_type":
-        answer = ['Okay my friend.', 'Sure! Removed!', 'Dont worry. I am removing it right now!' ]
+        answer = ['Okay my friend.', 'Okay, noted', 'Got it' ]
         answer = random.choice(answer)
 
     elif frame == "request_removal":
@@ -122,7 +122,7 @@ def answer(frame, customer=None):
         answer = random.choice(answer)
 
     elif frame == "request_special_need":
-        answer = ['Thanks for the information! What do you want to order?', 'Okay. I will have that, in mind! What do you want to eat?' ]
+        answer = ['Thanks for the information! What do you want to order?', 'Okay. I will have that in mind! What do you want to eat?' ]
         answer = random.choice(answer)
 
     elif frame == "request_nelly_gender":
@@ -169,7 +169,7 @@ def answer_price():
     price =str(price)
     answer = "Its, " + price +  ", euros. Have a nice day my friend."
 
-    answer = [answer, 'Today, this sandwich is free for you!']
+    answer = [answer, 'Today, this order is free for you!']
     answer = random.choice(answer)
 
     return answer
@@ -252,9 +252,10 @@ if __name__=="__main__":
             answer1 = answer("silence")
             text_to_speech(answer1)
             message = speech_to_text()
-            doc = nlp(message)
-            nelly.update_state(customer=new_customer, parsed_tree=doc)
-            frame = nelly.determine_semantic_frame_from_parsed_tree(doc)
+            if message != "silence":
+                doc = nlp(message)
+                nelly.update_state(customer=new_customer, parsed_tree=doc)
+                frame = nelly.determine_semantic_frame_from_parsed_tree(doc)
 
 
         question_context = {}
@@ -410,7 +411,7 @@ if __name__=="__main__":
         nelly.update_state(customer=new_customer, parsed_tree=doc, question_context=question_context)
         frame = nelly.determine_semantic_frame_from_parsed_tree(doc,question_context=question_context)
         if ("avocado" in new_customer.order.vegetable_list) and inside==0:
-            text_to_speech("You have added Avocado. Be carefull it is, expensive! Costs two euros more.")
+            text_to_speech("You have added Avocado. Be carefull it is, expensive! Costs two extra euros.")
             inside = 1
 
         if new_customer.ignore_food_restriction == False:
