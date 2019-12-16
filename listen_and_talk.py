@@ -130,7 +130,7 @@ def answer(frame, customer=None):
         answer = random.choice(answer)
 
     elif frame == "restate_last_state_change":
-        answer = ["You just added, "]
+        answer = [","]
         answer = random.choice(answer)
 
     elif frame == "accept_remove_suggested_items":
@@ -166,7 +166,8 @@ def answer_price():
     if (new_customer.order.cheese):
         price = price + 1
 
-    answer = "Its" + price +  "euros. Have a nice day my friend."
+    price =str(price)
+    answer = "Its, " + price +  ", euros. Have a nice day my friend."
 
     answer = [answer, 'Today, this sandwich is free for you!']
     answer = random.choice(answer)
@@ -262,7 +263,10 @@ if __name__=="__main__":
 
         if frame != "request_goodbye":
 
-            if (frame == "request_order_update") or (frame == "False" and enter_value==1) or (frame == "request_ignore_food_type") or (frame == "request_removal") or (frame == "accept_remove_items") or (frame == "deny_remove_suggested_items"):
+
+
+
+            if (frame == "request_order_update") or (frame == "False" and enter_value==1) or (frame == "request_ignore_food_type") or (frame == "request_removal") or (frame == "accept_remove_items") or (frame == "deny_remove_suggested_items") or(frame =="accept_remove_suggested_items"):
 
 
                 if entering==0:
@@ -284,13 +288,18 @@ if __name__=="__main__":
                 if frame == "request_order_update" and enter_value == 1:
                     answer1 =  answer(frame='restate_last_state_change', customer=new_customer)
                     answer1  = answer1.join(nelly.return_last_elements_added_to_the_order(new_customer))
-                    answer1 = "Ok I added, " + answer1 + " , to your order"
+                    answer1 = "Ok I added, " + answer1
                     text_to_speech(answer1)
 
 
                 if frame == "request_ignore_food_type" or frame == "request_removal":
                     answer1 = answer(frame)
                     text_to_speech(answer1)
+
+
+                if frame == "request_special_need" and entering==1:
+                    text_to_speech("Please my friend, lets continue with the order!")
+                    enter_value=0
 
 
                 if frame == "False" and enter_value==1:
@@ -348,6 +357,13 @@ if __name__=="__main__":
                     message = speech_to_text()
 
 
+
+            elif frame == "request_special_need":
+                    answer1 = answer(frame)
+                    text_to_speech(answer1)
+                    entering=1
+
+
             else:
                 if new_customer.number_of_greetings > 1:
                     if  frame == "greeting":
@@ -396,7 +412,7 @@ if __name__=="__main__":
                     if "_"  in answer1:
                         answer1=answer1.replace("_", ",")
                     # answer1= "You should remove, " + answer1 + ", because of your food restriction."
-                    answer1 = "Be careful " + answer1 + "violate your food restrictions. Would you like me to remove them from your order"
+                    answer1 = "Be careful, " + answer1 + ", violates your food restrictions. Would you like me to remove it, from your order"
                     text_to_speech(answer1)
                     question_context = {'type': 'accept_remove_items', 'items':new_customer.feedback['nutritional_violations']}
                     message = speech_to_text()

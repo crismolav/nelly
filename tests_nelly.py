@@ -312,6 +312,17 @@ class NellyTests(unittest.TestCase):
         self.assertEqual(expected_list, results_list)
         self.assertEqual(expected_last_state_change, new_customer.last_state_change)
 
+    def test_adding_vegetables(self):
+        new_customer = sf.Customer()
+        new_customer.order.add_vegetable("tomato")
+        new_customer.order.add_vegetable("lettuce")
+        new_customer.order.add_vegetable("olives")
+        new_customer.order.add_vegetable("onions")
+
+        result = new_customer.order.vegetable_list
+        expected = ["tomato", "lettuce", "olives","onions"]
+        self.assertEqual(expected, result)
+
     def test_update_order_with_request_ignore_food_type__cheese(self):
         new_customer = sf.Customer()
         question_context = {'type':'cheese'}
