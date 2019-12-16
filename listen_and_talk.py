@@ -300,6 +300,7 @@ if __name__=="__main__":
                 if frame == "request_special_need" and entering==1:
                     text_to_speech("Please my friend, lets continue with the order!")
                     enter_value=0
+                    entering=1
 
 
                 if frame == "False" and enter_value==1:
