@@ -102,15 +102,15 @@ ingredients_dict = {
 
     "bread":{
         "bread": {
-            "restriction": ["vegan", "gluten"],
+            "restriction": ["vegan", "gluten", "celiac"],
             "ingredients": ["wheat_flour", "yeast", "butter", "water", "salt", "sugar"]
         },
         "wheat_bread":{
-            "restriction": ["vegan", "gluten"],
+            "restriction": ["vegan", "gluten", "celiac"],
             "ingredients": ["wheat_flour", "yeast", "butter", "water", "salt", "sugar"]
         },
         "whole_wheat_bread":{
-            "restriction": ["vegan", "gluten"],
+            "restriction": ["vegan", "gluten", "celiac"],
             "ingredients": ["whole_wheat_flour", "yeast", "sun_flower_oil", "water", "salt", "sugar"]
         },
         "rice_bread":{
@@ -122,7 +122,7 @@ ingredients_dict = {
             "ingredients": ["wheat_flour", "water", "salt", "olive_oil","sun_flower_seeds"]
         },
         "oregano_bread":{
-            "restriction": ["vegan", "gluten"],
+            "restriction": ["vegan", "gluten", "celiac"],
             "ingredients": ["oregano","wheat_flour", "water", "salt", "olive_oil"]
         },
         "pita_bread":{
@@ -130,7 +130,7 @@ ingredients_dict = {
             "ingredients": ["wheat_flour", "water", "salt"]
         },
         "white_bread":{
-            "restriction": ["vegan", "gluten"],
+            "restriction": ["vegan", "gluten", "celiac"],
             "ingredients": ["yeast","wheat_flour", "water", "salt"]
         }
     },
