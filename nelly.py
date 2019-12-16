@@ -552,6 +552,8 @@ def triggers_request_order_update(root_tuple, parsed_tree, question_context={}):
                 if str(token.head) == root_text and str(token.lemma_) in ['know', 'inquire',
                                                                           'find']:
                     return False
+        if token.lemma_ in ["bread", "cheese"]:
+            token.lemma_ = get_food_type_strung(parsed_tree, "bread")
         if str(token.lemma_.lower()) in get_all_available_ingredients():
             return True
 

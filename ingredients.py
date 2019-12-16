@@ -79,9 +79,10 @@ ingredients_dict = {
 
     "cheese":{
         # "cheese":{
-        #         #     "restriction": ["lactose", "vegan"],
-        #         #     "ingredients": ["milk", "coagulants"]
-        #         # },
+        #     "restriction": ["lactose", "vegan"],
+        #     "ingredients": ["milk", "coagulants"]
+        # },
+
         "regular_cheese":{
             "restriction": ["lactose", "vegan"],
             "ingredients": ["milk", "coagulants"]
