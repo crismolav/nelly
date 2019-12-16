@@ -18,7 +18,7 @@ def answer(frame, customer=None):
         answer = random.choice(answer)
 
     elif frame == "request_no_food_restriction":
-        answer = ['Perfect my friend. Lets continue with the order!','Awesome! What do you want to eat?', 'Okay. What do you want to order?']
+        answer = ['Perfect my friend. Lets continue with the order!','Awesome!', 'Okay. What do you want to order?']
         answer = random.choice(answer)
 
     elif frame == "two_times_greeting":
@@ -155,13 +155,13 @@ def answer_price():
     price = 0
 
     if ("avocado" in new_customer.order.vegetable_list):
-        price = price + 3
+        price = price + 2
 
     if (len(new_customer.order.vegetable_list) > 5):
         price = len(new_customer.order.vegetable_list - 5)*1 + price
 
     if (new_customer.order.protein):
-        price = price + 2
+        price = price + 3
 
     if (new_customer.order.cheese):
         price = price + 1
@@ -283,7 +283,9 @@ if __name__=="__main__":
                         frame = nelly.determine_semantic_frame_from_parsed_tree(doc,question_context = {'type': 'food_restriction'})
                     entering=1
 
-
+                if frame =="accept_remove_suggested_items" or frame=="deny_remove_suggested_items":
+                    answer1= answer(frame)
+                    text_to_speech(answer1)
 
                 if frame == "request_order_update" and enter_value == 1:
                     answer1 =  answer(frame='restate_last_state_change', customer=new_customer)
@@ -300,7 +302,6 @@ if __name__=="__main__":
                 if frame == "request_special_need" and entering==1:
                     text_to_speech("Please my friend, lets continue with the order!")
                     enter_value=0
-                    entering=1
 
 
                 if frame == "False" and enter_value==1:
@@ -363,6 +364,8 @@ if __name__=="__main__":
                     answer1 = answer(frame)
                     text_to_speech(answer1)
                     entering=1
+                    message = speech_to_text()
+
 
 
             else:
@@ -401,7 +404,7 @@ if __name__=="__main__":
         nelly.update_state(customer=new_customer, parsed_tree=doc, question_context=question_context)
         frame = nelly.determine_semantic_frame_from_parsed_tree(doc,question_context=question_context)
         if ("avocado" in new_customer.order.vegetable_list) and inside==0:
-            text_to_speech("You have added Avocado. Be carefull it is, expensive!")
+            text_to_speech("You have added Avocado. Be carefull it is, expensive! Costs two euros more.")
             inside = 1
 
         if new_customer.ignore_food_restriction == False:
@@ -413,10 +416,11 @@ if __name__=="__main__":
                     if "_"  in answer1:
                         answer1=answer1.replace("_", ",")
                     # answer1= "You should remove, " + answer1 + ", because of your food restriction."
-                    answer1 = "Be careful, " + answer1 + ", violates your food restrictions. Would you like me to remove it, from your order"
+                    answer1 = "Be careful, " + answer1 + ", violates your food restrictions. Would you like me to remove it from your order"
                     text_to_speech(answer1)
                     question_context = {'type': 'accept_remove_items', 'items':new_customer.feedback['nutritional_violations']}
                     message = speech_to_text()
+
                     doc = nlp(message)
                     nelly.update_state(customer=new_customer, parsed_tree=doc,  question_context=question_context)
                     frame = nelly.determine_semantic_frame_from_parsed_tree(doc, question_context=question_context)
