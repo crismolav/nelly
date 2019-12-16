@@ -130,7 +130,7 @@ def answer(frame, customer=None):
         answer = random.choice(answer)
 
     elif frame == "restate_last_state_change":
-        answer = ["You just added, "]
+        answer = [","]
         answer = random.choice(answer)
 
     elif frame == "accept_remove_suggested_items":
