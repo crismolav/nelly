@@ -346,7 +346,6 @@ def determine_semantic_frame_from_parsed_tree(parsed_tree, question_context={}):
         return 'request_special_need'
     elif triggers_remove_item_from_the_order(
             root_tuple=root_tuple, parsed_tree= parsed_tree, question_context=question_context):
-
         return "request_removal"
     elif triggers_request_order_update(
             root_tuple=root_tuple, parsed_tree=parsed_tree, question_context=question_context):
@@ -565,7 +564,7 @@ def triggers_request_special_need(root_tuple, parsed_tree):
 
 
 def triggers_request_special_need_verb_positive(root_tuple, parsed_tree):
-    trigger_list = ['intolerance', 'allergy', 'disease']
+    trigger_list = ['intolerance', 'intolerant', 'allergy', 'disease']
     positive_list = ['vegan', 'vegetarian', 'celiac', 'lactose', 'gluten']
     root_lemma, root_text = root_tuple
     if root_lemma not in ['be', 'have']:
@@ -581,6 +580,7 @@ def triggers_request_special_need_verb_positive(root_tuple, parsed_tree):
 
 def token_triggers_special_need_verb_positive(token, root_text, positive_list, trigger_list):
     parent = token.head
+    
     if ((str(parent) == root_text and token.text in positive_list)
             or (str(parent) in trigger_list and str(parent.head) == root_text
                 and token.text in positive_list)):

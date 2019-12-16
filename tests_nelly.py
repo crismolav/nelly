@@ -17,6 +17,15 @@ class NellyTests(unittest.TestCase):
 
         self.assertEqual(expected, result)
 
+    def test_triggers_request_special_need__True(self):
+        parsed_tree = nlp("I'm lactose intolerant")
+        root_tuple = nelly.get_parse_tree_root_tuple(parsed_tree)
+
+        result = nelly.triggers_request_special_need(
+            parsed_tree=parsed_tree, root_tuple=root_tuple)
+
+        self.assertTrue(result)
+
     def test_determine_semantic_frame_from_parsed_tree__triggers_accept_remove_suggested_items_False(self):
         parsed_tree = nlp("No")
         question_context = {'type': 'accept_remove_items',
