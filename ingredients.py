@@ -74,10 +74,10 @@ ingredients_dict = {
     },
 
     "cheese":{
-        "cheese":{
-            "restriction": ["lactose", "vegan"],
-            "ingredients": ["milk", "coagulants"]
-        },
+        # "cheese":{
+        #     "restriction": ["lactose", "vegan"],
+        #     "ingredients": ["milk", "coagulants"]
+        # },
         "regular_cheese":{
             "restriction": ["lactose", "vegan"],
             "ingredients": ["milk", "coagulants"]
@@ -101,10 +101,10 @@ ingredients_dict = {
     },
 
     "bread":{
-        "bread": {
-            "restriction": ["vegan", "gluten", "celiac"],
-            "ingredients": ["wheat_flour", "yeast", "butter", "water", "salt", "sugar"]
-        },
+        # "bread": {
+        #     "restriction": ["vegan", "gluten", "celiac"],
+        #     "ingredients": ["wheat_flour", "yeast", "butter", "water", "salt", "sugar"]
+        # },
         "wheat_bread":{
             "restriction": ["vegan", "gluten", "celiac"],
             "ingredients": ["wheat_flour", "yeast", "butter", "water", "salt", "sugar"]
