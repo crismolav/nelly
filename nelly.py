@@ -105,6 +105,11 @@ def update_order_for_food_type(token, customer, parsed_tree, last_state_change):
         token.lemma_ = get_food_type_strung(parsed_tree, "cheese")
         customer.order.add_cheese(cheese=token.lemma_)
         variable_name = 'cheese'
+    elif token.lemma_ in ingredients_dict['order_type'].keys() and token.lemma_  != customer.order.order_type:
+        customer.order.order_type = token.lemma_
+        variable_name = 'order_type'
+
+
     else:
         return
     if variable_name in ['sauce_list', 'vegetable_list']:
@@ -379,6 +384,17 @@ def determine_semantic_frame_from_parsed_tree(parsed_tree, question_context={}):
     else:
         return "False"
 
+#
+# def triggers_request_sandwich_or_salad(parsed_tree, question_context):
+#     if question_context == {} or 'sandwich_or_salad' not in question_context.get('type', {}):
+#         return False
+#     for token in parsed_tree:
+#         set_trace()
+#         if token.lemma_ in ['sandwich', 'salad'] and [x for x in token.children][0].dep_ !='neg':
+#             return True
+#
+#     return False
+
 def triggers_deny_remove_suggested_items(parsed_tree, question_context):
     if question_context == {} or 'accept_remove_items' not in question_context.get('type', {}):
         return False
@@ -526,7 +542,7 @@ def triggers_request_order_update(root_tuple, parsed_tree, question_context={}):
     root_lemma, root_text = root_tuple
     modal_verbs = ['would', 'like']
     there_is_a_verb = is_there_a_verb(parsed_tree)
-    if there_is_a_verb and root_lemma not in ['sandwich', 'have', 'like', 'want',
+    if there_is_a_verb and root_lemma not in ['sandwich', 'salad', 'have', 'like', 'want',
                                               'give', 'need', "add", "order"]:
         return False
 
@@ -619,7 +635,7 @@ def get_all_available_ingredients():
     all_available_ingredients = []
     for food_type, food_type_dict in ingredients_dict.items():
         all_available_ingredients += ingredients_dict[food_type].keys()
-    return all_available_ingredients + ['sandwich']
+    return all_available_ingredients + ['sandwich', 'salad']
 
 
 def get_food_type_strung(parsed_tree, food_type):

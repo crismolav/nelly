@@ -26,6 +26,32 @@ class NellyTests(unittest.TestCase):
 
         self.assertTrue(result)
 
+    # def test_triggers_request_sandwich_or_salad__True(self):
+    #     parsed_tree = nlp("I want a salad")
+    #     question_context = {'type': 'sandwich_or_salad'}
+    #
+    #     result = nelly.triggers_request_sandwich_or_salad(
+    #         parsed_tree=parsed_tree, question_context=question_context)
+    #
+    #     self.assertTrue(result)
+    #
+    # def test_triggers_request_sandwich_or_salad__False(self):
+    #     parsed_tree = nlp("I don't want a salad")
+    #     question_context = {'type': 'sandwich_or_salad'}
+    #
+    #     result = nelly.triggers_request_sandwich_or_salad(
+    #         parsed_tree=parsed_tree, question_context=question_context)
+    #
+    #     self.assertFalse(result)
+    # def test_triggers_request_sandwich_or_salad__True(self):
+    #     parsed_tree = nlp("I want a salad")
+    #     question_context = {'type': 'sandwich_or_salad'}
+    #
+    #     result = nelly.triggers_request_sandwich_or_salad(
+    #         parsed_tree=parsed_tree, question_context=question_context)
+    #
+    #     self.assertTrue(result)
+
     def test_determine_semantic_frame_from_parsed_tree__triggers_accept_remove_suggested_items_False(self):
         parsed_tree = nlp("No")
         question_context = {'type': 'accept_remove_items',

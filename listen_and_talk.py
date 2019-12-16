@@ -174,7 +174,7 @@ def answer_price():
 
     return answer
 ################################################################################
-def answer_order(vegetable_list,sauce_list,bread,protein,cheese):
+def answer_order(vegetable_list,sauce_list,bread,protein,cheese, order_type):
     str1 = " "
     str2 = " "
 
@@ -190,10 +190,10 @@ def answer_order(vegetable_list,sauce_list,bread,protein,cheese):
     else:
         sauce= " "
 
-    if bread:
+    if bread and order_type == 'sandwich':
         bread=bread.replace("_", ",")
     else:
-        bread= " "
+        bread= ""
 
     if cheese:
         cheese=cheese.replace("_", ",")
@@ -205,7 +205,7 @@ def answer_order(vegetable_list,sauce_list,bread,protein,cheese):
     else:
         protein= " "
 
-    answer = 'Dear friend, you have ordered a sandwich which contains.' + bread +'.'+ protein +'.'+ vegetable +','+ sauce +','+ cheese
+    answer = 'Dear friend, you have ordered a %s which contains.'%order_type + bread + '.' + protein + '.' + vegetable + ',' + sauce + ',' + cheese
     return answer
 ################################################################################
 def speech_to_text():
@@ -290,7 +290,7 @@ if __name__=="__main__":
                 if frame == "request_order_update" and enter_value == 1:
                     answer1 =  answer(frame='restate_last_state_change', customer=new_customer)
                     answer1  = answer1.join(nelly.return_last_elements_added_to_the_order(new_customer))
-                    answer1 = "Ok I added, " + answer1
+                    answer1 = "Ok I added, " + answer1.replace("_", " ")
                     text_to_speech(answer1)
 
 
@@ -311,7 +311,7 @@ if __name__=="__main__":
                     enter_value=0
 
 
-                if new_customer.order.bread_type == None:
+                if new_customer.order.bread_type == None and new_customer.order.order_type == 'sandwich':
                     answer1= answer("answer_bread")
                     text_to_speech(answer1)
                     message = speech_to_text()
@@ -352,7 +352,13 @@ if __name__=="__main__":
 
                 else:
                     enter_value = 0
-                    answer1 = answer_order(new_customer.order.vegetable_list, new_customer.order.sauce_list, new_customer.order.bread_type, new_customer.order.protein, new_customer.order.cheese)
+                    answer1 = answer_order(
+                        vegetable_list=new_customer.order.vegetable_list,
+                        sauce_list=new_customer.order.sauce_list,
+                        bread=new_customer.order.bread_type,
+                        protein=new_customer.order.protein,
+                        cheese=new_customer.order.cheese,
+                        order_type=new_customer.order.order_type)
                     text_to_speech(answer1)
                     answer1 = answer_price()
                     text_to_speech(answer1)

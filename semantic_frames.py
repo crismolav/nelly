@@ -54,6 +54,7 @@ class Order():
         self.cheese = None
         self.sauce_list = []
         self.vegetable_list = []
+        self.order_type = "sandwich"
 
         self.wants_food_type = {'cheese':True , 'protein':True, 'sauce':True, 'vegetable':True}
 
