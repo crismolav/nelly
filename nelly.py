@@ -543,7 +543,7 @@ def triggers_request_order_update(root_tuple, parsed_tree, question_context={}):
     modal_verbs = ['would', 'like']
     there_is_a_verb = is_there_a_verb(parsed_tree)
     if there_is_a_verb and root_lemma not in ['sandwich', 'salad', 'have', 'like', 'want',
-                                              'give', 'need', "add", "order"]:
+                                              'give', 'need', "add", "order"] + get_all_available_ingredients():
         return False
 
     for token in parsed_tree:

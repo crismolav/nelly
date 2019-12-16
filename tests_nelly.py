@@ -17,6 +17,15 @@ class NellyTests(unittest.TestCase):
 
         self.assertEqual(expected, result)
 
+    def test_determine_semantic_frame_from_parsed_tree__error(self):
+        parsed_tree = nlp("tomato and avocado please")
+        question_context = {}
+        result = nelly.determine_semantic_frame_from_parsed_tree(
+            parsed_tree=parsed_tree, question_context=question_context)
+        expected = 'request_order_update'
+
+        self.assertEqual(expected, result)
+
     def test_triggers_request_special_need__True(self):
         parsed_tree = nlp("I'm lactose intolerant")
         root_tuple = nelly.get_parse_tree_root_tuple(parsed_tree)
@@ -359,6 +368,16 @@ class NellyTests(unittest.TestCase):
             'cheese': False, 'protein': True, 'sauce': True, 'vegetable': True}
 
         self.assertEqual(expected_wants_food_type, new_customer.order.wants_food_type)
+
+    def test_update_order_with_request__cheese(self):
+        new_customer = sf.Customer()
+        parsed_tree = nlp("pita bread")
+
+        nelly.update_order_with_request(
+            customer=new_customer, parsed_tree=parsed_tree)
+        expected_bread = "pita_bread"
+
+        self.assertEqual(expected_bread, new_customer.order.bread_type)
 
     def test_update_order_with_request__check_feedback(self):
         new_customer = sf.Customer()
