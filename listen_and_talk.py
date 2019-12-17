@@ -4,7 +4,7 @@ import os
 import spacy
 from gtts import gTTS
 from playsound import playsound
-from semantic_frames import Order, Customer
+from customer import Order, Customer
 from ingredients import ingredients_dict
 import nelly
 from pdb import set_trace

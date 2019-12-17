@@ -1,7 +1,7 @@
 import spacy
 from spacy import displacy
 from pdb import set_trace
-from semantic_frames import Order, Customer
+from customer import Order, Customer
 from ingredients import ingredients_dict
 from food_restrictions import food_restrictions_dict
 

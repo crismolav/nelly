@@ -1,7 +1,7 @@
 import unittest
 import spacy
 import nelly
-import semantic_frames as sf
+import customer as sf
 from pdb import set_trace
 
 nlp = spacy.load("en_core_web_sm")
