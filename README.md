@@ -19,17 +19,17 @@ Categories:
 
 In order to run Nelly you will need to install the below libraries:
 
-*spaCy is compatible with 64-bit CPython 2.7 / 3.5+ and runs on Unix/Linux, macOS/OS X and Windows:
+* spaCy is compatible with 64-bit CPython 2.7 / 3.5+ and runs on Unix/Linux, macOS/OS X and Windows:
 ```
 pip install -U spacy
 ```
 
-*gTTS (Google Text-to-Speech), a Python library and CLI tool to interface with Google Translate's text-to-speech API:
+* gTTS (Google Text-to-Speech), a Python library and CLI tool to interface with Google Translate's text-to-speech API:
 ```
 pip install gTTS
 ```
 
-*SpeechRecognition, Library for performing speech recognition, with support for several engines and APIs, online and offline:
+* SpeechRecognition, Library for performing speech recognition, with support for several engines and APIs, online and offline:
 ```
 pip install SpeechRecognition
 ```
@@ -50,5 +50,5 @@ python listen_and_talk.py
 
 ## Acknowledgments
 
-We would like to thank the Professors Leo Wanner and Mireia Farrús, for the patient guidance, encouragement, and advice they has provided us throughout the creation of Nelly.
+We would like to thank the Professors Leo Wanner and Mireia Farrús, for the guidance, encouragement, and advice they have provided us throughout the creation of Nelly.
 
