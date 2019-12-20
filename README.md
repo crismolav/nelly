@@ -7,12 +7,12 @@ at the Department of Information and Communication Technologies of the [Universi
 ### Build your own sandwich
 
 Categories:
-*Bread type (Mandatory)
-*Vegetables
-*Protein
-*Sauce
-*Cheese
-*Food Restrictions
+* Bread type (Mandatory)
+* Vegetables
+* Protein
+* Sauce
+* Cheese
+* Food Restrictions
 
 
 ## Prerequisites
@@ -45,7 +45,7 @@ python listen_and_talk.py
 
 * **Georgios Angelopoulos** - [LinkedIn](https://www.linkedin.com/in/george-angelopoulos/)
 * **Daniel Levkovits** - [LinkedIn](https://www.linkedin.com/in/daniellevkovits/)
-* **Jorge Pimienta** - [LinkedIn](https://www.linkedin.com/in/jorge-p-364544a9/
+* **Jorge Pimienta** - [LinkedIn](https://www.linkedin.com/in/jorge-p-364544a9/)
 * **Cristian Morales** - [LinkedIn](https://www.linkedin.com/in/cmoraleso/)
 
 ## Acknowledgments
