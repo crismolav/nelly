@@ -17,13 +17,10 @@ def update_state(customer, parsed_tree, question_context={}):
     elif semantic_frame == 'request_ignore_food_type':
         update_order_with_request_ignore_food_type(
             customer=customer, question_context=question_context)
-    # elif semantic_frame == 'request_for_information':
-    #     provide_information(customer=customer, parsed_tree=parsed_tree)
     elif semantic_frame == 'request_special_need':
         update_nutritional_restrictions(customer=customer, parsed_tree=parsed_tree)
     elif semantic_frame == "request_removal":
         update_order_with_removal_request(customer = customer, parsed_tree=parsed_tree)
-
     elif semantic_frame == "triggers_cancel":
         pass
     elif semantic_frame == "request_nelly_gender":
@@ -31,7 +28,8 @@ def update_state(customer, parsed_tree, question_context={}):
     elif semantic_frame == "request_no_food_restriction":
         update_customer_with_request_no_food_restriction(customer)
     elif semantic_frame == "accept_remove_suggested_items":
-        update_order_with_removal_acceptance(customer = customer, question_context=question_context)
+        update_order_with_removal_acceptance(
+            customer = customer, question_context=question_context)
     else:
         pass
 
@@ -530,6 +528,7 @@ def triggers_request_order_update(root_tuple, parsed_tree, question_context={}):
     root_lemma, root_text = root_tuple
     modal_verbs = ['would', 'like']
     there_is_a_verb = is_there_a_verb(parsed_tree)
+
     if there_is_a_verb and root_lemma not in ['sandwich', 'salad', 'have', 'like', 'want',
                                               'give', 'need', "add", "order"] + get_all_available_ingredients():
         return False
@@ -541,7 +540,8 @@ def triggers_request_order_update(root_tuple, parsed_tree, question_context={}):
                                                                           'find']:
                     return False
         if token.lemma_ in ["bread", "cheese"]:
-            token.lemma_ = get_food_type_strung(parsed_tree, "bread")
+            token.lemma_ = get_food_type_strung(parsed_tree, token.lemma_)
+
         if str(token.lemma_.lower()) in get_all_available_ingredients():
             return True
 
@@ -550,6 +550,10 @@ def triggers_request_order_update(root_tuple, parsed_tree, question_context={}):
 
 def is_there_a_verb(parsed_tree):
     for token in parsed_tree:
+        if token.lemma_ in ["bread", "cheese"]:
+            token.lemma_ = get_food_type_strung(parsed_tree, token.lemma_)
+        if token.lemma_ in get_all_available_ingredients():
+            continue
         if token.pos_ == 'VERB':
             return True
     return False
@@ -635,10 +639,14 @@ def get_food_type_strung(parsed_tree, food_type):
     food_children = []
     for token in parsed_tree:
         if token.lemma_ == food_type:
-            food_children = token.children
+            if token.i >0 and token.head.lemma_ in ['oregano']:
+                food_children.append(token.head)
+            else:
+                food_children += token.children
             break
     filtered_food_children = filter_food_type_children(
         children=food_children, food_type=food_type)
+
     for food_child in filtered_food_children:
         if food_child.pos_ == 'DET':
             continue

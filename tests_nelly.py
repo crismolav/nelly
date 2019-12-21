@@ -17,7 +17,27 @@ class NellyTests(unittest.TestCase):
 
         self.assertEqual(expected, result)
 
-    def test_determine_semantic_frame_from_parsed_tree__error(self):
+    def test_determine_semantic_frame_from_parsed_tree__cheese_update(self):
+        parsed_tree = nlp("can I have vegan cheese")
+        question_context = {}
+
+        result = nelly.determine_semantic_frame_from_parsed_tree(
+            parsed_tree=parsed_tree, question_context=question_context)
+        expected = 'request_order_update'
+
+        self.assertEqual(expected, result)
+
+    def test_determine_semantic_frame_from_parsed_tree__oregano_bread__update(self):
+        parsed_tree = nlp("can I have oregano bread")
+        question_context = {}
+
+        result = nelly.determine_semantic_frame_from_parsed_tree(
+            parsed_tree=parsed_tree, question_context=question_context)
+        expected = 'request_order_update'
+
+        self.assertEqual(expected, result)
+
+    def test_determine_semantic_frame_from_parsed_tree__no_verb(self):
         parsed_tree = nlp("tomato and avocado please")
         question_context = {}
         result = nelly.determine_semantic_frame_from_parsed_tree(
@@ -407,6 +427,14 @@ class NellyTests(unittest.TestCase):
 
         result = nelly.get_food_type_strung(parsed_tree, "bread")
         expected = ''
+
+        self.assertEqual(expected, result)
+
+    def test_get_bread_type_strung__pita_bread(self):
+        parsed_tree = nlp("can i have pita bread")
+
+        result = nelly.get_food_type_strung(parsed_tree, "bread")
+        expected = 'pita_bread'
 
         self.assertEqual(expected, result)
 
