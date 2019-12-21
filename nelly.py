@@ -116,7 +116,6 @@ def update_order_for_food_type(token, customer, parsed_tree, last_state_change):
         customer.order.order_type = token_lemma
         variable_name = 'order_type'
 
-
     else:
         return
     if variable_name in ['sauce_list', 'vegetable_list']:
