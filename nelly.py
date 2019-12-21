@@ -108,8 +108,7 @@ def update_order_for_food_type(token, customer, parsed_tree, last_state_change):
     elif "cheese" in token_lemma:
         food_type = 'cheese'
         if "_" not in token_lemma:
-            pass
-        token_lemma = get_food_type_strung(parsed_tree, "cheese")
+            token_lemma = get_food_type_strung(parsed_tree, "cheese")
         customer.order.add_cheese(cheese=token_lemma)
         variable_name = 'cheese'
     elif (token_lemma in ingredients_dict['order_type'].keys()
