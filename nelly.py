@@ -4,6 +4,7 @@ from pdb import set_trace
 from customer import Order, Customer
 from ingredients import ingredients_dict
 from food_restrictions import food_restrictions_dict
+import copy
 
 
 def update_state(customer, parsed_tree, question_context={}):
@@ -74,38 +75,46 @@ def update_order_with_request(customer, parsed_tree):
     last_state_change.setdefault('semantic_frames', []).append('request_order_update')
     last_state_change['state_changed'] = {'order': {}}
 
+    parsed_tree_copy = copy.deepcopy(parsed_tree)
     for token in parsed_tree:
-        update_order_for_food_type(token, customer, parsed_tree, last_state_change)
+        update_order_for_food_type(
+            token, customer, parsed_tree=parsed_tree_copy,
+            last_state_change=last_state_change)
 
     customer.last_state_change = last_state_change
 
 
 def update_order_for_food_type(token, customer, parsed_tree, last_state_change):
     food_type = ''
-    if token.lemma_ in ingredients_dict['protein'].keys():
+    token_lemma = copy.deepcopy(str(token.lemma_))
+    if token_lemma in ingredients_dict['protein'].keys():
         food_type = 'protein'
-        customer.order.add_protein_type(protein_type=token.lemma_)
+        customer.order.add_protein_type(protein_type=token_lemma)
         variable_name = 'protein'
-    elif token.lemma_ in ingredients_dict['vegetable'].keys():
+    elif token_lemma in ingredients_dict['vegetable'].keys():
         food_type = 'vegetable'
-        customer.order.add_vegetable(vegetable=token.lemma_)
+        customer.order.add_vegetable(vegetable=token_lemma)
         variable_name = 'vegetable_list'
-    elif token.lemma_ in ingredients_dict['sauce'].keys():
+    elif token_lemma in ingredients_dict['sauce'].keys():
         food_type = 'sauce'
-        customer.order.add_sauce(sauce=token.lemma_)
+        customer.order.add_sauce(sauce=token_lemma)
         variable_name = 'sauce_list'
-    elif "bread" in token.lemma_:
+    elif "bread" in token_lemma:
         food_type = 'bread'
-        token.lemma_ = get_food_type_strung(parsed_tree, "bread")
-        customer.order.add_bread_type(bread_type=token.lemma_)
+        if "_" not in token_lemma:
+            token_lemma = get_food_type_strung(parsed_tree, "bread")
+        customer.order.add_bread_type(bread_type=token_lemma)
         variable_name = 'bread_type'
-    elif "cheese" in token.lemma_:
+    elif "cheese" in token_lemma:
         food_type = 'cheese'
-        token.lemma_ = get_food_type_strung(parsed_tree, "cheese")
-        customer.order.add_cheese(cheese=token.lemma_)
+        if "_" not in token_lemma:
+            pass
+        token_lemma = get_food_type_strung(parsed_tree, "cheese")
+        customer.order.add_cheese(cheese=token_lemma)
         variable_name = 'cheese'
-    elif token.lemma_ in ingredients_dict['order_type'].keys() and token.lemma_  != customer.order.order_type:
-        customer.order.order_type = token.lemma_
+    elif (token_lemma in ingredients_dict['order_type'].keys()
+          and token_lemma  != customer.order.order_type):
+        customer.order.order_type = token_lemma
         variable_name = 'order_type'
 
 
@@ -113,19 +122,19 @@ def update_order_for_food_type(token, customer, parsed_tree, last_state_change):
         return
     if variable_name in ['sauce_list', 'vegetable_list']:
         last_state_change['state_changed']['order'].setdefault(variable_name, []).append(
-            token.lemma_)
+            token_lemma)
     else:
-        last_state_change['state_changed']['order'][variable_name] = token.lemma_
+        last_state_change['state_changed']['order'][variable_name] = token_lemma
 
     item_food_restrictions = check_item_food_restrictions(
-        food_type=food_type, food_name=token.lemma_,
+        food_type=food_type, food_name=token_lemma,
         food_restrictions=customer.food_restrictions_list,
         ignored_food_restrictions_items=customer.ignored_food_restrictions_items
     )
     if item_food_restrictions != []:
-        customer.feedback.setdefault('nutritional_violations',[]).append(token.lemma_)
+        customer.feedback.setdefault('nutritional_violations',[]).append(token_lemma)
     # last_state_change['food_restriction_violation'].setdefault(token.lemma_, []).append()
-
+    # set_trace()
 
 def from_variable_name_to_food_type(variable_name):
     conv_dict = {
@@ -654,6 +663,7 @@ def get_food_type_strung(parsed_tree, food_type):
 
     if food_type_list != []:
         food_type_list.append(food_type)
+
     return '_'.join(food_type_list)
 
 

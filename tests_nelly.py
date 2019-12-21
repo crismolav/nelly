@@ -399,6 +399,16 @@ class NellyTests(unittest.TestCase):
 
         self.assertEqual(expected_bread, new_customer.order.bread_type)
 
+    def test_update_order_with_request__pita_bread(self):
+        new_customer = sf.Customer()
+        parsed_tree = nlp("can I have pita bread")
+
+        nelly.update_order_with_request(
+            customer=new_customer, parsed_tree=parsed_tree)
+        expected_bread = "pita_bread"
+
+        self.assertEqual(expected_bread, new_customer.order.bread_type)
+
     def test_update_order_with_request__check_feedback(self):
         new_customer = sf.Customer()
         new_customer.food_restrictions_list = ['vegan']
