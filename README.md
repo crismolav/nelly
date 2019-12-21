@@ -1,7 +1,6 @@
 # Nelly - Frame Based Conversational Agent.
 
-Nelly is a Frame Based Conversational Agent for Sandwiches Ordering. Nelly is the final project for the course Natural Language Interaction course Master in Intelligent Interactive Systems 
-at the Department of Information and Communication Technologies of the [Universitat Pompeu Fabra, Barcelona, Spain.](https://www.upf.edu/)
+Nelly is a Frame Based Conversational Agent for Sandwiches Ordering. Nelly is the final project for the Natural Language Interaction course of the Master in Intelligent Interactive Systems at the Department of Information and Communication Technologies of the [Universitat Pompeu Fabra, Barcelona, Spain.](https://www.upf.edu/)
 
 
 ### Build your own sandwich
