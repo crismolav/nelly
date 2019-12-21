@@ -49,5 +49,5 @@ python listen_and_talk.py
 
 ## Acknowledgments
 
-We would like to thank the Professors Leo Wanner and Mireia Farrús, for the guidance, encouragement, and advice they have provided us throughout the creation of Nelly.
+We would like to thank the Professors Leo Wanner and Mireia Farrús, for the guidance and advice they have provided us throughout the creation of Nelly.
 
