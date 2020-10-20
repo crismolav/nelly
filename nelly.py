@@ -568,8 +568,8 @@ def is_there_a_verb(parsed_tree):
 
 def triggers_request_special_need(root_tuple, parsed_tree):
     root_lemma, root_text = root_tuple
-    if root_lemma in ['eat', 'drink', 'ingest', 'consume', 'tolerate', 'have', 'be', 'vegan', 'vegetarian']:
-        if root_lemma in ['vegan', 'vegetarian']:
+    if root_lemma in ['eat', 'drink', 'ingest', 'consume', 'tolerate', 'have', 'be', 'vegan', 'vegetarian', "gluten"]:
+        if root_lemma in ['vegan', 'vegetarian',"gluten"]:
             return True
         if root_verb_is_negated(root_tuple, parsed_tree):
             if triggers_request_special_need_verb_with_negation(
