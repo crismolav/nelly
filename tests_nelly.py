@@ -319,7 +319,7 @@ class NellyTests(unittest.TestCase):
     def test_triggers_a_request_order_update_all_ingredients(self):
         new_customer = sf.Customer()
 
-        parsed_tree = nlp("I want a sandwich with onions tomato beef ketchup rice bread and regular cheese")
+        parsed_tree = nlp("I want a sandwich with onion tomato beef ketchup rice bread and regular cheese")
         nelly.update_state(customer=new_customer, parsed_tree=parsed_tree)
 
         results_list = [new_customer.order.vegetable_list, new_customer.order.protein,
