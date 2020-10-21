@@ -26,7 +26,7 @@ def answer(frame, customer=None):
         answer = random.choice(answer)
 
     elif frame == "lactose_restriction": #(activated with cheese, milk, cream, etc)
-        answer = ['Be carefull, this ingredient, contains dairy products!', 'You want to die bitch?', 'I would like to infrom you that, this ingredient contains lactose!', 'This product is not lactose free!']
+        answer = ['Be careful, this ingredient, contains dairy products!', 'You want to get sick?', 'I would like to infrom you that, this ingredient contains lactose!', 'This product is not lactose free!']
         answer = random.choice(answer)
 
     elif frame == "no_lactose_restriction":
@@ -46,7 +46,7 @@ def answer(frame, customer=None):
         answer = random.choice(answer)
 
     elif frame == "no_gluten_restriction":
-        answer = ['Oh!, nice you dont have any gluten restriction, now you can continue ordering!']
+        answer = ['Oh!, nice you do not have any gluten restriction, now you can continue ordering!']
         answer = random.choice(answer)
 
     elif frame == "answer_ingredient":
