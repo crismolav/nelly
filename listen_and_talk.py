@@ -136,13 +136,16 @@ def answer(frame, customer=None):
     elif frame == "accept_remove_suggested_items":
         answer = ["Got it. Items removed!"]
         answer = random.choice(answer)
+
     elif frame == "deny_remove_suggested_items":
         answer = ["Got it"]
         answer = random.choice(answer)
+
     else:
         answer = ['HA HA HA HA! I can not understand you!', 'I can not help you with that, amigo. Sorry.']
         answer = random.choice(answer)
     return answer
+
 ################################################################################
 def answer_ingredient(ingredient_list):
     str1 = " "
